@@ -1,8 +1,3 @@
-# Xinchi
-Zhang Yijian :))))
-# Benjamin
-## Nivedit
-
 # About us
 
 Display | Name | Github Pofile | Portfolio
