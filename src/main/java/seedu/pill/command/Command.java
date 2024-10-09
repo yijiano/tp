@@ -1,4 +1,4 @@
-package seedu.duke.Command;
+package seedu.pill.command;
 
 import java.util.Scanner;
 
