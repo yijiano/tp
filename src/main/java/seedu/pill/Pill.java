@@ -1,7 +1,9 @@
 package seedu.pill;
 
+import seedu.pill.exceptions.PillException;
 import seedu.pill.util.Ui;
 import seedu.pill.util.Printer;
+import seedu.pill.util.Parser;
 
 public final class Pill {
     private static final Ui ui = new Ui();
@@ -9,11 +11,11 @@ public final class Pill {
     /**
      * Runs the main loop of the Pill chatbot.
      */
-    public void run(){
+    public void run() throws PillException {
         Printer.printInitMessage();
         String line = ui.getInput();
         while (!line.equalsIgnoreCase("exit")) {
-            System.out.println("No such command yet, please try again next year.");
+            Parser.parseCommand(line);
             line = ui.getInput();
         }
         Printer.printExitMessage();
@@ -22,7 +24,7 @@ public final class Pill {
     /**
      * Main method to run the Pill bot.
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws PillException{
         new Pill().run();
     }
 }
