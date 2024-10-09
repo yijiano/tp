@@ -19,7 +19,6 @@ public final class Printer {
                  . . . .        . .            ..  . .    .     .        .           .  .   .   .. ..   .     .\s
             """;
 
-
     /**
      * Prints a horizontal line.
      */

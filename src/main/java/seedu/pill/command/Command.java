@@ -1,7 +1,5 @@
 package seedu.pill.command;
 
-import java.util.Scanner;
-
 /**
  * Represents a command that can be executed.
  * Each command is responsible for performing a specific action in the system.
@@ -10,11 +8,10 @@ public abstract class Command {
     /**
      * Executes the command with the specified task list, user interface, and storage.
      *
-     * @param tasks       The task list to be manipulated by the command.
-     * @param ui          The Scanner that takes input from the terminal.
-     * @param storagePath The storage path for saving/loading tasks.
+     * @param tasks   The task list to be manipulated by the command.
+     * @param command The command type and the input parameters.
      */
-    public abstract void execute(String[] tasks, Scanner ui, String storagePath);
+    public abstract void execute(String[] tasks, String[] command);
 
     /**
      * Determines whether this command will exit the application.
