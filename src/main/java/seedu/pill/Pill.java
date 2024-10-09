@@ -7,6 +7,7 @@ import seedu.pill.util.Parser;
 
 public final class Pill {
     private static final Ui ui = new Ui();
+    private static final Parser parser = new Parser();
 
     /**
      * Runs the main loop of the Pill chatbot.
@@ -14,8 +15,8 @@ public final class Pill {
     public void run() throws PillException {
         Printer.printInitMessage();
         String line = ui.getInput();
-        while (!line.equalsIgnoreCase("exit")) {
-            Parser.parseCommand(line);
+        while (parser.getExitFlag()) {
+            parser.parseCommand(line);
             line = ui.getInput();
         }
         Printer.printExitMessage();
