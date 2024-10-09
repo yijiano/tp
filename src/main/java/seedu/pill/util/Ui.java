@@ -11,8 +11,6 @@ public final class Ui {
      */
     public String getInput() {
         Printer.printLine();
-        String input = this.sc.nextLine();
-        Printer.printLine();
-        return input;
+        return this.sc.nextLine();
     }
 }
