@@ -10,7 +10,7 @@ public final class Ui {
      * @return The user input in string representation.
      */
     public String getInput() {
-        Printer.printLine();
+        Printer.printSpace();
         return this.sc.nextLine();
     }
 }

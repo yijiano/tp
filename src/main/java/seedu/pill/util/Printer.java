@@ -21,9 +21,8 @@ public final class Printer {
     /**
      * Prints a horizontal line.
      */
-    public static void printLine(){
-        System.out.println("\n################################################" +
-                "####################################################\n");
+    public static void printSpace(){
+        System.out.println("\n");
     }
 
     /**
@@ -39,7 +38,6 @@ public final class Printer {
      */
     public static void printExitMessage(){
         System.out.println("Bye. Hope to see you again soon!");
-        printLine();
     }
 }
 
