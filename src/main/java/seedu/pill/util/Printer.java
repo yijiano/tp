@@ -22,7 +22,8 @@ public final class Printer {
      * Prints a horizontal line.
      */
     public static void printLine(){
-        System.out.println("\n####################################################################################################\n");
+        System.out.println("\n################################################" +
+                "####################################################\n");
     }
 
     /**
@@ -41,3 +42,4 @@ public final class Printer {
         printLine();
     }
 }
+
