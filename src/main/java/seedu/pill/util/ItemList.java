@@ -87,7 +87,8 @@ public class ItemList {
         }
         System.out.println("Listing all items:");
         for (int i = 0; i < items.size(); i++) {
-            System.out.println((i + 1) + ". " + items.get(i).getName() + ": " + items.get(i).getQuantity() + " in stock");
+            System.out.println((i + 1) + ". " + items.get(i).getName() + ": "
+                               + items.get(i).getQuantity() + " in stock");
         }
     }
 }
