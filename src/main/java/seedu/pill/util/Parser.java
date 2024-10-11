@@ -1,5 +1,7 @@
 package seedu.pill.util;
 
+import seedu.pill.command.Command;
+import seedu.pill.command.HelpCommand;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
@@ -29,7 +31,8 @@ public class Parser {
                 this.exitFlag = true;
                 break;
             case "help":
-                // TODO: Add "help" command
+                Command helpCommand = new HelpCommand();
+                helpCommand.execute(null, splitInput);
                 break;
             case "add":
                 // TODO: Add "add" command
