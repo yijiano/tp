@@ -1,17 +1,19 @@
 package seedu.pill.command;
 
+import seedu.pill.util.ItemList;
+
 /**
  * Represents a command that can be executed.
  * Each command is responsible for performing a specific action in the system.
  */
 public abstract class Command {
+
     /**
-     * Executes the command with the specified task list, user interface, and storage.
+     * Executes the command with the specified item list.
      *
-     * @param tasks   The task list to be manipulated by the command.
-     * @param command The command type and the input parameters.
+     * @param itemList The item list to be manipulated by the command.
      */
-    public abstract void execute(String[] tasks, String[] command);
+    public abstract void execute(ItemList itemList);
 
     /**
      * Determines whether this command will exit the application.
