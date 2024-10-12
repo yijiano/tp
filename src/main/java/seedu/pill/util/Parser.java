@@ -29,7 +29,7 @@ public class Parser {
                 this.exitFlag = true;
                 break;
             case "help":
-                // TODO: Add "help" command
+                // TODO: Add "add" command
                 break;
             case "add":
                 // TODO: Add "add" command
