@@ -12,7 +12,7 @@ public class Storage {
     private static final String FILE_NAME = "pill.txt";
     private static final String SEPARATOR = ",";
 
-    public static File initializeFile() throws IOException {
+    private static File initializeFile() throws IOException {
         File dir = new File(PATH);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -29,6 +29,7 @@ public class Storage {
             for (Item item : items) {
                 fw.write((item.getName() + SEPARATOR + item.getQuantity()) + System.lineSeparator());
             }
+            fw.close();
         } catch (IOException e) {
             throw new PillException(ExceptionMessages.SAVE_ERROR);
         }
@@ -39,6 +40,7 @@ public class Storage {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file, true);
             fw.write((item.getName() + SEPARATOR + item.getQuantity()) + System.lineSeparator());
+            fw.close();
         } catch (IOException e) {
             throw new PillException(ExceptionMessages.SAVE_ERROR);
         }

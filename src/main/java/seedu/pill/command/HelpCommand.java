@@ -1,6 +1,7 @@
 package seedu.pill.command;
 
 import seedu.pill.util.ItemList;
+import seedu.pill.util.Storage;
 
 /**
  * Represents a command that displays help information about available commands.
@@ -13,7 +14,7 @@ public class HelpCommand extends Command {
      * @param itemList The item list (not used in this command).
      */
     @Override
-    public void execute(ItemList itemList) {
+    public void execute(ItemList itemList, Storage storage) {
         System.out.println("Available commands:");
         System.out.println("  help    - Shows this help message");
         System.out.println("  add     - Adds a new item to the list");

@@ -1,6 +1,7 @@
 package seedu.pill.command;
 
 import seedu.pill.util.ItemList;
+import seedu.pill.util.Storage;
 
 
 public class FindCommand extends Command {
@@ -9,10 +10,10 @@ public class FindCommand extends Command {
     public FindCommand(String itemName) { this.itemName = itemName;}
 
     @Override
-    public void execute(ItemList itemList) {
+    public void execute(ItemList itemList, Storage storage) {
         ItemList foundItems = itemList.findItem(itemName);
         ListCommand listCommand = new ListCommand();
-        listCommand.execute(foundItems);
+        listCommand.execute(foundItems, storage);
     }
 
     @Override
