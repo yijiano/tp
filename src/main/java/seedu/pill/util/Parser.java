@@ -1,7 +1,5 @@
 package seedu.pill.util;
 
-import seedu.pill.command.Command;
-import seedu.pill.command.HelpCommand;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
