@@ -91,4 +91,22 @@ public class ItemList {
                                + items.get(i).getQuantity() + " in stock");
         }
     }
+
+    /**
+     * Finds an item in the list.
+     *
+     * @param itemName     The name of the item.
+     */
+    public ItemList findItem(String itemName) {
+        ItemList foundItems = new ItemList();
+        if (itemName == null || itemName.trim().isEmpty()) {
+            return foundItems;
+        }
+        for (Item item : items) {
+            if (item.getName().contains(itemName)) {
+                foundItems.addItem(item.getName(), item.getQuantity());
+            }
+        }
+        return foundItems;
+    }
 }
