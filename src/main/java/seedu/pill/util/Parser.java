@@ -31,8 +31,7 @@ public class Parser {
                 this.exitFlag = true;
                 break;
             case "help":
-                Command helpCommand = new HelpCommand();
-                helpCommand.execute(null, splitInput);
+                // TODO: Add "add" command
                 break;
             case "add":
                 // TODO: Add "add" command
