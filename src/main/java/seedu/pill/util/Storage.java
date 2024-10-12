@@ -12,19 +12,33 @@ public class Storage {
     private static final String FILE_NAME = "pill.txt";
     private static final String SEPARATOR = ",";
 
-    /**
-     * Saves the current state of the item list to the storage file. Each item
-     * is saved in Comma Separated Values(CSV) format.
-     *
-     * @param items The {@link ItemList} to be saved.
-     */
-    public void save(ItemList items) throws PillException {
-        File file = new File(PATH + FILE_NAME);
+    public static File initializeFile() throws IOException {
+        File dir = new File(PATH);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File items = new File(dir, FILE_NAME);
+        items.createNewFile();
+        return items;
+    }
 
-        try (FileWriter fw = new FileWriter(file)) {
+    public void saveItemList(ItemList items) throws PillException {
+        try {
+            File file = initializeFile();
+            FileWriter fw = new FileWriter(file);
             for (Item item : items) {
                 fw.write((item.getName() + SEPARATOR + item.getQuantity()) + System.lineSeparator());
             }
+        } catch (IOException e) {
+            throw new PillException(ExceptionMessages.SAVE_ERROR);
+        }
+    }
+
+    public void saveItem(Item item) throws PillException {
+        try {
+            File file = initializeFile();
+            FileWriter fw = new FileWriter(file, true);
+            fw.write((item.getName() + SEPARATOR + item.getQuantity()) + System.lineSeparator());
         } catch (IOException e) {
             throw new PillException(ExceptionMessages.SAVE_ERROR);
         }
