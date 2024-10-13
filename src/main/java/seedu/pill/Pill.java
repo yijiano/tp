@@ -15,7 +15,7 @@ public final class Pill {
     public void run() throws PillException {
         Printer.printInitMessage();
         String line = ui.getInput();
-        while (parser.getExitFlag()) {
+        while (!parser.getExitFlag()) {
             parser.parseCommand(line);
             line = ui.getInput();
         }
