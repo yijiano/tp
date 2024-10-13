@@ -7,11 +7,23 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * The Storage class handles the storage of ItemList objects
+ * in a file-based system, allowing for saving items and lists
+ * of items to a specified text file.
+ */
 public class Storage {
     private static final String PATH = "./data/";
     private static final String FILE_NAME = "pill.txt";
     private static final String SEPARATOR = ",";
 
+    /**
+     * Initializes the storage file and creates the necessary
+     * directories if they do not exist.
+     *
+     * @return The File object representing the storage file.
+     * @throws IOException if an I/O error occurs during file creation.
+     */
     private static File initializeFile() throws IOException {
         File dir = new File(PATH);
         if (!dir.exists()) {
@@ -22,6 +34,13 @@ public class Storage {
         return items;
     }
 
+    /**
+     * Saves the provided ItemList to the storage file, overwriting
+     * existing content.
+     *
+     * @param items The {@link ItemList} containing items to be saved.
+     * @throws PillException if an error occurs during the saving process.
+     */
     public void saveItemList(ItemList items) throws PillException {
         try {
             File file = initializeFile();
@@ -35,6 +54,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Appends a single item to the storage file.
+     *
+     * @param item The {@link Item} to be saved.
+     * @throws PillException if an error occurs during the saving process.
+     */
     public void saveItem(Item item) throws PillException {
         try {
             File file = initializeFile();
