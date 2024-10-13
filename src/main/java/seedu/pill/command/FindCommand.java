@@ -7,7 +7,9 @@ import seedu.pill.util.Storage;
 public class FindCommand extends Command {
     private final String itemName;
 
-    public FindCommand(String itemName) { this.itemName = itemName;}
+    public FindCommand(String itemName) {
+        this.itemName = itemName;
+    }
 
     @Override
     public void execute(ItemList itemList, Storage storage) {

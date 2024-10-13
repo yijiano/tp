@@ -1,8 +1,10 @@
 package seedu.pill.exceptions;
 
 public enum ExceptionMessages {
-    INVALID_COMMAND ("Invalid command, please try again."),
-    SAVE_ERROR      ("Error saving to file, please try again.");
+    INVALID_COMMAND         ("Invalid command, please try again."),
+    SAVE_ERROR              ("Error saving to file, please try again."),
+    INVALID_QUANTITY        ("Quantity is invalid, please try again"),
+    INVALID_QUANTITY_FORMAT ("Quantity provided is not a number, please try again.");
 
     private final String message;
 
