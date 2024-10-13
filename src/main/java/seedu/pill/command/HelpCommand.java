@@ -1,5 +1,6 @@
 package seedu.pill.command;
 
+import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemList;
 import seedu.pill.util.Storage;
 
@@ -19,11 +20,12 @@ public class HelpCommand extends Command {
 
     /**
      * Executes the help command by displaying information about available commands.
-     *
-     * @param itemList The item list (not used in this command).
+     * @param itemList The item list to be manipulated by the command.
+     * @param storage
+     * @throws PillException
      */
     @Override
-    public void execute(ItemList itemList) {
+    public void execute(ItemList itemList, Storage storage) throws PillException {
         if (commandName == null) {
             showGeneralHelp();
         } else {
