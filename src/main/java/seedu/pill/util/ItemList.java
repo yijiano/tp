@@ -1,11 +1,12 @@
 package seedu.pill.util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Represents a list of items and provides methods to add, delete, list, and edit items.
  */
-public class ItemList {
+public class ItemList implements Iterable<Item> {
     private ArrayList<Item> items;
 
     /**
@@ -14,6 +15,17 @@ public class ItemList {
      */
     public ItemList() {
         this.items = new ArrayList<>();
+    }
+
+    /**
+     * Returns an iterator over the tasks in the TaskList.
+     * This allows for iteration over the tasks using an enhanced for-loop.
+     *
+     * @return an Iterator of Task objects.
+     */
+    @Override
+    public Iterator<Item> iterator() {
+        return items.iterator();
     }
 
     /**

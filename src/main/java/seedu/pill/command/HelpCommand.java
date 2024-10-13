@@ -1,6 +1,7 @@
 package seedu.pill.command;
 
 import seedu.pill.util.ItemList;
+import seedu.pill.util.Storage;
 
 /**
  * Represents a command that displays help information about available commands.

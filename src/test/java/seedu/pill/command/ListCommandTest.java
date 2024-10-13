@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import seedu.pill.util.ItemList;
+import seedu.pill.util.Storage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -15,6 +16,7 @@ public class ListCommandTest {
     public void listCommandEmptyPasses() throws PillException {
         // Initialize test environment
         ItemList itemList = new ItemList();
+        Storage storage = new Storage();
         ListCommand listCommand = new ListCommand();
 
         // Declare expected output
@@ -26,7 +28,7 @@ public class ListCommandTest {
         System.setOut(printStream);
 
         // Test command
-        listCommand.execute(itemList);
+        listCommand.execute(itemList, storage);
 
         //Compare output
         String output = outputStream.toString();
@@ -38,6 +40,7 @@ public class ListCommandTest {
         ItemList itemList = new ItemList();
         itemList.addItem("Bandage", 20);
         itemList.addItem("Syringe", 10);
+        Storage storage = new Storage();
         ListCommand listCommand = new ListCommand();
 
         // Declare expected output
@@ -51,7 +54,7 @@ public class ListCommandTest {
         System.setOut(printStream);
 
         // Test command
-        listCommand.execute(itemList);
+        listCommand.execute(itemList, storage);
 
         //Compare output
         String output = outputStream.toString();
