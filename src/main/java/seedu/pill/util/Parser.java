@@ -18,9 +18,9 @@ public class Parser {
     /**
      * Public constructor for Parser.
      */
-    public Parser() {
-        this.items = new ItemList();
-        this.storage = new Storage();
+    public Parser(ItemList items, Storage storage) {
+        this.items = items;
+        this.storage = storage;
     }
 
     /**
