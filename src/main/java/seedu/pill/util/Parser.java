@@ -10,6 +10,8 @@ import seedu.pill.command.ListCommand;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
+import java.util.Objects;
+
 public class Parser {
     private boolean exitFlag = false;
     private final ItemList items;
@@ -53,7 +55,8 @@ public class Parser {
                 new FindCommand(argument).execute(this.items, this.storage);
                 break;
             case "help":
-                new HelpCommand().execute(this.items, this.storage);
+                boolean flag = quantityStr.equals("-v");
+                new HelpCommand(argument, flag).execute(this.items, this.storage);
                 break;
             case "list":
                 new ListCommand().execute(this.items, this.storage);

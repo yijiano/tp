@@ -13,18 +13,6 @@ public class HelpCommand extends Command {
     private String commandName;
     private boolean verbose;
 
-    public HelpCommand() {
-        this.commandName = null;
-        this.verbose = false;
-        logger.info("Created HelpCommand with no specific command");
-    }
-
-    public HelpCommand(String commandName) {
-        this.commandName = commandName;
-        this.verbose = false;
-        logger.info("Created HelpCommand for command: " + commandName);
-    }
-
     public HelpCommand(String commandName, boolean verbose) {
         this.commandName = commandName;
         this.verbose = verbose;
