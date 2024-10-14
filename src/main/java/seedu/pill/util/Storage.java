@@ -6,6 +6,8 @@ import seedu.pill.exceptions.PillException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * The Storage class handles the storage of ItemList objects
@@ -69,5 +71,52 @@ public class Storage {
         } catch (IOException e) {
             throw new PillException(ExceptionMessages.SAVE_ERROR);
         }
+    }
+
+    /**
+     * Loads saved CSV data into an ItemList
+     *
+     * @return The ItemList containing saved items
+     * @throws PillException if an error occurs during the loading process
+     */
+    public ItemList loadData() throws PillException {
+        ArrayList<Item> loadedItems = new ArrayList<Item>();
+        try {
+            File file = initializeFile();
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                try {
+                    String line = scanner.nextLine();
+                    loadedItems.add(loadLine(line));
+                } catch (PillException e) {
+                    // Skip corrupt line
+                }
+            }
+            scanner.close();
+        } catch (IOException e) {
+            throw new PillException(ExceptionMessages.LOAD_ERROR);
+        }
+        return new ItemList(loadedItems);
+    }
+
+    /**
+     * Returns data in current line as an Item
+     * @param line Next line string read by the scanner
+     * @return The item present in the line
+     * @throws PillException if format of saved data is incorrect
+     */
+    public Item loadLine(String line) throws PillException {
+        Item item;
+        String[] data = line.split(SEPARATOR);
+        if (data.length == 2) {
+            try {
+                item = new Item(data[0], Integer.parseInt(data[1]));
+            } catch (NumberFormatException e) {
+                throw new PillException(ExceptionMessages.INVALID_QUANTITY_FORMAT);
+            }
+        } else {
+            throw new PillException(ExceptionMessages.INVALID_LINE_FORMAT);
+        }
+        return item;
     }
 }

@@ -8,16 +8,18 @@ import seedu.pill.util.Storage;
 import seedu.pill.util.Ui;
 
 public final class Pill {
-    private static final ItemList items = new ItemList();
     private static final Storage storage = new Storage();
+    private static ItemList items = new ItemList();
     private static final Ui ui = new Ui(items);
-    private static final Parser parser = new Parser(items, storage);
+    private static Parser parser = new Parser(items, storage);
 
     /**
      * Runs the main loop of the Pill chatbot.
      */
     public void run() throws PillException {
         Printer.printInitMessage();
+        items = storage.loadData();
+        parser = new Parser(items, storage);
         while (!parser.getExitFlag()) {
             String line = ui.getInput();
             parser.parseCommand(line);

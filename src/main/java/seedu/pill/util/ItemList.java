@@ -18,6 +18,15 @@ public class ItemList implements Iterable<Item> {
     }
 
     /**
+     * Constructor for ItemList.
+     * Constructs an ItemList based on passed ArrayList of items
+     * @param items The list of items to be constructed into an ItemList
+     */
+    public ItemList(ArrayList<Item> items) {
+        this.items = items;
+    }
+
+    /**
      * Returns an iterator over the tasks in the TaskList.
      * This allows for iteration over the tasks using an enhanced for-loop.
      *
