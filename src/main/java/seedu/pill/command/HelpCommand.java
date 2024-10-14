@@ -3,6 +3,8 @@ package seedu.pill.command;
 import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemList;
 import seedu.pill.util.Storage;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -16,6 +18,7 @@ public class HelpCommand extends Command {
     public HelpCommand(String commandName, boolean verbose) {
         this.commandName = commandName;
         this.verbose = verbose;
+        logger.setLevel(Level.OFF);
         logger.info("Created HelpCommand for command: " + commandName + " with verbose mode: " + verbose);
     }
 
