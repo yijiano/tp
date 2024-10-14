@@ -34,8 +34,6 @@ public class FindCommandTest{
 
         //Compare output
         String output = outputStream.toString();
-        output = output.replace("\r\n", "\n");
-        expectedOutput = expectedOutput.replace("\r\n", "\n");
         assertEquals(output, expectedOutput);
     }
     @Test
@@ -49,11 +47,7 @@ public class FindCommandTest{
         FindCommand findCommand = new FindCommand("Band");
 
         // Declare expected output
-        String outputFromAddFoundTasks = "Added the following item to the inventory: " + System.lineSeparator() +
-                "Bandage: 20 in stock" + System.lineSeparator() +
-                "Added the following item to the inventory: " + System.lineSeparator() +
-                "Band-aid: 5 in stock" + System.lineSeparator();
-        String expectedOutput = outputFromAddFoundTasks + "Listing all items:" + System.lineSeparator() +
+        String expectedOutput = "Listing all items:" + System.lineSeparator() +
                 "1. Bandage: 20 in stock" + System.lineSeparator() +
                 "2. Band-aid: 5 in stock" + System.lineSeparator();
 
@@ -67,8 +61,6 @@ public class FindCommandTest{
 
         //Compare output
         String output = outputStream.toString();
-        output = output.replace("\r\n", "\n");
-        expectedOutput = expectedOutput.replace("\r\n", "\n");
         assertEquals(output, expectedOutput);
     }
     @Test
@@ -96,8 +88,6 @@ public class FindCommandTest{
 
         //Compare output
         String output = outputStream.toString();
-        output = output.replace("\r\n", "\n");
-        expectedOutput = expectedOutput.replace("\r\n", "\n");
         assertEquals(output, expectedOutput);
     }
 }
