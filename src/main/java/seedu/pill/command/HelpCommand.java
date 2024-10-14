@@ -49,6 +49,7 @@ public class HelpCommand extends Command {
         System.out.println("  help    - Shows this help message");
         System.out.println("  add     - Adds a new item to the list");
         System.out.println("  delete  - Deletes an item from the list");
+        System.out.println("  edit    - Edits quantity of an existing item in the list");
         System.out.println("  list    - Lists all items");
         System.out.println("  quit    - Exits the program");
         System.out.println("Type 'help <command>' for more information on a specific command.");
@@ -70,6 +71,9 @@ public class HelpCommand extends Command {
         case "delete":
             showDeleteHelp();
             break;
+        case "edit":
+            showEditHelp();
+            break;
         case "list":
             showListHelp();
             break;
@@ -78,7 +82,7 @@ public class HelpCommand extends Command {
             break;
         default:
             System.out.println("Unknown command: " + command);
-            System.out.println("Available commands: help, add, delete, list, quit");
+            System.out.println("Available commands: help, add, delete, edit, list, quit");
             System.out.println("Type 'help <command>' for more information on a specific command.");
         }
     }
@@ -126,6 +130,21 @@ public class HelpCommand extends Command {
             System.out.println("  delete Aspirin");
         }
         System.out.println("\nCorrect input format: delete <index>");
+    }
+
+    /**
+     * Prints detailed information about the 'edit' command.
+     */
+    private void showEditHelp() {
+        System.out.println("edit: Edits the item in the inventory.");
+        System.out.println("Usage: edit <name> <quantity>");
+        System.out.println("  <name> - Name of the item to edit (as shown in the list)");
+        System.out.println("  <quantity> - New quantity of the item");
+        if (verbose) {
+            System.out.println("\nExample:");
+            System.out.println("  edit Aspirin 100");
+        }
+        System.out.println("\nCorrect input format: edit <name> <quantity>");
     }
 
     /**
