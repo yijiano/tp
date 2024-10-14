@@ -28,4 +28,16 @@ public class Item {
     public String toString() {
         return name + ": " + quantity + " in stock";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Item) {
+            Item item = (Item) obj;
+            return name.equals(item.getName()) && quantity == item.getQuantity();
+        }
+        return false;
+    }
 }
