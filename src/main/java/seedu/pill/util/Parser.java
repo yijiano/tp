@@ -53,7 +53,8 @@ public class Parser {
                 new FindCommand(argument).execute(this.items, this.storage);
                 break;
             case "help":
-                new HelpCommand().execute(this.items, this.storage);
+                boolean flag = quantityStr.equals("-v");
+                new HelpCommand(argument, flag).execute(this.items, this.storage);
                 break;
             case "list":
                 new ListCommand().execute(this.items, this.storage);

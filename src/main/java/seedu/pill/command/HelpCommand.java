@@ -3,6 +3,8 @@ package seedu.pill.command;
 import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemList;
 import seedu.pill.util.Storage;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -13,21 +15,10 @@ public class HelpCommand extends Command {
     private String commandName;
     private boolean verbose;
 
-    public HelpCommand() {
-        this.commandName = null;
-        this.verbose = false;
-        logger.info("Created HelpCommand with no specific command");
-    }
-
-    public HelpCommand(String commandName) {
-        this.commandName = commandName;
-        this.verbose = false;
-        logger.info("Created HelpCommand for command: " + commandName);
-    }
-
     public HelpCommand(String commandName, boolean verbose) {
         this.commandName = commandName;
         this.verbose = verbose;
+        logger.setLevel(Level.OFF);
         logger.info("Created HelpCommand for command: " + commandName + " with verbose mode: " + verbose);
     }
 
@@ -62,7 +53,7 @@ public class HelpCommand extends Command {
         System.out.println("  delete  - Deletes an item from the list");
         System.out.println("  edit    - Edits quantity of an existing item in the list");
         System.out.println("  list    - Lists all items");
-        System.out.println("  quit    - Exits the program");
+        System.out.println("  exit    - Exits the program");
         System.out.println("Type 'help <command>' for more information on a specific command.");
         System.out.println("Add  '-v' after the command for verbose output with examples.");
     }
@@ -91,12 +82,12 @@ public class HelpCommand extends Command {
         case "list":
             showListHelp();
             break;
-        case "quit":
-            showQuitHelp();
+        case "exit":
+            showExitHelp();
             break;
         default:
             System.out.println("Unknown command: " + command);
-            System.out.println("Available commands: help, add, delete, edit, list, quit");
+            System.out.println("Available commands: help, add, delete, edit, list, exit");
             System.out.println("Type 'help <command>' for more information on a specific command.");
         }
     }
@@ -184,16 +175,16 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Prints detailed information about the 'quit' command.
+     * Prints detailed information about the 'exit' command.
      */
-    private void showQuitHelp() {
-        logger.fine("Showing help information for 'quit' command");
+    private void showExitHelp() {
+        logger.fine("Showing help information for 'exit' command");
 
-        System.out.println("quit: Exits the program.");
+        System.out.println("exit: Exits the program.");
         if (verbose) {
-            System.out.println("Usage: quit");
+            System.out.println("Usage: exit");
             System.out.println("\nExample:");
-            System.out.println("  quit");
+            System.out.println("  exit");
         }
     }
 
