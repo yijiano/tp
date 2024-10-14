@@ -119,15 +119,15 @@ public class ItemList implements Iterable<Item> {
      * @param itemName     The name of the item.
      */
     public ItemList findItem(String itemName) {
-        ItemList foundItems = new ItemList();
+        ArrayList<Item> foundItems = new ArrayList<Item>();
         if (itemName == null || itemName.trim().isEmpty()) {
-            return foundItems;
+            return new ItemList(foundItems);
         }
         for (Item item : items) {
             if (item.getName().contains(itemName)) {
-                foundItems.addItem(item.getName(), item.getQuantity());
+                foundItems.add(item);
             }
         }
-        return foundItems;
+        return new ItemList(foundItems);
     }
 }
