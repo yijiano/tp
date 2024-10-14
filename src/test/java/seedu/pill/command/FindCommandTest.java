@@ -34,7 +34,7 @@ public class FindCommandTest{
 
         //Compare output
         String output = outputStream.toString();
-        assertEquals(output, expectedOutput);
+        assertEquals(expectedOutput, output);
     }
     @Test
     public void listFindSimplePasses() throws PillException {
@@ -61,7 +61,7 @@ public class FindCommandTest{
 
         //Compare output
         String output = outputStream.toString();
-        assertEquals(output, expectedOutput);
+        assertEquals(expectedOutput, output);
     }
     @Test
     public void listFindNotFoundPasses() throws PillException {
@@ -88,6 +88,6 @@ public class FindCommandTest{
 
         //Compare output
         String output = outputStream.toString();
-        assertEquals(output, expectedOutput);
+        assertEquals(expectedOutput, output);
     }
 }
