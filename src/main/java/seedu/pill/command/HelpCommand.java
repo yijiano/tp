@@ -3,27 +3,32 @@ package seedu.pill.command;
 import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemList;
 import seedu.pill.util.Storage;
+import java.util.logging.Logger;
 
 /**
  * Represents a command that displays help information about available commands.
  */
 public class HelpCommand extends Command {
+    private static final Logger logger = Logger.getLogger(HelpCommand.class.getName());
     private String commandName;
     private boolean verbose;
 
     public HelpCommand() {
         this.commandName = null;
         this.verbose = false;
+        logger.info("Created HelpCommand with no specific command");
     }
 
     public HelpCommand(String commandName) {
         this.commandName = commandName;
         this.verbose = false;
+        logger.info("Created HelpCommand for command: " + commandName);
     }
 
     public HelpCommand(String commandName, boolean verbose) {
         this.commandName = commandName;
         this.verbose = verbose;
+        logger.info("Created HelpCommand for command: " + commandName + " with verbose mode: " + verbose);
     }
 
     /**
@@ -34,6 +39,10 @@ public class HelpCommand extends Command {
      */
     @Override
     public void execute(ItemList itemList, Storage storage) throws PillException {
+        assert itemList != null : "ItemList cannot be null";
+        assert storage != null : "Storage cannot be null";
+        logger.info("Executing HelpCommand");
+
         if (commandName == null) {
             showGeneralHelp();
         } else {
@@ -45,6 +54,8 @@ public class HelpCommand extends Command {
      * Displays general help information for every command.
      */
     private void showGeneralHelp() {
+        logger.info("Showing general help information");
+
         System.out.println("Available commands:");
         System.out.println("  help    - Shows this help message");
         System.out.println("  add     - Adds a new item to the list");
@@ -61,6 +72,9 @@ public class HelpCommand extends Command {
      * @param command - optional user input that determines which help information is displayed to the user.
      */
     private void showSpecificHelp(String command) {
+        assert command != null : "Command cannot be null";
+        logger.info("Showing specific help for command: " + command);
+
         switch (command.toLowerCase()) {
         case "help":
             showHelpHelp();
@@ -91,11 +105,13 @@ public class HelpCommand extends Command {
      * Prints detailed information about the 'help' command.
      */
     private void showHelpHelp() {
+        logger.fine("Showing help information for 'help' command");
+
         System.out.println("help: Shows help information about available commands.");
-        System.out.println("Usage: help [command] [-v]");
-        System.out.println("  [command] - Optional. Specify a command to get detailed help.");
-        System.out.println("  [-v]      - Optional. Show verbose output with examples.");
         if (verbose) {
+            System.out.println("Usage: help [command] [-v]");
+            System.out.println("  [command] - Optional. Specify a command to get detailed help.");
+            System.out.println("  [-v]      - Optional. Show verbose output with examples.");
             System.out.println("\nExamples:");
             System.out.println("  help");
             System.out.println("  help add");
@@ -107,11 +123,13 @@ public class HelpCommand extends Command {
      * Prints detailed information about the 'add' command.
      */
     private void showAddHelp() {
+        logger.fine("Showing help information for 'add' command");
+
         System.out.println("add: Adds a new item to the inventory.");
-        System.out.println("Usage: add <name> <quantity> <price>");
-        System.out.println("  <name>     - Name of the item");
-        System.out.println("  <quantity> - Initial quantity of the item");
         if (verbose) {
+            System.out.println("Usage: add <name> <quantity> <price>");
+            System.out.println("  <name>     - Name of the item");
+            System.out.println("  <quantity> - Initial quantity of the item");
             System.out.println("\nExample:");
             System.out.println("  add Aspirin 100");
         }
@@ -122,10 +140,12 @@ public class HelpCommand extends Command {
      * Prints detailed information about the 'delete' command.
      */
     private void showDeleteHelp() {
+        logger.fine("Showing help information for 'delete' command");
+
         System.out.println("delete: Removes an item from the inventory.");
-        System.out.println("Usage: delete <name>");
-        System.out.println("  <name> - Name of the item to delete (as shown in the list)");
         if (verbose) {
+            System.out.println("Usage: delete <name>");
+            System.out.println("  <name> - Name of the item to delete (as shown in the list)");
             System.out.println("\nExample:");
             System.out.println("  delete Aspirin");
         }
@@ -136,11 +156,13 @@ public class HelpCommand extends Command {
      * Prints detailed information about the 'edit' command.
      */
     private void showEditHelp() {
+        logger.fine("Showing help information for 'edit' command");
+
         System.out.println("edit: Edits the item in the inventory.");
-        System.out.println("Usage: edit <name> <quantity>");
-        System.out.println("  <name> - Name of the item to edit (as shown in the list)");
-        System.out.println("  <quantity> - New quantity of the item");
         if (verbose) {
+            System.out.println("Usage: edit <name> <quantity>");
+            System.out.println("  <name> - Name of the item to edit (as shown in the list)");
+            System.out.println("  <quantity> - New quantity of the item");
             System.out.println("\nExample:");
             System.out.println("  edit Aspirin 100");
         }
@@ -151,9 +173,11 @@ public class HelpCommand extends Command {
      * Prints detailed information about the 'list' command.
      */
     private void showListHelp() {
+        logger.fine("Showing help information for 'list' command");
+
         System.out.println("list: Displays all items in the inventory.");
-        System.out.println("Usage: list");
         if (verbose) {
+            System.out.println("Usage: list");
             System.out.println("\nExample:");
             System.out.println("  list");
         }
@@ -163,9 +187,11 @@ public class HelpCommand extends Command {
      * Prints detailed information about the 'quit' command.
      */
     private void showQuitHelp() {
+        logger.fine("Showing help information for 'quit' command");
+
         System.out.println("quit: Exits the program.");
-        System.out.println("Usage: quit");
         if (verbose) {
+            System.out.println("Usage: quit");
             System.out.println("\nExample:");
             System.out.println("  quit");
         }
