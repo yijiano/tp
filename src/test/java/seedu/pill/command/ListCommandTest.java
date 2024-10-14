@@ -32,7 +32,7 @@ public class ListCommandTest {
 
         //Compare output
         String output = outputStream.toString();
-        assertEquals(output, expectedOutput);
+        assertEquals(expectedOutput, output);
     }
     @Test
     public void listCommandSimplePasses() throws PillException {
@@ -58,6 +58,6 @@ public class ListCommandTest {
 
         //Compare output
         String output = outputStream.toString();
-        assertEquals(output, expectedOutput);
+        assertEquals(expectedOutput, output);
     }
 }
