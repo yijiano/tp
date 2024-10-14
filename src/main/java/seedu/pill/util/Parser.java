@@ -10,8 +10,6 @@ import seedu.pill.command.ListCommand;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
-import java.util.Objects;
-
 public class Parser {
     private boolean exitFlag = false;
     private final ItemList items;
