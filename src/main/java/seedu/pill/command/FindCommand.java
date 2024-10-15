@@ -1,6 +1,6 @@
 package seedu.pill.command;
 
-import seedu.pill.util.ItemList;
+import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
 
@@ -12,8 +12,8 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public void execute(ItemList itemList, Storage storage) {
-        ItemList foundItems = itemList.findItem(itemName);
+    public void execute(ItemMap itemMap, Storage storage) {
+        ItemMap foundItems = itemMap.findItem(itemName);
         ListCommand listCommand = new ListCommand();
         listCommand.execute(foundItems, storage);
     }

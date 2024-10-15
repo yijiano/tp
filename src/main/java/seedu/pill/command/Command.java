@@ -1,7 +1,7 @@
 package seedu.pill.command;
 
 import seedu.pill.exceptions.PillException;
-import seedu.pill.util.ItemList;
+import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
 /**
@@ -13,9 +13,9 @@ public abstract class Command {
     /**
      * Executes the command with the specified item list.
      *
-     * @param itemList The item list to be manipulated by the command.
+     * @param itemMap The item list to be manipulated by the command.
      */
-    public abstract void execute(ItemList itemList, Storage storage) throws PillException;
+    public abstract void execute(ItemMap itemMap, Storage storage) throws PillException;
 
     /**
      * Determines whether this command will exit the application.

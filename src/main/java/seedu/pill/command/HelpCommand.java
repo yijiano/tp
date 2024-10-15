@@ -1,7 +1,7 @@
 package seedu.pill.command;
 
 import seedu.pill.exceptions.PillException;
-import seedu.pill.util.ItemList;
+import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
 import java.util.logging.Level;
@@ -24,13 +24,13 @@ public class HelpCommand extends Command {
 
     /**
      * Executes the help command by displaying information about available commands.
-     * @param itemList       - The item list to be manipulated by the command.
+     * @param itemMap       - The item list to be manipulated by the command.
      * @param storage        -
      * @throws PillException -
      */
     @Override
-    public void execute(ItemList itemList, Storage storage) throws PillException {
-        assert itemList != null : "ItemList cannot be null";
+    public void execute(ItemMap itemMap, Storage storage) throws PillException {
+        assert itemMap != null : "ItemList cannot be null";
         assert storage != null : "Storage cannot be null";
         logger.info("Executing HelpCommand");
 
@@ -140,7 +140,7 @@ public class HelpCommand extends Command {
             System.out.println("\nExample:");
             System.out.println("  delete Aspirin");
         }
-        System.out.println("\nCorrect input format: delete <index>");
+        System.out.println("\nCorrect input format: delete <name>");
     }
 
     /**

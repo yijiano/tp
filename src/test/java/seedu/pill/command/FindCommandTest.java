@@ -5,7 +5,7 @@ import seedu.pill.exceptions.PillException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import seedu.pill.util.ItemList;
+import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
 import java.io.ByteArrayOutputStream;
@@ -15,7 +15,7 @@ public class FindCommandTest{
     @Test
     public void listFindEmptyNotFoundPasses() throws PillException {
         // Initialize test environment
-        ItemList itemList = new ItemList();
+        ItemMap itemMap = new ItemMap();
         Storage storage = new Storage();
         FindCommand findCommand = new FindCommand("abc");
 
@@ -30,7 +30,7 @@ public class FindCommandTest{
         System.setOut(printStream);
 
         // Test command
-        findCommand.execute(itemList, storage);
+        findCommand.execute(itemMap, storage);
 
         //Compare output
         String output = outputStream.toString();
@@ -39,10 +39,10 @@ public class FindCommandTest{
     @Test
     public void listFindSimplePasses() throws PillException {
         // Initialize test environment
-        ItemList itemList = new ItemList();
-        itemList.addItem("Bandage", 20);
-        itemList.addItem("Syringe", 10);
-        itemList.addItem("Band-aid", 5);
+        ItemMap itemMap = new ItemMap();
+        itemMap.addItem("Bandage", 20);
+        itemMap.addItem("Syringe", 10);
+        itemMap.addItem("Band-aid", 5);
         Storage storage = new Storage();
         FindCommand findCommand = new FindCommand("Band");
 
@@ -57,7 +57,7 @@ public class FindCommandTest{
         System.setOut(printStream);
 
         // Test command
-        findCommand.execute(itemList, storage);
+        findCommand.execute(itemMap, storage);
 
         //Compare output
         String output = outputStream.toString();
@@ -66,10 +66,10 @@ public class FindCommandTest{
     @Test
     public void listFindNotFoundPasses() throws PillException {
         // Initialize test environment
-        ItemList itemList = new ItemList();
-        itemList.addItem("Bandage", 20);
-        itemList.addItem("Syringe", 10);
-        itemList.addItem("Band-aid", 5);
+        ItemMap itemMap = new ItemMap();
+        itemMap.addItem("Bandage", 20);
+        itemMap.addItem("Syringe", 10);
+        itemMap.addItem("Band-aid", 5);
         Storage storage = new Storage();
         FindCommand findCommand = new FindCommand("abc");
 
@@ -84,7 +84,7 @@ public class FindCommandTest{
         System.setOut(printStream);
 
         // Test command
-        findCommand.execute(itemList, storage);
+        findCommand.execute(itemMap, storage);
 
         //Compare output
         String output = outputStream.toString();
