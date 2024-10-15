@@ -55,7 +55,7 @@ public class HelpCommand extends Command {
         System.out.println("  list    - Lists all items");
         System.out.println("  exit    - Exits the program");
         System.out.println("Type 'help <command>' for more information on a specific command.");
-        System.out.println("Add  '-v' after the command for verbose output with examples.");
+        System.out.println("Type 'help <command> -v' for verbose output with examples.");
     }
 
     /**

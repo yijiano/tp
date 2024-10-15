@@ -16,9 +16,9 @@ public final class Pill {
     /**
      * Runs the main loop of the Pill chatbot.
      */
-    public void run() throws PillException {
-        Printer.printInitMessage();
+    public void run() {
         items = storage.loadData();
+        Printer.printInitMessage();
         parser = new Parser(items, storage);
         while (!parser.getExitFlag()) {
             String line = ui.getInput();
