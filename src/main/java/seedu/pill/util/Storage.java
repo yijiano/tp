@@ -31,8 +31,14 @@ public class Storage {
         if (!dir.exists()) {
             dir.mkdirs();
         }
+        assert dir.isDirectory();
+
         File items = new File(dir, FILE_NAME);
-        items.createNewFile();
+        if (!items.exists()) {
+            items.createNewFile();
+        }
+        assert items.isFile();
+
         return items;
     }
 
