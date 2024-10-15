@@ -1,7 +1,7 @@
 package seedu.pill.command;
 
 import seedu.pill.exceptions.PillException;
-import seedu.pill.util.ItemList;
+import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
 public class DeleteItemCommand extends Command {
@@ -12,9 +12,9 @@ public class DeleteItemCommand extends Command {
     }
 
     @Override
-    public void execute(ItemList itemList, Storage storage) throws PillException {
-        itemList.deleteItem(itemName);
-        storage.saveItemList(itemList);
+    public void execute(ItemMap itemMap, Storage storage) throws PillException {
+        itemMap.deleteItem(itemName);
+        storage.saveItemMap(itemMap);
     }
 
     @Override

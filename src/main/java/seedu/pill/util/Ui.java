@@ -4,9 +4,9 @@ import java.util.Scanner;
 
 public final class Ui {
     private final Scanner sc = new Scanner(System.in);
-    private final ItemList items;
+    private final ItemMap items;
 
-    public Ui(ItemList items) {
+    public Ui(ItemMap items) {
         this.items = items;
     }
 

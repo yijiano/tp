@@ -24,8 +24,7 @@ public class LoadDataTest {
         try {
             Item item = storage.loadLine(data);
             fail();
-        }
-        catch (PillException e) {
+        } catch (PillException e) {
             assertEquals(ExceptionMessages.INVALID_LINE_FORMAT.getMessage(), e.getMessage());
         }
     }
@@ -37,8 +36,7 @@ public class LoadDataTest {
         try {
             Item item = storage.loadLine(data);
             fail();
-        }
-        catch (PillException e) {
+        } catch (PillException e) {
             assertEquals(ExceptionMessages.INVALID_QUANTITY_FORMAT.getMessage(), e.getMessage());
         }
     }
