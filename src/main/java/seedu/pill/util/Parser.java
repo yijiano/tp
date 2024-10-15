@@ -27,15 +27,18 @@ public class Parser {
      * Processes the user's command.
      *
      * @param input The user's input command from the scanner.
-     * @throws PillException If command is invalid
      */
-    public void parseCommand(String input) throws PillException {
-        String[] splitInput = input.split(" ", 3);
-        String commandString = splitInput[0].toLowerCase();
-        String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
-        String quantityStr = splitInput.length > 2 ? splitInput[2] : "1"; // default quantity is 1
-
+    public void parseCommand(String input) {
         try {
+            String[] splitInput = input.split(" ");
+            if (splitInput.length > 3) {
+                throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+            }
+            assert(splitInput.length <= 3);
+            String commandString = splitInput[0].toLowerCase();
+            String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
+            String quantityStr = splitInput.length > 2 ? splitInput[2] : "1"; // default quantity is 1
+
             switch (commandString) {
             case "exit":
                 this.exitFlag = true;

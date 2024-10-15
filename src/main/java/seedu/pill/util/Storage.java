@@ -4,6 +4,7 @@ import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -84,9 +85,8 @@ public class Storage {
      * Loads saved CSV data into an ItemMap
      *
      * @return The ItemMap containing saved items
-     * @throws PillException if an error occurs during the loading process
      */
-    public ItemMap loadData() throws PillException {
+    public ItemMap loadData() {
         ItemMap loadedItems = new ItemMap();
         try {
             File file = initializeFile();
@@ -97,12 +97,12 @@ public class Storage {
                     Item item = loadLine(line);
                     loadedItems.addItemSilent(item.getName(), item.getQuantity());
                 } catch (PillException e) {
-                    throw new PillException(ExceptionMessages.LOAD_ERROR);
+                    PillException.printException(e);
                 }
             }
             scanner.close();
         } catch (IOException e) {
-            throw new PillException(ExceptionMessages.LOAD_ERROR);
+            throw new RuntimeException(e);
         }
         return loadedItems;
     }

@@ -4,9 +4,13 @@ public enum ExceptionMessages {
     INVALID_COMMAND         ("Invalid command, please try again."),
     SAVE_ERROR              ("Error saving to file, please try again."),
     LOAD_ERROR              ("Error loading saved data"),
-    INVALID_LINE_FORMAT     ("Invalid line format, file corrupted"),
+    INVALID_LINE_FORMAT     ("File corrupted. Ignoring invalid line format..."),
     INVALID_QUANTITY        ("Quantity is invalid, please try again"),
-    INVALID_QUANTITY_FORMAT ("Quantity provided is not a number, please try again.");
+    INVALID_QUANTITY_FORMAT ("Quantity provided is not a number, please try again."),
+    TOO_MANY_ARGUMENTS      ("Too many arguments. Accepted command formats are as follows:" +
+            "\n- [command]                      e.g. help" +
+            "\n- [command] <name>               e.g. delete JackDaniels" +
+            "\n- [command] <name> <quantity>    e.g. add JackDaniels 1231");
 
     private final String message;
 
