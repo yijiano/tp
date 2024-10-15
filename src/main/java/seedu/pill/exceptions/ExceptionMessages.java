@@ -1,7 +1,7 @@
 package seedu.pill.exceptions;
 
 public enum ExceptionMessages {
-    INVALID_COMMAND         ("Invalid command, please try again."),
+    INVALID_COMMAND         ("Invalid command, please try again.\nType the 'help' command for a list of valid commands."),
     SAVE_ERROR              ("Error saving to file, please try again."),
     LOAD_ERROR              ("Error loading saved data"),
     INVALID_LINE_FORMAT     ("File corrupted. Ignoring invalid line format..."),

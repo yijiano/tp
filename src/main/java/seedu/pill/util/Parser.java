@@ -30,7 +30,7 @@ public class Parser {
      */
     public void parseCommand(String input) {
         try {
-            String[] splitInput = input.split(" ");
+            String[] splitInput = input.split("\\s+");
             if (splitInput.length > 3) {
                 throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
             }
