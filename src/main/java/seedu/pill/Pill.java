@@ -1,7 +1,7 @@
 package seedu.pill;
 
 import seedu.pill.exceptions.PillException;
-import seedu.pill.util.ItemList;
+import seedu.pill.util.ItemMap;
 import seedu.pill.util.Parser;
 import seedu.pill.util.Printer;
 import seedu.pill.util.Storage;
@@ -9,7 +9,7 @@ import seedu.pill.util.Ui;
 
 public final class Pill {
     private static final Storage storage = new Storage();
-    private static ItemList items = new ItemList();
+    private static ItemMap items = new ItemMap();
     private static final Ui ui = new Ui(items);
     private static Parser parser = new Parser(items, storage);
 

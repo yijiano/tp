@@ -1,7 +1,7 @@
 package seedu.pill.command;
 
 import seedu.pill.exceptions.PillException;
-import seedu.pill.util.ItemList;
+import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
 public class EditItemCommand extends Command {
@@ -14,9 +14,9 @@ public class EditItemCommand extends Command {
     }
 
     @Override
-    public void execute(ItemList itemList, Storage storage) throws PillException {
-        itemList.editItem(itemName, newQuantity);
-        storage.saveItemList(itemList);
+    public void execute(ItemMap itemMap, Storage storage) throws PillException {
+        itemMap.editItem(itemName, newQuantity);
+        storage.saveItemMap(itemMap);
     }
 
     @Override

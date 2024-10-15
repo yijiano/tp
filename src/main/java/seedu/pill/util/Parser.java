@@ -12,13 +12,13 @@ import seedu.pill.exceptions.PillException;
 
 public class Parser {
     private boolean exitFlag = false;
-    private final ItemList items;
+    private final ItemMap items;
     private final Storage storage;
 
     /**
      * Public constructor for Parser.
      */
-    public Parser(ItemList items, Storage storage) {
+    public Parser(ItemMap items, Storage storage) {
         this.items = items;
         this.storage = storage;
     }

@@ -6,11 +6,11 @@ import seedu.pill.exceptions.PillException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Map;
 
 /**
- * The Storage class handles the storage of ItemList objects
+ * The Storage class handles the storage of ItemMap objects
  * in a file-based system, allowing for saving items and lists
  * of items to a specified text file.
  */
@@ -37,17 +37,18 @@ public class Storage {
     }
 
     /**
-     * Saves the provided ItemList to the storage file, overwriting
+     * Saves the provided ItemMap to the storage file, overwriting
      * existing content.
      *
-     * @param items The {@link ItemList} containing items to be saved.
+     * @param itemMap The {@link ItemMap} containing items to be saved.
      * @throws PillException if an error occurs during the saving process.
      */
-    public void saveItemList(ItemList items) throws PillException {
+    public void saveItemMap(ItemMap itemMap) throws PillException {
         try {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file);
-            for (Item item : items) {
+            for (Map.Entry<String, Item> entry : itemMap) {
+                Item item = entry.getValue();
                 fw.write((item.getName() + SEPARATOR + item.getQuantity()) + System.lineSeparator());
             }
             fw.close();
@@ -74,29 +75,30 @@ public class Storage {
     }
 
     /**
-     * Loads saved CSV data into an ItemList
+     * Loads saved CSV data into an ItemMap
      *
-     * @return The ItemList containing saved items
+     * @return The ItemMap containing saved items
      * @throws PillException if an error occurs during the loading process
      */
-    public ItemList loadData() throws PillException {
-        ArrayList<Item> loadedItems = new ArrayList<Item>();
+    public ItemMap loadData() throws PillException {
+        ItemMap loadedItems = new ItemMap();
         try {
             File file = initializeFile();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 try {
                     String line = scanner.nextLine();
-                    loadedItems.add(loadLine(line));
+                    Item item = loadLine(line);
+                    loadedItems.addItemSilent(item.getName(), item.getQuantity());
                 } catch (PillException e) {
-                    // Skip corrupt line
+                    throw new PillException(ExceptionMessages.LOAD_ERROR);
                 }
             }
             scanner.close();
         } catch (IOException e) {
             throw new PillException(ExceptionMessages.LOAD_ERROR);
         }
-        return new ItemList(loadedItems);
+        return loadedItems;
     }
 
     /**
