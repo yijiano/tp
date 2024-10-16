@@ -19,8 +19,13 @@ public class HelpCommand extends Command {
     private String commandName;
     private boolean verbose;
 
-    public HelpCommand(String commandName, boolean verbose) {
-        this.commandName = commandName;
+    public HelpCommand(String commandInput, boolean verbose) {
+        if (commandInput != null) {
+            String[] parts = commandInput.split("\\s+", 2);
+            this.commandName = parts.length > 0 ? parts[0].toLowerCase() : null;
+        } else {
+            this.commandName = null;
+        }
         this.verbose = verbose;
         logger.setLevel(Level.OFF);
         logger.info("Created HelpCommand for command: " + commandName + " with verbose mode: " + verbose);
@@ -38,7 +43,7 @@ public class HelpCommand extends Command {
         assert storage != null : "Storage cannot be null";
         logger.info("Executing HelpCommand");
 
-        if (commandName == null) {
+        if (commandName == null || commandName.isEmpty()) {
             showGeneralHelp();
         } else {
             showSpecificHelp(commandName);
@@ -90,7 +95,13 @@ public class HelpCommand extends Command {
             showExitHelp();
             break;
         default:
-            suggestSimilarCommand(command);
+            String closestMatch = StringMatcher.findClosestMatch(command, VALID_COMMANDS);
+            if (closestMatch != null) {
+                System.out.println("Did you mean: " + closestMatch + "?");
+                showSpecificHelp(closestMatch);
+            } else {
+                suggestSimilarCommand(command);
+            }
         }
     }
 
@@ -101,10 +112,8 @@ public class HelpCommand extends Command {
     private void suggestSimilarCommand(String command) {
         logger.info("Suggesting similar command for: " + command);
 
-        String closestMatch = StringMatcher.findClosestMatch(command, VALID_COMMANDS);
-
         System.out.println("Unknown command: " + command);
-
+        String closestMatch = StringMatcher.findClosestMatch(command, VALID_COMMANDS);
         if (closestMatch != null) {
             System.out.println("Did you mean: " + closestMatch + "?");
             System.out.println("Type 'help " + closestMatch + "' for more information on this command.");
