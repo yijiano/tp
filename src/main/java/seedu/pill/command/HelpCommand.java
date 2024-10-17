@@ -3,7 +3,10 @@ package seedu.pill.command;
 import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
+import seedu.pill.util.StringMatcher;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,11 +15,17 @@ import java.util.logging.Logger;
  */
 public class HelpCommand extends Command {
     private static final Logger logger = Logger.getLogger(HelpCommand.class.getName());
+    private static final List<String> VALID_COMMANDS = Arrays.asList("help", "add", "delete", "edit", "list", "exit");
     private String commandName;
     private boolean verbose;
 
-    public HelpCommand(String commandName, boolean verbose) {
-        this.commandName = commandName;
+    public HelpCommand(String commandInput, boolean verbose) {
+        if (commandInput != null) {
+            String[] parts = commandInput.split("\\s+", 2);
+            this.commandName = parts.length > 0 ? parts[0].toLowerCase() : null;
+        } else {
+            this.commandName = null;
+        }
         this.verbose = verbose;
         logger.setLevel(Level.OFF);
         logger.info("Created HelpCommand for command: " + commandName + " with verbose mode: " + verbose);
@@ -34,7 +43,7 @@ public class HelpCommand extends Command {
         assert storage != null : "Storage cannot be null";
         logger.info("Executing HelpCommand");
 
-        if (commandName == null) {
+        if (commandName == null || commandName.isEmpty()) {
             showGeneralHelp();
         } else {
             showSpecificHelp(commandName);
@@ -51,7 +60,7 @@ public class HelpCommand extends Command {
         System.out.println("  help    - Shows this help message");
         System.out.println("  add     - Adds a new item to the list");
         System.out.println("  delete  - Deletes an item from the list");
-        System.out.println("  edit    - Edits quantity of an existing item in the list");
+        System.out.println("  edit    - Edits an item in the list");
         System.out.println("  list    - Lists all items");
         System.out.println("  exit    - Exits the program");
         System.out.println("Type 'help <command>' for more information on a specific command.");
@@ -86,10 +95,34 @@ public class HelpCommand extends Command {
             showExitHelp();
             break;
         default:
-            System.out.println("Unknown command: " + command);
-            System.out.println("Available commands: help, add, delete, edit, list, exit");
-            System.out.println("Type 'help <command>' for more information on a specific command.");
+            String closestMatch = StringMatcher.findClosestMatch(command, VALID_COMMANDS);
+            if (closestMatch != null) {
+                System.out.println("Did you mean: " + closestMatch + "?");
+                showSpecificHelp(closestMatch);
+            } else {
+                suggestSimilarCommand(command);
+            }
         }
+    }
+
+    /**
+     * Suggests a similar command when an unknown command is entered.
+     * @param command - the unknown command entered by the user.
+     */
+    private void suggestSimilarCommand(String command) {
+        logger.info("Suggesting similar command for: " + command);
+
+        System.out.println("Unknown command: " + command);
+        String closestMatch = StringMatcher.findClosestMatch(command, VALID_COMMANDS);
+        if (closestMatch != null) {
+            System.out.println("Did you mean: " + closestMatch + "?");
+            System.out.println("Type 'help " + closestMatch + "' for more information on this command.");
+        } else {
+            System.out.println("No similar command found.");
+        }
+
+        System.out.println("\nAvailable commands: " + String.join(", ", VALID_COMMANDS));
+        System.out.println("Type 'help <command>' for more information on a specific command.");
     }
 
     /**
