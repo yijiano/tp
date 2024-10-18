@@ -1,15 +1,23 @@
 package seedu.pill.util;
 
+import java.time.LocalDate;
+
 /**
  * Represents an item in the inventory.
  */
 public class Item {
     private String name;
     private int quantity;
+    private LocalDate expiryDate;
 
     public Item(String name, int quantity) {
+        new Item(name, quantity, null);
+    }
+
+    public Item(String name, int quantity, LocalDate expiryDate) {
         this.name = name;
         this.quantity = quantity;
+        this.expiryDate = expiryDate;
     }
 
     public String getName() {
@@ -18,6 +26,10 @@ public class Item {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public LocalDate getExpiryDate() {
+        return expiryDate;
     }
 
     public void setQuantity(int quantity) {

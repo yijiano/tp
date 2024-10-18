@@ -1,5 +1,6 @@
 package seedu.pill.util;
 
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class ItemMap implements Iterable<Map.Entry<String, Item>> {
      * @param name     The name of the item.
      * @param quantity The quantity of the item.
      */
-    public void addItem(String name, int quantity) {
+    public void addItem(String name, int quantity, LocalDate expiryDate) {
         assert name != null && !name.trim().isEmpty() : "Item name cannot be null or empty";
         assert quantity > 0 : "Quantity must be positive";
 
