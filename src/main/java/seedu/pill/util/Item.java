@@ -49,11 +49,26 @@ public class Item implements Comparable<Item> {
      */
     @Override
     public int compareTo(Item other) {
+        if (this.expiryDate == null && other.expiryDate == null) {
+            return 0;
+        }
+        if (this.expiryDate == null) {
+            return 1; // Null (no expiry) is considered later than any date
+        }
+        if (other.expiryDate == null) {
+            return -1; // Any date is considered earlier than null (no expiry)
+        }
         return expiryDate.compareTo(other.expiryDate);
     }
 
     @Override
     public String toString() {
+        if (quantity <= 0) {
+            return name;
+        }
+        if (expiryDate == null) {
+            return name + ": " + quantity + " in stock";
+        }
         return name + ": " + quantity + " in stock, expiring: " + expiryDate;
     }
 
