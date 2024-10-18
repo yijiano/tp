@@ -7,6 +7,9 @@ import seedu.pill.util.Printer;
 import seedu.pill.util.Storage;
 import seedu.pill.util.Ui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public final class Pill {
     private static final Storage storage = new Storage();
     private static ItemMap items = new ItemMap();
@@ -17,14 +20,18 @@ public final class Pill {
      * Runs the main loop of the Pill chatbot.
      */
     public void run() {
+        Logger LOGGER = Logger.getLogger("PILL");
+        LOGGER.setLevel(Level.OFF);
         items = storage.loadData();
         Printer.printInitMessage();
         parser = new Parser(items, storage);
+        LOGGER.info("New Chatbot Conversation Created");
         while (!parser.getExitFlag()) {
             String line = ui.getInput();
             parser.parseCommand(line);
         }
         Printer.printExitMessage();
+        LOGGER.info("Chatbot Conversation Ended");
     }
 
     /**
