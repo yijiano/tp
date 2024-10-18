@@ -80,6 +80,7 @@ public class Parser {
     private int parseQuantity(String quantityStr) throws PillException {
         try {
             int quantity = Integer.parseInt(quantityStr);
+            assert quantity > 0 : "Quantity must be positive";
             if (quantity <= 0) {
                 throw new PillException(ExceptionMessages.INVALID_QUANTITY);
             }
