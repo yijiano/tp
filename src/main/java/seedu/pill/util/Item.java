@@ -11,7 +11,9 @@ public class Item implements Comparable<Item> {
     private LocalDate expiryDate;
 
     public Item(String name, int quantity) {
-        new Item(name, quantity, null);
+        this.name = name;
+        this.quantity = quantity;
+        this.expiryDate = null;
     }
 
     public Item(String name, int quantity, LocalDate expiryDate) {
