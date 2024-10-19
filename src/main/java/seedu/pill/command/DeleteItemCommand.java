@@ -1,6 +1,7 @@
 package seedu.pill.command;
 
 import seedu.pill.exceptions.PillException;
+import seedu.pill.util.Item;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
@@ -22,7 +23,9 @@ public class DeleteItemCommand extends Command {
 
     @Override
     public void execute(ItemMap itemMap, Storage storage) throws PillException {
-        itemMap.deleteItem(itemName, expiryDate);
+        // Looks stupid, but this way I don't handle Optionals in this class
+        Item item = new Item(itemName, 0, expiryDate);
+        itemMap.deleteItem(item.getName(), item.getExpiryDate());
         storage.saveItemMap(itemMap);
     }
 

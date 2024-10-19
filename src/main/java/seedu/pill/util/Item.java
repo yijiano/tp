@@ -1,6 +1,7 @@
 package seedu.pill.util;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Represents an item in the inventory.
@@ -8,18 +9,16 @@ import java.time.LocalDate;
 public class Item implements Comparable<Item> {
     private String name;
     private int quantity;
-    private LocalDate expiryDate;
+    private Optional<LocalDate> expiryDate;
 
     public Item(String name, int quantity) {
-        this.name = name;
-        this.quantity = quantity;
-        this.expiryDate = null;
+        this(name, quantity, null);
     }
 
     public Item(String name, int quantity, LocalDate expiryDate) {
         this.name = name;
         this.quantity = quantity;
-        this.expiryDate = expiryDate;
+        this.expiryDate = Optional.<LocalDate>ofNullable(expiryDate);
     }
 
     public String getName() {
@@ -30,7 +29,7 @@ public class Item implements Comparable<Item> {
         return quantity;
     }
 
-    public LocalDate getExpiryDate() {
+    public Optional<LocalDate> getExpiryDate() {
         return expiryDate;
     }
 
@@ -49,16 +48,11 @@ public class Item implements Comparable<Item> {
      */
     @Override
     public int compareTo(Item other) {
-        if (this.expiryDate == null && other.expiryDate == null) {
-            return 0;
-        }
-        if (this.expiryDate == null) {
-            return 1; // Null (no expiry) is considered later than any date
-        }
-        if (other.expiryDate == null) {
-            return -1; // Any date is considered earlier than null (no expiry)
-        }
-        return expiryDate.compareTo(other.expiryDate);
+        return this.getExpiryDate()
+                .map(thisDate -> other.getExpiryDate()
+                        .map(otherDate -> thisDate.compareTo(otherDate))
+                        .orElse(-1))
+                .orElseGet(() -> other.getExpiryDate().map(x -> 1).orElse(0));
     }
 
     @Override
@@ -66,10 +60,9 @@ public class Item implements Comparable<Item> {
         if (quantity <= 0) {
             return name;
         }
-        if (expiryDate == null) {
-            return name + ": " + quantity + " in stock";
-        }
-        return name + ": " + quantity + " in stock, expiring: " + expiryDate;
+        return this.expiryDate
+                .map(exDate -> name + ": " + quantity + " in stock, expiring: " + exDate)
+                .orElse(name + ": " + quantity + " in stock");
     }
 
     @Override

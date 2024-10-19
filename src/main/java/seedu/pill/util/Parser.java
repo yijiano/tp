@@ -1,6 +1,5 @@
 package seedu.pill.util;
 
-import seedu.pill.Pill;
 import seedu.pill.command.AddItemCommand;
 import seedu.pill.command.DeleteItemCommand;
 import seedu.pill.command.EditItemCommand;
@@ -35,13 +34,12 @@ public class Parser {
     public void parseCommand(String input) {
         try {
             String[] splitInput = input.split("\\s+");
-            if (splitInput.length > 3) {
+            if (splitInput.length > 4) {
                 throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
             }
-            assert(splitInput.length <= 3);
+            assert(splitInput.length <= 4);
             String commandString = splitInput[0].toLowerCase();
-            String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
-            String quantityStr = splitInput.length > 2 ? splitInput[2] : "1"; // default quantity is 1
+            String argument = splitInput.length > 1 ? splitInput[1] : null;
 
             switch (commandString) {
             case "exit":
@@ -60,7 +58,7 @@ public class Parser {
                 new FindCommand(argument).execute(this.items, this.storage);
                 break;
             case "help":
-                boolean flag = quantityStr.equals("-v");
+                boolean flag = splitInput[2].equals("-v");
                 new HelpCommand(argument, flag).execute(this.items, this.storage);
                 break;
             case "list":
@@ -90,7 +88,7 @@ public class Parser {
         }
         assert(splitInput.length <= 4);
 
-        String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
+        String argument = splitInput.length > 1 ? splitInput[1] : null;
         String quantityStr = "1";
         String expiryDateStr = null;
 
@@ -124,7 +122,7 @@ public class Parser {
         }
         assert(splitInput.length <= 3);
 
-        String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
+        String argument = splitInput.length > 1 ? splitInput[1] : null;
         String expiryDateStr = splitInput[2];
 
         return new DeleteItemCommand(argument, parseExpiryDate(expiryDateStr));
@@ -147,7 +145,7 @@ public class Parser {
         }
         assert(splitInput.length <= 4);
 
-        String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
+        String argument = splitInput.length > 1 ? splitInput[1] : null;
         String quantityStr = "1";
         String expiryDateStr = splitInput[2];
 
@@ -174,6 +172,9 @@ public class Parser {
      */
     private LocalDate parseExpiryDate(String expiryDateStr) throws PillException {
         try {
+            if (expiryDateStr == null) {
+                return null;
+            }
             return LocalDate.parse(expiryDateStr);
         } catch (DateTimeParseException e) {
             throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);

@@ -11,7 +11,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.zip.DataFormatException;
 
 /**
  * The Storage class handles the storage of ItemMap objects
@@ -58,7 +57,6 @@ public class Storage {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file);
             for (Map.Entry<String, TreeSet<Item>> itemSet : itemMap) {
-//                Item item = entry.getValue();
                 for (Item item : itemSet.getValue()) {
                     fw.write((item.getName() + SEPARATOR + item.getQuantity()
                             + SEPARATOR + item.getExpiryDate())
@@ -104,7 +102,7 @@ public class Storage {
                 try {
                     String line = scanner.nextLine();
                     Item item = loadLine(line);
-                    loadedItems.addItemSilent(item.getName(), item.getQuantity(), item.getExpiryDate());
+                    loadedItems.addItemSilent(item);
                 } catch (PillException e) {
                     PillException.printException(e);
                 }

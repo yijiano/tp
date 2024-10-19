@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
+import seedu.pill.util.Item;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -38,8 +39,13 @@ public class ListCommandTest {
     public void listCommandSimplePasses() throws PillException {
         // Initialize test environment
         ItemMap itemMap = new ItemMap();
-        itemMap.addItem("Bandage", 20);
-        itemMap.addItem("Syringe", 10);
+
+        Item item1 = new Item("Bandage", 20);
+        Item item2 = new Item("Syringe", 10);
+
+        itemMap.addItem(item1);
+        itemMap.addItem(item2);
+
         Storage storage = new Storage();
         ListCommand listCommand = new ListCommand();
 

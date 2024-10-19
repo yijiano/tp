@@ -12,6 +12,12 @@ public class AddItemCommand extends Command {
     private final int quantity;
     private final LocalDate expiryDate;
 
+    public AddItemCommand(String itemName, int quantity) {
+        this.itemName = itemName;
+        this.quantity = quantity;
+        this.expiryDate = null;
+    }
+
     public AddItemCommand(String itemName, int quantity, LocalDate expiryDate) {
         this.itemName = itemName;
         this.quantity = quantity;
@@ -20,8 +26,9 @@ public class AddItemCommand extends Command {
 
     @Override
     public void execute(ItemMap itemMap, Storage storage) throws PillException {
-        itemMap.addItem(itemName, quantity, expiryDate);
-        storage.saveItem(new Item(itemName, quantity, expiryDate));
+        Item item = new Item(itemName, quantity, expiryDate);
+        itemMap.addItem(item);
+        storage.saveItem(item);
     }
 
     @Override

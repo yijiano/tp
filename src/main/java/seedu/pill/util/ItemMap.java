@@ -1,6 +1,7 @@
 package seedu.pill.util;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,11 +34,13 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     /**
      * Adds a new item to the list.
      *
-     * @param name       The name of the item.
-     * @param quantity   The quantity of the item.
-     * @param expiryDate The expiry date of the item. Null value represents no expiry date.
+     * @param newItem The item to be added.
      */
-    public void addItem(String name, int quantity, LocalDate expiryDate) {
+    public void addItem(Item newItem) {
+        String name = newItem.getName();
+        int quantity = newItem.getQuantity();
+        Optional<LocalDate> expiryDate = newItem.getExpiryDate();
+
         assert name != null && !name.trim().isEmpty() : "Item name cannot be null or empty";
         assert quantity > 0 : "Quantity must be positive";
 
@@ -58,40 +61,50 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                     int newQuantity = item.getQuantity() + quantity;
                     item.setQuantity(newQuantity);
                     itemUpdated = true;
-                    LOGGER.info("Updated existing item with expiry date: " + name + ", new quantity: " + newQuantity + ", expiry: " + expiryDate);
-                    System.out.println("Item already exists with the same expiry date. Updated quantity: \n"
-                            + name + ": " + newQuantity + " in stock (Expiry: " + expiryDate + ")");
+                    expiryDate.ifPresentOrElse(
+                            expiry -> {
+                                LOGGER.info("Updated existing item with expiry date: " + newItem);
+                                System.out.println("Item already exists with the same expiry date. Updated quantity: \n"
+                                        + newItem);
+                            },
+                            () -> {
+                                LOGGER.info("Updated existing item with no expiry date: " + newItem);
+                                System.out.println("Item already exists with no expiry date. Updated quantity: \n"
+                                    + newItem);
+                            }
+                    );
                     break;
                 }
             }
 
             // If no item with the same expiry date, add a new one
             if (!itemUpdated) {
-                itemSet.add(new Item(name, quantity, expiryDate));
-                LOGGER.info("Added new item with different expiry date: " + name + ", quantity: " + quantity + ", expiry: " + expiryDate);
+                itemSet.add(newItem);
+                LOGGER.info("Added new item with different expiry date: " + newItem);
                 System.out.println("Added new item with a different expiry date: \n"
-                        + name + ": " + quantity + " in stock (Expiry: " + expiryDate + ")");
+                        + newItem);
             }
         } else {
             // If the item doesn't exist, create a new list for the item and add it
             TreeSet<Item> itemSet = new TreeSet<>();
-            Item item = new Item(name, quantity, expiryDate);
-            itemSet.add(item);
+            itemSet.add(newItem);
             items.put(name, itemSet);
-            LOGGER.info("Added new item: " + name + ", quantity: " + quantity + ", expiry: " + expiryDate);
+            LOGGER.info("Added new item: " + newItem);
             System.out.println("Added the following item to the inventory: \n"
-                    + item);
+                    + newItem);
         }
     }
 
     /**
      * Adds a new item to the list. Does not print any output.
      *
-     * @param name       The name of the item.
-     * @param quantity   The quantity of the item.
-     * @param expiryDate The expiry date of the item. Null value represents no expiry date.
+     * @param newItem The item to be added.
      */
-    public void addItemSilent(String name, int quantity, LocalDate expiryDate) {
+    public void addItemSilent(Item newItem) {
+        String name = newItem.getName();
+        int quantity = newItem.getQuantity();
+        Optional<LocalDate> expiryDate = newItem.getExpiryDate();
+
         assert name != null && !name.trim().isEmpty() : "Item name cannot be null or empty";
         assert quantity > 0 : "Quantity must be positive";
 
@@ -113,15 +126,14 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                 }
             }
             if (!itemUpdated) {
-                itemSet.add(new Item(name, quantity, expiryDate));
-                LOGGER.fine("Silently added new item: " + name + ", quantity: " + quantity);
+                itemSet.add(newItem);
+                LOGGER.fine("Silently added new item: " + newItem);
             }
         } else {
             TreeSet<Item> itemSet = new TreeSet<>();
-            Item item = new Item(name, quantity, expiryDate);
-            itemSet.add(item);
+            itemSet.add(newItem);
             items.put(name, itemSet);
-            LOGGER.fine("Silently added new item: " + name + ", quantity: " + quantity);
+            LOGGER.fine("Silently added new item: " + newItem);
         }
     }
 
@@ -131,7 +143,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      * @param name       The name of the item to be deleted.
      * @param expiryDate The date of the item to be deleted.
      */
-    public void deleteItem(String name, LocalDate expiryDate) {
+    public void deleteItem(String name, Optional<LocalDate> expiryDate) {
         assert name != null : "Item name cannot be null";
 
         if (name == null || name.trim().isEmpty()) {
@@ -142,7 +154,8 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
 
         TreeSet<Item> itemSet = items.get(name);
         if (itemSet != null) {
-            Item dummyItem = new Item(name, 0, expiryDate);
+            Item dummyItem = expiryDate.map(ex -> new Item(name, 0, ex))
+                            .orElse(new Item(name, 0));
             Item removedItem = itemSet.ceiling(dummyItem);
             if (removedItem != null && removedItem.getExpiryDate().equals(expiryDate)) {
                 itemSet.remove(removedItem);
@@ -163,13 +176,15 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
-     * Edits an item by its name.
+     * Edits an item by its name and expiry date.
      *
-     * @param name       The name of the item to be edited.
-     * @param quantity   The new quantity for the item.
-     * @param expiryDate The expiry date of the item.
+     * @param updatedItem The updated item that has a new quantity.
      */
-    public void editItem(String name, int quantity, LocalDate expiryDate) {
+    public void editItem(Item updatedItem) {
+        String name = updatedItem.getName();
+        int quantity = updatedItem.getQuantity();
+        Optional<LocalDate> expiryDate = updatedItem.getExpiryDate();
+
         assert name != null && !name.trim().isEmpty() : "Item name cannot be null or empty";
         assert quantity > 0 : "Quantity must be positive";
 
@@ -179,7 +194,6 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
             return;
         }
 
-//        Item item = items.get(name);
         TreeSet<Item> itemSet = items.get(name);
         boolean isUpdated = false;
         if (itemSet != null) {
@@ -190,11 +204,11 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                 }
             }
             if (isUpdated) {
-                LOGGER.info("Edited item: " + name + " Expiry: " + expiryDate + ", new quantity: " + quantity);
-                System.out.println("Edited item: " + name + " Expiry: " + expiryDate + " (" + quantity + " in stock)");
+                LOGGER.info("Edited item: " + updatedItem);
+                System.out.println("Edited item: " + updatedItem);
             } else {
-                LOGGER.warning("Attempt to edit non-existent item: " + name + " Expiry: " + expiryDate);
-                System.out.println("Item not found: " + name + " Expiry: " + expiryDate);
+                LOGGER.warning("Attempt to edit non-existent item: " + updatedItem);
+                System.out.println("Item not found: " + updatedItem);
             }
         } else {
             LOGGER.warning("Attempt to edit non-existent item: " + name);
@@ -241,7 +255,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
             TreeSet<Item> itemSet = entry.getValue();
             if (itemSet.first().getName().toLowerCase().contains(itemName.toLowerCase())) {
                 for (Item item : itemSet) {
-                    foundItems.addItemSilent(item.getName(), item.getQuantity(), item.getExpiryDate());
+                    foundItems.addItemSilent(item);
                 }
             }
         }
