@@ -1,5 +1,6 @@
 package seedu.pill.util;
 
+import seedu.pill.Pill;
 import seedu.pill.command.AddItemCommand;
 import seedu.pill.command.DeleteItemCommand;
 import seedu.pill.command.EditItemCommand;
@@ -50,10 +51,10 @@ public class Parser {
                 parseAddItemCommand(splitInput).execute(this.items, this.storage);
                 break;
             case "delete":
-                new DeleteItemCommand(argument).execute(this.items, this.storage);
+                parseDeleteItemCommand(splitInput).execute(this.items, this.storage);
                 break;
             case "edit":
-                new EditItemCommand(argument, parseQuantity(quantityStr)).execute(this.items, this.storage);
+                parseEditItemCommand(splitInput).execute(this.items, this.storage);
                 break;
             case "find":
                 new FindCommand(argument).execute(this.items, this.storage);
@@ -88,6 +89,7 @@ public class Parser {
             throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
         }
         assert(splitInput.length <= 4);
+
         String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
         String quantityStr = "1";
         String expiryDateStr = null;
@@ -104,6 +106,63 @@ public class Parser {
         }
 
         return new AddItemCommand(argument, parseQuantity(quantityStr), parseExpiryDate(expiryDateStr));
+    }
+
+    /**
+     * Parses the input and creates an {@code DeleteItemCommand} object.
+     * The input must be an array of strings that represents the item name and expiry date.
+     * If the input exceeds three elements, a {@code PillException} is thrown.
+     *
+     * @param splitInput An array of strings representing the user's input.
+     *                   The array contains the item name and expiry date.
+     * @return An {@code AddItemCommand} object containing the parsed item name and expiry date.
+     * @throws PillException If the input contains more than three arguments.
+     */
+    private DeleteItemCommand parseDeleteItemCommand(String[] splitInput) throws PillException {
+        if (splitInput.length > 3) {
+            throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+        }
+        assert(splitInput.length <= 3);
+
+        String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
+        String expiryDateStr = splitInput[2];
+
+        return new DeleteItemCommand(argument, parseExpiryDate(expiryDateStr));
+    }
+
+    /**
+     * Parses the user input to create an {@code EditItemCommand}.
+     * The input is expected to be split into an array of strings.
+     * The method handles scenarios where the user provides optional arguments
+     * such as the quantity of the item and the expiry date.
+     *
+     * @param splitInput The split user input as an array of strings.
+     *                   The first element is the command name, and the subsequent elements are the arguments.
+     * @return An {@code EditItemCommand} containing the item details parsed from the input.
+     * @throws PillException If there are more than 4 elements in the input array.
+     */
+    private EditItemCommand parseEditItemCommand(String[] splitInput) throws PillException {
+        if (splitInput.length > 4) {
+            throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+        }
+        assert(splitInput.length <= 4);
+
+        String argument = splitInput.length > 1 ? splitInput[1].toLowerCase() : null;
+        String quantityStr = "1";
+        String expiryDateStr = splitInput[2];
+
+        if (splitInput.length > 2) {
+            if (isANumber(splitInput[2])) {
+                quantityStr = splitInput[2];
+                if (splitInput.length > 3) {
+                    expiryDateStr = splitInput[3];
+                }
+            } else {
+                expiryDateStr = splitInput[2];
+            }
+        }
+
+        return new EditItemCommand(argument, parseQuantity(quantityStr), parseExpiryDate(expiryDateStr));
     }
 
     /**
