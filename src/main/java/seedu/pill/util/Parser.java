@@ -40,6 +40,7 @@ public class Parser {
             assert(splitInput.length <= 4);
             String commandString = splitInput[0].toLowerCase();
             String argument = splitInput.length > 1 ? splitInput[1] : null;
+            String flagStr = splitInput.length > 2 ? splitInput[2] : "";
 
             switch (commandString) {
             case "exit":
@@ -58,7 +59,7 @@ public class Parser {
                 new FindCommand(argument).execute(this.items, this.storage);
                 break;
             case "help":
-                boolean flag = splitInput[2].equals("-v");
+                boolean flag = flagStr.equals("-v");
                 new HelpCommand(argument, flag).execute(this.items, this.storage);
                 break;
             case "list":
@@ -123,7 +124,7 @@ public class Parser {
         assert(splitInput.length <= 3);
 
         String argument = splitInput.length > 1 ? splitInput[1] : null;
-        String expiryDateStr = splitInput[2];
+        String expiryDateStr = splitInput.length > 2 ? splitInput[2] : null;
 
         return new DeleteItemCommand(argument, parseExpiryDate(expiryDateStr));
     }
