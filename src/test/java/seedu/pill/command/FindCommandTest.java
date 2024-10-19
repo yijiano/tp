@@ -5,6 +5,7 @@ import seedu.pill.exceptions.PillException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import seedu.pill.util.Item;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
@@ -40,9 +41,15 @@ public class FindCommandTest{
     public void listFindSimplePasses() throws PillException {
         // Initialize test environment
         ItemMap itemMap = new ItemMap();
-        itemMap.addItem("Bandage", 20);
-        itemMap.addItem("Syringe", 10);
-        itemMap.addItem("Band-aid", 5);
+
+        Item item1 = new Item("Bandage", 20);
+        Item item2 = new Item("Syringe", 10);
+        Item item3 = new Item("Band-aid", 5);
+
+        itemMap.addItem(item1);
+        itemMap.addItem(item2);
+        itemMap.addItem(item3);
+
         Storage storage = new Storage();
         FindCommand findCommand = new FindCommand("Band");
 
@@ -67,9 +74,15 @@ public class FindCommandTest{
     public void listFindNotFoundPasses() throws PillException {
         // Initialize test environment
         ItemMap itemMap = new ItemMap();
-        itemMap.addItem("Bandage", 20);
-        itemMap.addItem("Syringe", 10);
-        itemMap.addItem("Band-aid", 5);
+
+        Item item1 = new Item("Bandage", 20);
+        Item item2 = new Item("Syringe", 10);
+        Item item3 = new Item("Band-aid", 5);
+
+        itemMap.addItem(item1);
+        itemMap.addItem(item2);
+        itemMap.addItem(item3);
+
         Storage storage = new Storage();
         FindCommand findCommand = new FindCommand("abc");
 

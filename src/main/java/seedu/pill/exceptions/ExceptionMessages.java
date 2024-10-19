@@ -8,6 +8,7 @@ public enum ExceptionMessages {
     INVALID_LINE_FORMAT     ("File corrupted. Ignoring invalid line format..."),
     INVALID_QUANTITY        ("Quantity is invalid, please try again"),
     INVALID_QUANTITY_FORMAT ("Quantity provided is not a number, please try again."),
+    PARSE_DATE_ERROR        ("Date provided is in the wrong format, please try again."),
     TOO_MANY_ARGUMENTS      ("Too many arguments. Accepted command formats are as follows:" +
                                 "\n- [command]                      e.g. help" +
                                 "\n- [command] <name>               e.g. delete JackDaniels" +

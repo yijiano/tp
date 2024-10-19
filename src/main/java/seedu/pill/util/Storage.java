@@ -6,8 +6,11 @@ import seedu.pill.exceptions.PillException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.Map;
+import java.util.TreeSet;
 
 /**
  * The Storage class handles the storage of ItemMap objects
@@ -53,9 +56,12 @@ public class Storage {
         try {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file);
-            for (Map.Entry<String, Item> entry : itemMap) {
-                Item item = entry.getValue();
-                fw.write((item.getName() + SEPARATOR + item.getQuantity()) + System.lineSeparator());
+            for (Map.Entry<String, TreeSet<Item>> itemSet : itemMap) {
+                for (Item item : itemSet.getValue()) {
+                    fw.write((item.getName() + SEPARATOR + item.getQuantity()
+                            + SEPARATOR + item.getExpiryDate())
+                            + System.lineSeparator());
+                }
             }
             fw.close();
         } catch (IOException e) {
@@ -73,7 +79,9 @@ public class Storage {
         try {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file, true);
-            fw.write((item.getName() + SEPARATOR + item.getQuantity()) + System.lineSeparator());
+            fw.write((item.getName() + SEPARATOR + item.getQuantity()
+                    + SEPARATOR + item.getExpiryDate())
+                    + System.lineSeparator());
             fw.close();
         } catch (IOException e) {
             throw new PillException(ExceptionMessages.SAVE_ERROR);
@@ -94,7 +102,7 @@ public class Storage {
                 try {
                     String line = scanner.nextLine();
                     Item item = loadLine(line);
-                    loadedItems.addItemSilent(item.getName(), item.getQuantity());
+                    loadedItems.addItemSilent(item);
                 } catch (PillException e) {
                     PillException.printException(e);
                 }
@@ -115,7 +123,15 @@ public class Storage {
     public Item loadLine(String line) throws PillException {
         Item item;
         String[] data = line.split(SEPARATOR);
-        if (data.length == 2) {
+        if (data.length == 3) {
+            try {
+                item = new Item(data[0], Integer.parseInt(data[1]), LocalDate.parse(data[2]));
+            } catch (NumberFormatException e) {
+                throw new PillException(ExceptionMessages.INVALID_QUANTITY_FORMAT);
+            } catch (DateTimeParseException e) {
+                throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
+            }
+        } else if (data.length == 2) {
             try {
                 item = new Item(data[0], Integer.parseInt(data[1]));
             } catch (NumberFormatException e) {
