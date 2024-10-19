@@ -1,5 +1,6 @@
 package seedu.pill.util;
 
+import seedu.pill.Pill;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
@@ -129,7 +130,13 @@ public class Storage {
             } catch (NumberFormatException e) {
                 throw new PillException(ExceptionMessages.INVALID_QUANTITY_FORMAT);
             } catch (DateTimeParseException e) {
+                throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
+            }
+        } else if (data.length == 2) {
+            try {
                 item = new Item(data[0], Integer.parseInt(data[1]));
+            } catch (NumberFormatException e) {
+                throw new PillException(ExceptionMessages.INVALID_QUANTITY_FORMAT);
             }
         } else {
             throw new PillException(ExceptionMessages.INVALID_LINE_FORMAT);

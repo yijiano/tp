@@ -25,7 +25,7 @@ public class LoadDataTest {
             Item item = storage.loadLine(data);
             fail();
         } catch (PillException e) {
-            assertEquals(ExceptionMessages.INVALID_LINE_FORMAT.getMessage(), e.getMessage());
+            assertEquals(ExceptionMessages.PARSE_DATE_ERROR.getMessage(), e.getMessage());
         }
     }
 
