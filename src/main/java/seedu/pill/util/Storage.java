@@ -1,6 +1,5 @@
 package seedu.pill.util;
 
-import seedu.pill.Pill;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
