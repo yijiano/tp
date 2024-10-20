@@ -18,6 +18,8 @@ import java.util.logging.*;
      */
     private static void setUpLogger() {
         logger = Logger.getLogger("PillLogger");
+        // Disable parent handlers to prevent unintended terminal output
+        logger.setUseParentHandlers(false);
         Handler consoleHandler = new ConsoleHandler();
         consoleHandler.setFormatter(new SimpleFormatter());
         consoleHandler.setLevel(Level.OFF);
