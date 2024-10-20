@@ -1,5 +1,6 @@
 package seedu.pill.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
 
@@ -25,6 +26,10 @@ import java.util.logging.*;
         consoleHandler.setLevel(Level.OFF);
         logger.addHandler(consoleHandler);
         try {
+            File dir = new File(PATH);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
             Handler fileHandler = new FileHandler(PATH + FILE_NAME, true);
             fileHandler.setFormatter(new SimpleFormatter());
             fileHandler.setLevel(Level.ALL);
