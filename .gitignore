@@ -15,4 +15,10 @@ bin/
 
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
+
+# Local data and log files
 /data/
+/log/
+
+# Artifact manifest file
+/META-INF/

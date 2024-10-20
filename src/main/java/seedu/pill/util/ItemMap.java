@@ -7,13 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * Represents a list of items and provides methods to add, delete, list, and edit items.
  */
 public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
-    private static final Logger LOGGER = Logger.getLogger(ItemMap.class.getName());
+    private static final Logger LOGGER = PillLogger.getLogger();
     private Map<String, TreeSet<Item>> items;
 
     /**
@@ -22,7 +21,6 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      */
     public ItemMap() {
         this.items = new LinkedHashMap<>();
-        LOGGER.setLevel(Level.OFF);
         LOGGER.info("New ItemMap instance created");
     }
 

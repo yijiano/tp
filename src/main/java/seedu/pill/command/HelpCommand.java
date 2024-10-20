@@ -2,19 +2,19 @@ package seedu.pill.command;
 
 import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemMap;
+import seedu.pill.util.PillLogger;
 import seedu.pill.util.Storage;
 import seedu.pill.util.StringMatcher;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Represents a command that displays help information about available commands.
  */
 public class HelpCommand extends Command {
-    private static final Logger logger = Logger.getLogger(HelpCommand.class.getName());
+    private static final Logger logger = PillLogger.getLogger();
     private static final List<String> VALID_COMMANDS = Arrays.asList("help", "add", "delete", "edit", "list", "exit");
     private String commandName;
     private boolean verbose;
@@ -27,7 +27,6 @@ public class HelpCommand extends Command {
             this.commandName = null;
         }
         this.verbose = verbose;
-        logger.setLevel(Level.OFF);
         logger.info("Created HelpCommand for command: " + commandName + " with verbose mode: " + verbose);
     }
 
