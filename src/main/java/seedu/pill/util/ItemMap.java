@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * Represents a list of items and provides methods to add, delete, list, and edit items.

@@ -2,14 +2,19 @@ package seedu.pill.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.*;
+import java.util.logging.Logger;
+import java.util.logging.Handler;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.FileHandler;
+import java.util.logging.SimpleFormatter;
 
 /**
  * A utility class that manages a logger for the application, logging to both
  * console and file. Logs are stored in {@code PillLog.log} under the {@code ./log/} directory.
  * Console logging is disabled ({@code Level.OFF}), while file logging captures all levels.
  */
- public class PillLogger {
+public class PillLogger {
     private static Logger logger;
     private static final String PATH = "./log/";
     private static final String FILE_NAME = "PillLog.log";
