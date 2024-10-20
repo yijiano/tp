@@ -24,17 +24,21 @@ public class PillLogger {
      */
     private static void setUpLogger() {
         logger = Logger.getLogger("PillLogger");
+
         // Disable parent handlers to prevent unintended terminal output
         logger.setUseParentHandlers(false);
+
         Handler consoleHandler = new ConsoleHandler();
         consoleHandler.setFormatter(new SimpleFormatter());
         consoleHandler.setLevel(Level.OFF);
         logger.addHandler(consoleHandler);
+
         try {
             File dir = new File(PATH);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
+            
             Handler fileHandler = new FileHandler(PATH + FILE_NAME, true);
             fileHandler.setFormatter(new SimpleFormatter());
             fileHandler.setLevel(Level.ALL);
