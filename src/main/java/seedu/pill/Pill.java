@@ -1,10 +1,6 @@
 package seedu.pill;
 
-import seedu.pill.util.ItemMap;
-import seedu.pill.util.Parser;
-import seedu.pill.util.Printer;
-import seedu.pill.util.Storage;
-import seedu.pill.util.Ui;
+import seedu.pill.util.*;
 
 import seedu.pill.exceptions.PillException;
 
@@ -16,13 +12,12 @@ public final class Pill {
     private static ItemMap items = new ItemMap();
     private static final Ui ui = new Ui(items);
     private static Parser parser = new Parser(items, storage);
+    private static final Logger LOGGER = PillLogger.getLogger();
 
     /**
      * Runs the main loop of the Pill chatbot.
      */
     public void run() {
-        Logger LOGGER = Logger.getLogger("PILL");
-        LOGGER.setLevel(Level.OFF);
         items = storage.loadData();
         Printer.printInitMessage();
         parser = new Parser(items, storage);
