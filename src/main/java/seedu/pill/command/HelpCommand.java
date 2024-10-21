@@ -221,7 +221,7 @@ public class HelpCommand extends Command {
     private void showStockCheckHelp() {
         logger.fine("Showing help information for 'stock-check' command");
 
-        System.out.println("stock-check: Displays all items in the inventory that need to be restocked, based on a threshold.");
+        System.out.println("stock-check: Displays all items in the inventory that need to be restocked.");
         if (verbose) {
             System.out.println("Usage: stock-check <threshold>");
             System.out.println("  <threshold> - Items with strictly less than this quantity will be printed.");
