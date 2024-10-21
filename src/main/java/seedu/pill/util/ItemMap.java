@@ -1,12 +1,12 @@
 package seedu.pill.util;
 
+import seedu.pill.exceptions.ExceptionMessages;
+import seedu.pill.exceptions.PillException;
+
 import java.time.LocalDate;
-import java.util.Optional;
-import java.util.LinkedHashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 /**
  * Represents a list of items and provides methods to add, delete, list, and edit items.
@@ -22,6 +22,10 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     public ItemMap() {
         this.items = new LinkedHashMap<>();
         LOGGER.info("New ItemMap instance created");
+    }
+
+    public boolean isEmpty() {
+        return this.items.isEmpty();
     }
 
     @Override
@@ -232,6 +236,45 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                 System.out.println(index + ". " + item.toString());
                 index++;
             }
+        }
+    }
+
+    /**
+     * Lists all the items in the inventory for restock command, given a threshold value.
+     * If the threshold is 1000, items with strictly less than 1000 quantity are printed.
+     *
+     * @param threshold The minimum number of items before it is deemed to require replenishment.
+     */
+    public void getRestockItemList(int threshold){
+        try {
+            if (items.isEmpty()) {
+                LOGGER.info("Attempted to list items, but inventory is empty");
+                return;
+            }
+            if (threshold < 0) {
+                throw new PillException(ExceptionMessages.INVALID_QUANTITY);
+            }
+
+            List<Item> filteredItems = items.values().stream()
+                    .flatMap(TreeSet::stream)
+                    .filter(item -> item.getQuantity() <= threshold)
+                    .toList();
+
+            if (filteredItems.isEmpty()) {
+                LOGGER.info("There are no items that need to be restocked.");
+                System.out.println("There are no items that need to be restocked.");
+
+            }
+            else {
+                LOGGER.info(String.format("Listing all items that need too be restocked (less than %d):", threshold));
+                System.out.printf("Listing all items that need too be restocked (less than %d):%n", threshold);
+                IntStream.rangeClosed(1, filteredItems.size())
+                        .forEach(i -> System.out.println(i + ". " + filteredItems.get(i - 1).toString()));
+            }
+
+        } catch (PillException e) {
+            LOGGER.severe(e.getMessage());
+            PillException.printException(e);
         }
     }
 
