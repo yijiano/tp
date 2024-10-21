@@ -1,5 +1,28 @@
 # Developer Guide
 
+## Table of Contents
+- [Developer Guide](#developer-guide)
+    - [Table of Contents](#table-of-contents)
+    - [Acknowledgements](#acknowledgements)
+    - [Design \& Implementation](#design--implementation)
+        - [UI and I/O](#ui-and-io)
+        - [Commands](#commands)
+        - [Storage](#storage)
+        - [Item and ItemMap](#item-and-itemmap)
+        - [DateTime](#datetime)
+        - [Exceptions and Logging](#exceptions-and-logging)
+    - [Product scope](#product-scope)
+        - [Target user profile](#target-user-profile)
+        - [Value proposition](#value-proposition)
+    - [User Stories](#user-stories)
+    - [Non-Functional Requirements](#non-functional-requirements)
+    - [Glossary](#glossary)
+    - [Instructions for Testing](#instructions-for-testing)
+        - [Manual Testing](#manual-testing)
+        - [JUnit Testing](#junit-testing)
+        - [Text UI Testing](#text-ui-testing)
+    - [Future Enhancements](#future-enhancements)
+
 ## Acknowledgements
 
 {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
