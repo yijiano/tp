@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.TreeSet;
@@ -79,9 +80,11 @@ public class Storage {
         try {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file, true);
-            fw.write((item.getName() + SEPARATOR + item.getQuantity()
-                    + SEPARATOR + item.getExpiryDate())
-                    + System.lineSeparator());
+            fw.write(item.getName() + SEPARATOR + item.getQuantity());
+            if (item.getExpiryDate().isPresent()) {
+                fw.write(SEPARATOR + item.getExpiryDate().get());
+            }
+            fw.write(System.lineSeparator());
             fw.close();
         } catch (IOException e) {
             throw new PillException(ExceptionMessages.SAVE_ERROR);
