@@ -23,7 +23,7 @@ public final class Pill {
      */
     public void run() {
         items = storage.loadData();
-        Printer.printInitMessage();
+        Printer.printInitMessage(items, 50);
         parser = new Parser(items, storage);
         logger.info("New Chatbot Conversation Created");
         while (!parser.getExitFlag()) {

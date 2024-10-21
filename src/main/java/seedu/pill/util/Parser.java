@@ -6,6 +6,7 @@ import seedu.pill.command.EditItemCommand;
 import seedu.pill.command.FindCommand;
 import seedu.pill.command.HelpCommand;
 import seedu.pill.command.ListCommand;
+import seedu.pill.command.StockCheckCommand;
 
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
@@ -63,7 +64,16 @@ public class Parser {
                 new HelpCommand(argument, flag).execute(this.items, this.storage);
                 break;
             case "list":
+                if (splitInput.length > 1) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
                 new ListCommand().execute(this.items, this.storage);
+                break;
+            case "stock-check":
+                if (splitInput.length > 2) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
+                new StockCheckCommand(argument).execute(this.items, this.storage);
                 break;
             default:
                 throw new PillException(ExceptionMessages.INVALID_COMMAND);

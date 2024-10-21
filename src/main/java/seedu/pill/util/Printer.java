@@ -27,10 +27,20 @@ public final class Printer {
     }
 
     /**
-     * Initializes the bot, prints the logo and a welcome message.
+     * Initializes the bot, prints the ASCII logo.
+     * Prints the list of items to be restocked if there are any.
+     * Finally, prints the welcome message.
+     *
+     * @param items Reference ItemMap to print restock list.
+     * @param threshold The minimum number of items before it is deemed to require replenishment.
      */
-    public static void printInitMessage(){
+    public static void printInitMessage(ItemMap items, int threshold){
         System.out.println(ASCII);
+        printSpace();
+        if (!items.isEmpty()) {
+            items.listItemsToRestock(threshold);
+            printSpace();
+        }
         System.out.println("Hello! I'm " + NAME +  "! " + "How can I help you today?");
     }
 
