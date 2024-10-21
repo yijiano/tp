@@ -4,7 +4,12 @@ import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
@@ -251,6 +256,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                 LOGGER.info("Attempted to list items, but inventory is empty");
                 return;
             }
+
             if (threshold < 0) {
                 throw new PillException(ExceptionMessages.INVALID_QUANTITY);
             }
@@ -264,8 +270,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                 LOGGER.info(String.format("There are no items that have quantity less than %d.", threshold));
                 System.out.printf("There are no items that have quantity less than %d:%n", threshold);
 
-            }
-            else {
+            } else {
                 LOGGER.info(String.format("Listing all items that need too be restocked (less than %d):", threshold));
                 System.out.printf("Listing all items that need too be restocked (less than %d):%n", threshold);
                 IntStream.rangeClosed(1, filteredItems.size())

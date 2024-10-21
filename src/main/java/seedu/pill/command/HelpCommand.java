@@ -15,7 +15,9 @@ import java.util.logging.Logger;
  */
 public class HelpCommand extends Command {
     private static final Logger logger = PillLogger.getLogger();
-    private static final List<String> VALID_COMMANDS = Arrays.asList("help", "add", "delete", "edit", "list", "exit", "stock-check");
+    private static final List<String> VALID_COMMANDS = Arrays.asList(
+            "help", "add", "delete", "edit",
+            "list", "exit", "stock-check");
     private final String commandName;
     private final boolean verbose;
 
