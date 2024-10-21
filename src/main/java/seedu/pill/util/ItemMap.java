@@ -246,7 +246,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
 
     /**
      * Lists all the items in the inventory for restock command, given a threshold value.
-     * If the threshold is 1000, items with strictly less than 1000 quantity are printed.
+     * Prints all items with quantity strictly less than threshold.
      *
      * @param threshold The minimum number of items before it is deemed to require replenishment.
      */
