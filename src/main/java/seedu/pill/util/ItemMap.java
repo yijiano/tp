@@ -250,7 +250,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      *
      * @param threshold The minimum number of items before it is deemed to require replenishment.
      */
-    public void getRestockItemList(int threshold){
+    public void listItemsToRestock(int threshold){
         try {
             if (items.isEmpty()) {
                 LOGGER.info("Attempted to list items, but inventory is empty");

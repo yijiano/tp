@@ -12,7 +12,7 @@ public class StockCheckCommand extends Command{
 
     @Override
     public void execute(ItemMap itemMap, Storage storage) {
-        itemMap.getRestockItemList(this.threshold);
+        itemMap.listItemsToRestock(this.threshold);
     }
 
     @Override
