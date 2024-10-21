@@ -261,8 +261,8 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                     .toList();
 
             if (filteredItems.isEmpty()) {
-                LOGGER.info("There are no items that need to be restocked.");
-                System.out.println("There are no items that need to be restocked.");
+                LOGGER.info(String.format("There are no items that have quantity less than %d.", threshold));
+                System.out.printf("There are no items that have quantity less than %d:%n", threshold);
 
             }
             else {

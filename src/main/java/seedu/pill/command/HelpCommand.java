@@ -15,9 +15,9 @@ import java.util.logging.Logger;
  */
 public class HelpCommand extends Command {
     private static final Logger logger = PillLogger.getLogger();
-    private static final List<String> VALID_COMMANDS = Arrays.asList("help", "add", "delete", "edit", "list", "exit");
-    private String commandName;
-    private boolean verbose;
+    private static final List<String> VALID_COMMANDS = Arrays.asList("help", "add", "delete", "edit", "list", "exit", "stock-check");
+    private final String commandName;
+    private final boolean verbose;
 
     public HelpCommand(String commandInput, boolean verbose) {
         if (commandInput != null) {
@@ -56,12 +56,13 @@ public class HelpCommand extends Command {
         logger.info("Showing general help information");
 
         System.out.println("Available commands:");
-        System.out.println("  help    - Shows this help message");
-        System.out.println("  add     - Adds a new item to the list");
-        System.out.println("  delete  - Deletes an item from the list");
-        System.out.println("  edit    - Edits an item in the list");
-        System.out.println("  list    - Lists all items");
-        System.out.println("  exit    - Exits the program");
+        System.out.println("  help          - Shows this help message");
+        System.out.println("  add           - Adds a new item to the list");
+        System.out.println("  delete        - Deletes an item from the list");
+        System.out.println("  edit          - Edits an item in the list");
+        System.out.println("  list          - Lists all items");
+        System.out.println("  stock-check   - Lists all items that need to be restocked");
+        System.out.println("  exit          - Exits the program");
         System.out.println("Type 'help <command>' for more information on a specific command.");
         System.out.println("Type 'help <command> -v' for verbose output with examples.");
     }
@@ -89,6 +90,9 @@ public class HelpCommand extends Command {
             break;
         case "list":
             showListHelp();
+            break;
+        case "stock-check":
+            showStockCheckHelp();
             break;
         case "exit":
             showExitHelp();
@@ -150,13 +154,14 @@ public class HelpCommand extends Command {
 
         System.out.println("add: Adds a new item to the inventory.");
         if (verbose) {
-            System.out.println("Usage: add <name> <quantity> <price>");
+            System.out.println("Usage: add <name> <quantity> <expiry>");
             System.out.println("  <name>     - Name of the item");
             System.out.println("  <quantity> - Initial quantity of the item");
+            System.out.println("  <expiry>   - Expiry date of the item in yyyy-MM-dd format");
             System.out.println("\nExample:");
-            System.out.println("  add Aspirin 100");
+            System.out.println("  add Aspirin 100 2024-05-24");
         }
-        System.out.println("\nCorrect input format: add <name> <quantity>");
+        System.out.println("\nCorrect input format: add <name> <quantity> <expiry>");
     }
 
     /**
@@ -167,12 +172,13 @@ public class HelpCommand extends Command {
 
         System.out.println("delete: Removes an item from the inventory.");
         if (verbose) {
-            System.out.println("Usage: delete <name>");
+            System.out.println("Usage: delete <name> <expiry>");
             System.out.println("  <name> - Name of the item to delete (as shown in the list)");
+            System.out.println("  <expiry>   - Expiry date of the item in yyyy/MM/dd format.");
             System.out.println("\nExample:");
-            System.out.println("  delete Aspirin");
+            System.out.println("  delete Aspirin 2024-05-24");
         }
-        System.out.println("\nCorrect input format: delete <name>");
+        System.out.println("\nCorrect input format: delete <name> <expiry>");
     }
 
     /**
@@ -183,13 +189,14 @@ public class HelpCommand extends Command {
 
         System.out.println("edit: Edits the item in the inventory.");
         if (verbose) {
-            System.out.println("Usage: edit <name> <quantity>");
+            System.out.println("Usage: edit <name> <quantity> <expiry>");
             System.out.println("  <name> - Name of the item to edit (as shown in the list)");
             System.out.println("  <quantity> - New quantity of the item");
+            System.out.println("  <expiry>   - Expiry date of the item in yyyy-MM-dd format");
             System.out.println("\nExample:");
-            System.out.println("  edit Aspirin 100");
+            System.out.println("  edit Aspirin 100 2024-05-24");
         }
-        System.out.println("\nCorrect input format: edit <name> <quantity>");
+        System.out.println("\nCorrect input format: edit <name> <quantity> <expiry>");
     }
 
     /**
@@ -204,6 +211,22 @@ public class HelpCommand extends Command {
             System.out.println("\nExample:");
             System.out.println("  list");
         }
+    }
+
+    /**
+     * Prints detailed information about the 'stock-check' command.
+     */
+    private void showStockCheckHelp() {
+        logger.fine("Showing help information for 'stock-check' command");
+
+        System.out.println("stock-check: Displays all items in the inventory that need to be restocked, based on a threshold.");
+        if (verbose) {
+            System.out.println("Usage: stock-check <threshold>");
+            System.out.println("  <threshold> - Items with strictly less than this quantity will be printed.");
+            System.out.println("\nExample:");
+            System.out.println("  stock-check 100");
+        }
+        System.out.println("\nCorrect input format: stock-check <threshold>");
     }
 
     /**
