@@ -79,9 +79,11 @@ public class Storage {
         try {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file, true);
-            fw.write((item.getName() + SEPARATOR + item.getQuantity()
-                    + SEPARATOR + item.getExpiryDate())
-                    + System.lineSeparator());
+            fw.write(item.getName() + SEPARATOR + item.getQuantity());
+            if (item.getExpiryDate().isPresent()) {
+                fw.write(SEPARATOR + item.getExpiryDate().get());
+            }
+            fw.write(System.lineSeparator());
             fw.close();
         } catch (IOException e) {
             throw new PillException(ExceptionMessages.SAVE_ERROR);
