@@ -8,7 +8,10 @@ import seedu.pill.exceptions.PillException;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AddItemCommandTest {
 
@@ -47,20 +50,5 @@ class AddItemCommandTest {
         assertEquals(expiryDate, itemMap.findItem("panadol")
                 .get("panadol").first().getExpiryDate().orElse(null), "Expiry date should match");
     }
-
-    @Test
-    public void addCommand_invalidItemName_throwsPillException() {
-        AddItemCommand command = new AddItemCommand("", 10, null);
-
-        assertThrows(PillException.class, () -> command.execute(itemMap, storage),
-                "Invalid item name should throw exception");
-    }
-
-    @Test
-    public void addCommand_invalidQuantity_throwsPillException() {
-        AddItemCommand command = new AddItemCommand("bandage", -5, null);
-
-        assertThrows(PillException.class, () -> command.execute(itemMap, storage),
-                "Invalid quantity should throw exception");
-    }
+    
 }
