@@ -42,39 +42,39 @@ public class Parser {
             String arguments = String.join(" ", Arrays.copyOfRange(splitInput, 1, splitInput.length));
 
             switch (commandString) {
-                case "exit":
-                    this.exitFlag = true;
-                    break;
-                case "add":
-                    parseAddItemCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "delete":
-                    parseDeleteItemCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "edit":
-                    parseEditItemCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "find":
-                    new FindCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "help":
-                    boolean flag = flagStr.equals("-v");
-                    new HelpCommand(argument, flag).execute(this.items, this.storage);
-                    break;
-                case "list":
-                    if (splitInput.length > 1) {
-                        throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-                    }
-                    new ListCommand().execute(this.items, this.storage);
-                    break;
-                case "stock-check":
-                    if (splitInput.length > 2) {
-                        throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-                    }
-                    new StockCheckCommand(argument).execute(this.items, this.storage);
-                    break;
-                default:
-                    throw new PillException(ExceptionMessages.INVALID_COMMAND);
+            case "exit":
+                this.exitFlag = true;
+                break;
+            case "add":
+                parseAddItemCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "delete":
+                parseDeleteItemCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "edit":
+                parseEditItemCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "find":
+                new FindCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "help":
+                boolean flag = flagStr.equals("-v");
+                new HelpCommand(argument, flag).execute(this.items, this.storage);
+                break;
+            case "list":
+                if (splitInput.length > 1) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
+                new ListCommand().execute(this.items, this.storage);
+                break;
+            case "stock-check":
+                if (splitInput.length > 2) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
+                new StockCheckCommand(argument).execute(this.items, this.storage);
+                break;
+            default:
+                throw new PillException(ExceptionMessages.INVALID_COMMAND);
             }
         } catch (PillException e) {
             PillException.printException(e);
@@ -161,7 +161,7 @@ public class Parser {
      * The method constructs the item name by looping through the input until a valid date is found.
      * Any valid date found is treated as the item's expiry date.
      *
-     * @param arguments A string representing the user's input for deleting an item, including the item name and optionally the expiry date.
+     * @param arguments A string representing the user's input for deleting an item
      * @return A {@code DeleteItemCommand} containing the parsed item name and optional expiry date.
      * @throws PillException If the input format is invalid (e.g., more than one date or no item name provided).
      */
