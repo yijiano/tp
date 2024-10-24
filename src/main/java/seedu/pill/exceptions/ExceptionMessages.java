@@ -10,7 +10,7 @@ public enum ExceptionMessages {
     INVALID_QUANTITY_FORMAT ("Quantity provided is not a number, please try again."),
     INVALID_ADD_COMMAND     ("Invalid Add command format..."),
     INVALID_DELETE_COMMAND  ("Invalid Delete command format..."),
-    INVALID_EDIT_COMMAND    ("Edit command requires at least an item name."),
+    INVALID_EDIT_COMMAND    ("Invalid Edit command format..."),
     PARSE_DATE_ERROR        ("Date provided is in the wrong format, please try again."),
     TOO_MANY_ARGUMENTS      ("Too many arguments. Please type 'help' for accepted commands.");
 
