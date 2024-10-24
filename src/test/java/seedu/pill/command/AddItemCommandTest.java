@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AddItemCommandTest {
 
@@ -50,5 +49,4 @@ class AddItemCommandTest {
         assertEquals(expiryDate, itemMap.findItem("panadol")
                 .get("panadol").first().getExpiryDate().orElse(null), "Expiry date should match");
     }
-    
 }
