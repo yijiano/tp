@@ -62,7 +62,6 @@ public class Storage {
                 for (Item item : itemSet) {
                     fw.write(item.getName() + SEPARATOR + item.getQuantity());
 
-                    // Handle expiry date
                     if (item.getExpiryDate().isPresent()) {
                         fw.write(SEPARATOR + item.getExpiryDate().get().toString());
                     } else {
