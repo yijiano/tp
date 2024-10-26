@@ -38,6 +38,7 @@ public final class Printer {
         System.out.println(ASCII);
         printSpace();
         if (!items.isEmpty()) {
+            items.listExpiredItems();
             items.listItemsToRestock(threshold);
             printSpace();
         }
