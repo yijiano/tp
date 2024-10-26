@@ -334,6 +334,31 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
+     * Retrieves all items that have expired from the item map.
+     *
+     * <p>This method iterates through all items in the item map and checks each item's expiry date.
+     * If the expiry date is before the current date, the item is added to a new {@code ItemMap}
+     * containing only the expired items.</p>
+     *
+     * @return an {@code ItemMap} containing all items that have expired.
+     */
+    public ItemMap getExpiredItems() {
+        ItemMap expiredItems = new ItemMap();
+        LocalDate currDate = LocalDate.now();
+        for (Map.Entry<String, TreeSet<Item>> entry : items.entrySet()) {
+            TreeSet<Item> itemSet = entry.getValue();
+            for (Item item : itemSet) {
+                item.getExpiryDate().ifPresent(expiry -> {
+                    if (expiry.isBefore(currDate)) {
+                        expiredItems.addItemSilent(item);
+                    }
+                });
+            }
+        }
+        return expiredItems;
+    }
+
+    /**
      * Returns the total number of items in the map.
      * This counts each individual item, including those with different expiry dates.
      *
