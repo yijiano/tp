@@ -1,8 +1,8 @@
 package seedu.pill.command;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
@@ -10,159 +10,299 @@ import seedu.pill.util.Storage;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class HelpCommandTest {
-
-    // Will add more Test cases as we go, already missing a few I need to test.
+    private ItemMap itemMap;
+    private Storage storage;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
     @BeforeEach
-    public void setUpStreams() {
+    void setUp() {
+        itemMap = new ItemMap();
+        storage = new Storage();
         System.setOut(new PrintStream(outContent));
     }
 
-    @AfterEach
-    public void restoreStreams() {
-        System.setOut(originalOut);
-    }
-
     @Test
-    public void testGeneralHelp() throws PillException {
-        HelpCommand helpCommand = new HelpCommand(null, false);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
+    void execute_emptyCommand_printsGeneralHelp() throws PillException {
+        HelpCommand command = new HelpCommand("", false);
+        command.execute(itemMap, storage);
 
-        helpCommand.execute(itemMap, storage);
-
-        String output = outContent.toString().trim();
+        String output = outContent.toString();
         assertTrue(output.contains("Available commands:"));
-        assertTrue(output.contains("help"));
-        assertTrue(output.contains("add"));
-        assertTrue(output.contains("delete"));
-        assertTrue(output.contains("edit"));
-        assertTrue(output.contains("list"));
-        assertTrue(output.contains("exit"));
+        assertTrue(output.contains("Type 'help <command>' for more information"));
     }
 
     @Test
-    public void testSpecificCommandHelp() throws PillException {
-        HelpCommand helpCommand = new HelpCommand("add", false);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
+    void execute_nullCommand_printsGeneralHelp() throws PillException {
+        HelpCommand command = new HelpCommand(null, false);
+        command.execute(itemMap, storage);
 
-        helpCommand.execute(itemMap, storage);
-
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("add:"));
-        assertTrue(output.contains("Adds a new item to the inventory"));
+        String output = outContent.toString();
+        assertTrue(output.contains("Available commands:"));
+        assertTrue(output.contains("Type 'help <command>' for more information"));
     }
 
     @Test
-    public void testVerboseSpecificCommandHelp() throws PillException {
-        HelpCommand helpCommand = new HelpCommand("add", true);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
+    void execute_helpForHelp_printsHelpHelp() throws PillException {
+        HelpCommand command = new HelpCommand("help", false);
+        command.execute(itemMap, storage);
 
-        helpCommand.execute(itemMap, storage);
+        String output = outContent.toString();
+        assertTrue(output.contains("help: Shows help information"));
+    }
 
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("add:"));
-        assertTrue(output.contains("Adds a new item to the inventory"));
-        assertTrue(output.contains("Usage:"));
+    @Test
+    void execute_verboseHelpForHelp_printsDetailedHelpHelp() throws PillException {
+        HelpCommand command = new HelpCommand("help", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: help [command] [-v]"));
+        assertTrue(output.contains("Examples:"));
+    }
+
+    @Test
+    void execute_verboseHelpForDelete_printsDetailedDeleteHelp() throws PillException {
+        HelpCommand command = new HelpCommand("delete", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: delete <name> <expiry>"));
         assertTrue(output.contains("Example:"));
     }
 
     @Test
-    public void testUnknownCommand() throws PillException {
-        HelpCommand helpCommand = new HelpCommand("unknown", false);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
+    void execute_verboseHelpForEdit_printsDetailedEditHelp() throws PillException {
+        HelpCommand command = new HelpCommand("edit", true);
+        command.execute(itemMap, storage);
 
-        helpCommand.execute(itemMap, storage);
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: edit <name> <quantity> <expiry>"));
+        assertTrue(output.contains("Example:"));
+    }
 
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("Unknown command: unknown"));
+    @Test
+    void execute_verboseHelpForList_printsDetailedListHelp() throws PillException {
+        HelpCommand command = new HelpCommand("list", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: list"));
+        assertTrue(output.contains("Example:"));
+    }
+
+    @Test
+    void execute_verboseHelpForStockCheck_printsDetailedStockCheckHelp() throws PillException {
+        HelpCommand command = new HelpCommand("stock-check", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: stock-check <threshold>"));
+        assertTrue(output.contains("Example:"));
+    }
+
+    @Test
+    void execute_verboseHelpForExit_printsDetailedExitHelp() throws PillException {
+        HelpCommand command = new HelpCommand("exit", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: exit"));
+        assertTrue(output.contains("Example:"));
+    }
+
+    @Test
+    void execute_invalidCommand_suggestsSimilarCommand() throws PillException {
+        HelpCommand command = new HelpCommand("hel", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: help?"));
+        assertTrue(output.contains("help: Shows help information"));
+    }
+
+    @Test
+    void execute_veryInvalidCommand_showsNoSimilarCommand() throws PillException {
+        HelpCommand command = new HelpCommand("xyz", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Unknown command:"));
+        assertTrue(output.contains("No similar command found"));
+    }
+
+    @Test
+    void execute_nullItemMap_throwsAssertionError() {
+        HelpCommand command = new HelpCommand("help", false);
+        assertThrows(AssertionError.class, () -> command.execute(null, storage));
+    }
+
+    @Test
+    void execute_nullStorage_throwsAssertionError() {
+        HelpCommand command = new HelpCommand("help", false);
+        assertThrows(AssertionError.class, () -> command.execute(itemMap, null));
+    }
+
+    @Test
+    void isExit_returnsAlwaysFalse() {
+        HelpCommand command = new HelpCommand("help", false);
+        assertFalse(command.isExit());
+    }
+
+    @AfterEach
+    void restoreSystemStreams() {
+        System.setOut(originalOut);
+    }
+
+    @Test
+    void execute_helpWithMultipleWords_printsGeneralHelp() throws PillException {
+        HelpCommand command = new HelpCommand("help more words", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("help: Shows help information"));
+    }
+
+    @Test
+    void execute_multiWordInvalidCommand_showsNoSimilarCommand() throws PillException {
+        HelpCommand command = new HelpCommand("invalid command string", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Unknown command:"));
+        assertTrue(output.contains("No similar command found"));
+    }
+
+    @Test
+    void execute_almostList_suggestsListCommand() throws PillException {
+        HelpCommand command = new HelpCommand("lst", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: list?"));
+    }
+
+    @Test
+    void execute_almostAdd_suggestsAddCommand() throws PillException {
+        HelpCommand command = new HelpCommand("ad", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: add?"));
+    }
+
+    @Test
+    void execute_almostDelete_suggestsDeleteCommand() throws PillException {
+        HelpCommand command = new HelpCommand("delet", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: delete?"));
+    }
+
+    @Test
+    void execute_almostEdit_suggestsEditCommand() throws PillException {
+        HelpCommand command = new HelpCommand("edt", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: edit?"));
+    }
+
+    @Test
+    void execute_almostStockCheck_suggestsStockCheckCommand() throws PillException {
+        HelpCommand command = new HelpCommand("stock-chek", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: stock-check?"));
+    }
+
+    @Test
+    void execute_almostExit_suggestsExitCommand() throws PillException {
+        HelpCommand command = new HelpCommand("ext", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: exit?"));
+    }
+
+    @Test
+    void execute_commandWithExtraSpaces_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("help    -v", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: help [command] [-v]"));
+    }
+
+    @Test
+    void execute_mixedCaseCommand_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("HeLp", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("help: Shows help information"));
+    }
+
+    @Test
+    void execute_commandWithTrailingSpaces_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("help   ", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("help: Shows help information"));
+    }
+
+    @Test
+    void execute_verboseWithExtraFlags_stillShowsVerbose() throws PillException {
+        HelpCommand command = new HelpCommand("help -v -x", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: help [command] [-v]"));
+        assertTrue(output.contains("Examples:"));
+    }
+
+    @Test
+    void execute_helpWithSpecialCharacters_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("help#$%", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Unknown command:"));
         assertTrue(output.contains("Available commands:"));
     }
 
     @Test
-    public void testHelpWithEmptyString() throws PillException {
-        HelpCommand helpCommand = new HelpCommand("", false);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
+    void execute_emptyStringCommand_printsGeneralHelp() throws PillException {
+        HelpCommand command = new HelpCommand("    ", false);
+        command.execute(itemMap, storage);
 
-        helpCommand.execute(itemMap, storage);
-
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("Available commands:"), "Should show general help for empty string input");
+        String output = outContent.toString();
+        assertTrue(output.contains("Available commands:"));
     }
 
     @Test
-    public void testHelpWithWhitespaceOnly() throws PillException {
-        HelpCommand helpCommand = new HelpCommand("   ", false);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
+    void execute_helpWithNumbers_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("help123", false);
+        command.execute(itemMap, storage);
 
-        helpCommand.execute(itemMap, storage);
-
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("Available commands:"), "Should show general help for whitespace-only input");
+        String output = outContent.toString();
+        assertTrue(output.contains("Unknown command:"));
     }
 
     @Test
-    public void testHelpWithMixedCase() throws PillException {
-        HelpCommand helpCommand = new HelpCommand("AdD", false);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
+    void execute_caseInsensitiveVerboseFlag_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("help -V", true);
+        command.execute(itemMap, storage);
 
-        helpCommand.execute(itemMap, storage);
-
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("add:"), "Should recognize command regardless of case");
-    }
-
-    @Test
-    public void testHelpWithExtraArguments() throws PillException {
-        HelpCommand helpCommand = new HelpCommand("add extra args", false);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
-
-        helpCommand.execute(itemMap, storage);
-
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("add:"), "Should ignore extra arguments and show help for 'add'");
-    }
-
-    @Test
-    public void testAllSpecificCommands() throws PillException {
-        String[] commands = {"help", "add", "delete", "edit", "list", "exit"};
-        for (String cmd : commands) {
-            outContent.reset(); // Clear the output stream
-            HelpCommand helpCommand = new HelpCommand(cmd, false);
-            ItemMap itemMap = new ItemMap();
-            Storage storage = new Storage();
-
-            helpCommand.execute(itemMap, storage);
-
-            String output = outContent.toString().trim();
-            assertTrue(output.contains(cmd + ":"), "Should show help for " + cmd + " command");
-        }
-    }
-
-    @Test
-    public void testTypoSuggestionWithNoCloseMatch() throws PillException {
-        HelpCommand helpCommand = new HelpCommand("xyz", false);
-        ItemMap itemMap = new ItemMap();
-        Storage storage = new Storage();
-
-        helpCommand.execute(itemMap, storage);
-
-        String output = outContent.toString().trim();
-        assertTrue(output.contains("Unknown command: xyz"), "Should indicate unknown command");
-        assertTrue(output.contains("Available commands:"), "Should list available commands");
-        assertFalse(output.contains("Did you mean:"), "Should not suggest a command when there's no close match");
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: help [command] [-v]"));
     }
 }
