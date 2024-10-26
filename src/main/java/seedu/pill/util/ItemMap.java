@@ -268,6 +268,26 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
         }
     }
 
+    public void listExpiredItems() {
+        ItemMap expiredItems = this.getExpiredItems();
+        if (expiredItems.isEmpty()) {
+            LOGGER.info("There are no items that have expired.");
+            System.out.println("There are no items that have expired.");
+        } else {
+            LOGGER.info("Listing all items that have expired");
+            System.out.println("Listing all items that have expired");
+            int index = 1;
+            for (Map.Entry<String, TreeSet<Item>> entry : expiredItems.items.entrySet()) {
+                TreeSet<Item> itemSet = entry.getValue();
+                for (Item item : itemSet) {
+                    System.out.println(index + ". " + item.toString());
+                    index++;
+                }
+            }
+            System.out.println();
+        }
+    }
+
     /**
      * Lists all the items in the inventory for restock command, given a threshold value.
      * Prints all items with quantity strictly less than threshold.
