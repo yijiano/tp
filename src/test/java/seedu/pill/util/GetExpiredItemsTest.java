@@ -9,14 +9,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GetExpiredItemsTest {
     @Test
-    public void getExpiredEmptyTest(){
+    public void getExpiredEmptyTest() {
         ItemMap items = new ItemMap();
         ItemMap expiredItems = items.getExpiredItems();
         assertTrue(expiredItems.isEmpty());
     }
 
     @Test
-    public void getExpiredTestSimpleExpired(){
+    public void getExpiredTestNoDate() {
+        ItemMap items = new ItemMap();
+        Item item1 = new Item("a", 5);
+        items.addItem(item1);
+        ItemMap expiredItems = items.getExpiredItems();
+        assertTrue(expiredItems.isEmpty());
+    }
+
+    @Test
+    public void getExpiredTestSimpleExpired() {
         Item item1 = new Item("a", 5, LocalDate.now().plusDays(-1));
         Item item2 = new Item("a", 2, LocalDate.now().plusDays(1));
         Item item3 = new Item("a", 3, LocalDate.now().plusDays(2));
@@ -31,7 +40,7 @@ public class GetExpiredItemsTest {
     }
 
     @Test
-    public void getExpiredTestSimpleNotExpired(){
+    public void getExpiredTestSimpleNotExpired() {
         Item item1 = new Item("a", 5, LocalDate.now().plusDays(1));
         Item item2 = new Item("a", 2, LocalDate.now().plusDays(2));
         Item item3 = new Item("a", 3, LocalDate.now().plusDays(3));
@@ -44,7 +53,7 @@ public class GetExpiredItemsTest {
     }
 
     @Test
-    public void getExpiredTestMixed(){
+    public void getExpiredTestMixed() {
         Item item1 = new Item("a", 5, LocalDate.now().plusDays(-22));
         Item item2 = new Item("b", 6, LocalDate.now().plusDays(-2));
         Item item3 = new Item("c", 4, LocalDate.now().plusDays(3));
