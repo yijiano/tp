@@ -39,6 +39,30 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
+     * Compares this ItemMap to the specified object for equality.
+     *
+     * <p>This method returns {@code true} if and only if the specified object
+     * is also an ItemMap and both ItemMaps contain the same key-value pairs,
+     * where keys are strings and values are sets of Item objects. The equality
+     * of Item objects is determined by their own {@link Item#equals(Object)}
+     * method.</p>
+     *
+     * @param obj the object to be compared for equality with this ItemMap
+     * @return {@code true} if the specified object is equal to this ItemMap;
+     *         {@code false} otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof ItemMap itemMap) {
+            return this.items.equals(itemMap.items);
+        }
+        return false;
+    }
+
+    /**
      * Adds a new item to the list.
      *
      * @param newItem The item to be added.
