@@ -8,9 +8,7 @@ public class ExpiredCommand extends Command {
 
     @Override
     public void execute(ItemMap itemMap, Storage storage) {
-        ItemMap expiredItems = itemMap.getExpiredItems();
-        ListCommand listCommand = new ListCommand();
-        listCommand.execute(expiredItems, storage);
+        itemMap.listExpiredItems();
     }
 
     @Override
