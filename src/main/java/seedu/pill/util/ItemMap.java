@@ -268,6 +268,13 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
         }
     }
 
+    /**
+     * Lists all expired items in this {@code ItemMap}.
+     * <p>
+     * Retrieves expired items from {@link #getExpiredItems()} and logs a message
+     * if no items have expired. If there are expired items, the items are printed.
+     *
+     */
     public void listExpiredItems() {
         ItemMap expiredItems = this.getExpiredItems();
         if (expiredItems.isEmpty()) {

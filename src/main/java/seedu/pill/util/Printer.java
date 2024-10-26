@@ -28,6 +28,7 @@ public final class Printer {
 
     /**
      * Initializes the bot, prints the ASCII logo.
+     * Prints expired items if any.
      * Prints the list of items to be restocked if there are any.
      * Finally, prints the welcome message.
      *
