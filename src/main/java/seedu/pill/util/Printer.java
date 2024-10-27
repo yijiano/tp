@@ -39,7 +39,7 @@ public final class Printer {
         System.out.println(ASCII);
         printSpace();
         if (!items.isEmpty()) {
-            items.listExpiredItems();
+            items.listExpiringItems(LocalDate.now());
             items.listItemsToRestock(threshold);
             printSpace();
         }
