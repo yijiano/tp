@@ -39,6 +39,30 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
+     * Compares this ItemMap to the specified object for equality.
+     *
+     * <p>This method returns {@code true} if and only if the specified object
+     * is also an ItemMap and both ItemMaps contain the same key-value pairs,
+     * where keys are strings and values are sets of Item objects. The equality
+     * of Item objects is determined by their own {@link Item#equals(Object)}
+     * method.</p>
+     *
+     * @param obj the object to be compared for equality with this ItemMap
+     * @return {@code true} if the specified object is equal to this ItemMap;
+     *         {@code false} otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof ItemMap itemMap) {
+            return this.items.equals(itemMap.items);
+        }
+        return false;
+    }
+
+    /**
      * Adds a new item to the list.
      *
      * @param newItem The item to be added.
@@ -245,6 +269,33 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
+     * Lists all expired items in this {@code ItemMap}.
+     * <p>
+     * Retrieves expired items from {@link #getExpiredItems()} and logs a message
+     * if no items have expired. If there are expired items, the items are printed.
+     *
+     */
+    public void listExpiredItems() {
+        ItemMap expiredItems = this.getExpiredItems();
+        if (expiredItems.isEmpty()) {
+            LOGGER.info("There are no items that have expired.");
+            System.out.println("There are no items that have expired.");
+        } else {
+            LOGGER.info("Listing all items that have expired");
+            System.out.println("Listing all items that have expired");
+            int index = 1;
+            for (Map.Entry<String, TreeSet<Item>> entry : expiredItems.items.entrySet()) {
+                TreeSet<Item> itemSet = entry.getValue();
+                for (Item item : itemSet) {
+                    System.out.println(index + ". " + item.toString());
+                    index++;
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    /**
      * Lists all the items in the inventory for restock command, given a threshold value.
      * Prints all items with quantity strictly less than threshold.
      *
@@ -307,6 +358,31 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
         }
         LOGGER.info("Found " + foundItems.items.size() + " items matching: " + itemName);
         return foundItems;
+    }
+
+    /**
+     * Retrieves all items that have expired from the item map.
+     *
+     * <p>This method iterates through all items in the item map and checks each item's expiry date.
+     * If the expiry date is before the current date, the item is added to a new {@code ItemMap}
+     * containing only the expired items.</p>
+     *
+     * @return an {@code ItemMap} containing all items that have expired.
+     */
+    public ItemMap getExpiredItems() {
+        ItemMap expiredItems = new ItemMap();
+        LocalDate currDate = LocalDate.now();
+        for (Map.Entry<String, TreeSet<Item>> entry : items.entrySet()) {
+            TreeSet<Item> itemSet = entry.getValue();
+            for (Item item : itemSet) {
+                item.getExpiryDate().ifPresent(expiry -> {
+                    if (expiry.isBefore(currDate)) {
+                        expiredItems.addItemSilent(item);
+                    }
+                });
+            }
+        }
+        return expiredItems;
     }
 
     /**
