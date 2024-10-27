@@ -11,16 +11,26 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Represents a command that displays help information about available commands.
+ * Represents a command that displays help information about available commands in the Pill application.
+ * This command can show both general help information for all commands and detailed help for specific commands.
+ * It supports a verbose mode that provides additional examples and detailed usage information.
  */
 public class HelpCommand extends Command {
     private static final Logger logger = PillLogger.getLogger();
     private static final List<String> VALID_COMMANDS = Arrays.asList(
             "help", "add", "delete", "edit", "expired", "expiring",
-            "list", "exit", "stock-check");
+            "list", "order", "cancel-order", "fulfill-order", "list-orders",
+            "stock-check", "transaction-history", "exit");
     private final String commandName;
     private final boolean verbose;
 
+    /**
+     * Constructs a new HelpCommand with the specified command input and verbosity setting.
+     *
+     * @param commandInput - The name of the command to get help for, or null for general help.
+     *                       If the input contains spaces, only the first word is considered as the command.
+     * @param verbose      - Whether to display detailed help information with examples (true) or basic help (false).
+     */
     public HelpCommand(String commandInput, boolean verbose) {
         if (commandInput != null) {
             String[] parts = commandInput.split("\\s+", 2);
@@ -33,10 +43,14 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Executes the help command by displaying information about available commands.
-     * @param itemMap       - The item list to be manipulated by the command.
-     * @param storage        -
-     * @throws PillException -
+     * Executes the help command by displaying appropriate help information.
+     * If no specific command is specified, shows general help for all commands.
+     * If a specific command is specified, shows detailed help for that command.
+     * In verbose mode, includes additional examples and detailed usage information.
+     *
+     * @param itemMap        - The current inventory of items (not used by this command but required by interface).
+     * @param storage        - The storage manager (not used by this command but required by interface).
+     * @throws PillException - If there is an error executing the help command.
      */
     @Override
     public void execute(ItemMap itemMap, Storage storage) throws PillException {
@@ -52,13 +66,15 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Displays general help information for every command.
+     * Displays general help information for all available commands.
+     * Lists each command with a brief description of its function.
      */
     private void showGeneralHelp() {
         logger.info("Showing general help information");
 
         System.out.println("Available commands:");
-        System.out.println("  help          - Shows this help message");
+
+        System.out.println("\nItem Management:");
         System.out.println("  add           - Adds a new item to the list");
         System.out.println("  delete        - Deletes an item from the list");
         System.out.println("  edit          - Edits an item in the list");
@@ -66,14 +82,29 @@ public class HelpCommand extends Command {
         System.out.println("  expiring      - Lists items expiring before a specified date");
         System.out.println("  list          - Lists all items");
         System.out.println("  stock-check   - Lists all items that need to be restocked");
+
+        System.out.println("\nOrder Management:");
+        System.out.println("  order         - Creates a new purchase or dispense order");
+        System.out.println("  fulfill-order - Processes and completes a pending order");
+        System.out.println("  cancel-order  - Cancels a pending order");
+        System.out.println("  list-orders   - Lists all orders with optional filtering");
+
+        System.out.println("\nTransaction Management:");
+        System.out.println("  transaction-history - Views transaction history with optional filtering");
+
+        System.out.println("\nOther Commands:");
+        System.out.println("  help          - Shows this help message");
         System.out.println("  exit          - Exits the program");
-        System.out.println("Type 'help <command>' for more information on a specific command.");
+
+        System.out.println("\nType 'help <command>' for more information on a specific command.");
         System.out.println("Type 'help <command> -v' for verbose output with examples.");
     }
 
     /**
-     * Calls the appropriate method depending on what the user requests help for.
-     * @param command - optional user input that determines which help information is displayed to the user.
+     * Displays help information for a specific command.
+     * If the command is not recognized, attempts to find and suggest similar commands.
+     *
+     * @param command - The name of the command to show help for.
      */
     private void showSpecificHelp(String command) {
         assert command != null : "Command cannot be null";
@@ -101,6 +132,21 @@ public class HelpCommand extends Command {
         case "list":
             showListHelp();
             break;
+        case "order":
+            showOrderHelp();
+            break;
+        case "cancel-order":
+            showCancelOrderHelp();
+            break;
+        case "fulfill-order":
+            showFulfillOrderHelp();
+            break;
+        case "list-orders":
+            showListOrdersHelp();
+            break;
+        case "transaction-history":
+            showTransactionHistoryHelp();
+            break;
         case "stock-check":
             showStockCheckHelp();
             break;
@@ -119,8 +165,10 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Suggests a similar command when an unknown command is entered.
-     * @param command - the unknown command entered by the user.
+     * Suggests similar commands when an unknown command is entered.
+     * Uses string matching to find the closest matching valid command.
+     *
+     * @param command - The unknown command entered by the user.
      */
     private void suggestSimilarCommand(String command) {
         logger.info("Suggesting similar command for: " + command);
@@ -258,6 +306,98 @@ public class HelpCommand extends Command {
     }
 
     /**
+     * Prints detailed information about the 'order' command.
+     */
+    private void showOrderHelp() {
+        logger.fine("Showing help information for 'order' command");
+
+        System.out.println("order: Creates a new purchase or dispense order.");
+        if (verbose) {
+            System.out.println("Usage: order <type> <item1> <quantity1> [item2 quantity2 ...] [-n \"notes\"]");
+            System.out.println("  <type>     - Type of order: 'purchase' or 'dispense'");
+            System.out.println("  <itemN>    - Name of item to order");
+            System.out.println("  <quantityN>- Quantity of the item");
+            System.out.println("  -n         - Optional notes about the order");
+            System.out.println("\nExamples:");
+            System.out.println("  order purchase Aspirin 100 Bandages 50 -n \"Monthly stock replenishment\"");
+            System.out.println("  order dispense Paracetamol 20 -n \"Emergency room request\"");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'fulfill-order' command.
+     */
+    private void showFulfillOrderHelp() {
+        logger.fine("Showing help information for 'fulfill-order' command");
+
+        System.out.println("fulfill-order: Processes and completes a pending order.");
+        if (verbose) {
+            System.out.println("Usage: fulfill-order <order-id>");
+            System.out.println("  <order-id> - The unique identifier of the order to fulfill");
+            System.out.println("\nExample:");
+            System.out.println("  fulfill-order 123e4567-e89b-12d3-a456-556642440000");
+            System.out.println("\nNote: This will create the necessary transactions and update inventory levels");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'cancel-order' command.
+     */
+    private void showCancelOrderHelp() {
+        logger.fine("Showing help information for 'cancel-order' command");
+
+        System.out.println("cancel-order: Cancels a pending order.");
+        if (verbose) {
+            System.out.println("Usage: cancel-order <order-id>");
+            System.out.println("  <order-id> - The unique identifier of the order to cancel");
+            System.out.println("\nExample:");
+            System.out.println("  cancel-order 123e4567-e89b-12d3-a456-556642440000");
+            System.out.println("\nNote: Only pending orders can be cancelled");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'list-orders' command.
+     */
+    private void showListOrdersHelp() {
+        logger.fine("Showing help information for 'list-orders' command");
+
+        System.out.println("list-orders: Lists all orders with optional filtering.");
+        if (verbose) {
+            System.out.println("Usage: list-orders [type] [status] [start-date] [end-date]");
+            System.out.println("  [type]      - Optional: Filter by 'purchase' or 'dispense'");
+            System.out.println("  [status]    - Optional: Filter by 'pending', 'fulfilled', or 'cancelled'");
+            System.out.println("  [start-date]- Optional: Show orders from this date (yyyy-MM-dd)");
+            System.out.println("  [end-date]  - Optional: Show orders until this date (yyyy-MM-dd)");
+            System.out.println("\nExamples:");
+            System.out.println("  list-orders");
+            System.out.println("  list-orders purchase pending");
+            System.out.println("  list-orders dispense fulfilled 2024-01-01 2024-12-31");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'transaction-history' command.
+     */
+    private void showTransactionHistoryHelp() {
+        logger.fine("Showing help information for 'transaction-history' command");
+
+        System.out.println("transaction-history: Views transaction history with optional filtering.");
+        if (verbose) {
+            System.out.println("Usage: transaction-history [item-name] [type] [start-date] [end-date]");
+            System.out.println("  [item-name] - Optional: Filter by specific item");
+            System.out.println("  [type]      - Optional: Filter by 'incoming' or 'outgoing'");
+            System.out.println("  [start-date]- Optional: Show transactions from this date (yyyy-MM-dd)");
+            System.out.println("  [end-date]  - Optional: Show transactions until this date (yyyy-MM-dd)");
+            System.out.println("\nExamples:");
+            System.out.println("  transaction-history");
+            System.out.println("  transaction-history Aspirin");
+            System.out.println("  transaction-history incoming 2024-01-01 2024-12-31");
+            System.out.println("  transaction-history Bandages outgoing 2024-01-01 2024-12-31");
+        }
+    }
+
+    /**
      * Prints detailed information about the 'stock-check' command.
      */
     private void showStockCheckHelp() {
@@ -288,7 +428,9 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * @return false as this command does not exit the application.
+     * Determines whether this command will exit the application.
+     *
+     * @return - false as the help command does not exit the application.
      */
     @Override
     public boolean isExit() {
