@@ -33,6 +33,8 @@ original source as well}
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+<!-- @@author cxc0418 -->
+
 ### UI and I/O
 
 The program uses a command-line interface (CLI) for interaction with the user.
@@ -50,6 +52,8 @@ Example:
 AddItemCommand command = new AddItemCommand(itemName, quantity, expiryDate);
 command.execute(itemMap, storage);
 ```
+
+<!-- @@author yakultbottle -->
 
 ### Storage
 
@@ -71,6 +75,8 @@ bandage,34
 The Storage class depends on self-defined classes PillException, Item, and
 ItemMap. While it has other dependencies, such as File and FileWriter from
 the Java standard library, PillException is the only custom class it depends on.
+
+<!-- @@author -->
 
 ## Product scope
 
