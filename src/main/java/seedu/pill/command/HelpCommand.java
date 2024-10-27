@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Represents a command that displays help information about available commands.
+ * Represents a command that displays help information about available commands in the Pill application.
+ * This command can show both general help information for all commands and detailed help for specific commands.
+ * It supports a verbose mode that provides additional examples and detailed usage information.
  */
 public class HelpCommand extends Command {
     private static final Logger logger = PillLogger.getLogger();
@@ -21,6 +23,13 @@ public class HelpCommand extends Command {
     private final String commandName;
     private final boolean verbose;
 
+    /**
+     * Constructs a new HelpCommand with the specified command input and verbosity setting.
+     *
+     * @param commandInput - The name of the command to get help for, or null for general help.
+     *                       If the input contains spaces, only the first word is considered as the command.
+     * @param verbose      - Whether to display detailed help information with examples (true) or basic help (false).
+     */
     public HelpCommand(String commandInput, boolean verbose) {
         if (commandInput != null) {
             String[] parts = commandInput.split("\\s+", 2);
@@ -33,10 +42,14 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Executes the help command by displaying information about available commands.
-     * @param itemMap       - The item list to be manipulated by the command.
-     * @param storage        -
-     * @throws PillException -
+     * Executes the help command by displaying appropriate help information.
+     * If no specific command is specified, shows general help for all commands.
+     * If a specific command is specified, shows detailed help for that command.
+     * In verbose mode, includes additional examples and detailed usage information.
+     *
+     * @param itemMap        - The current inventory of items (not used by this command but required by interface).
+     * @param storage        - The storage manager (not used by this command but required by interface).
+     * @throws PillException - If there is an error executing the help command.
      */
     @Override
     public void execute(ItemMap itemMap, Storage storage) throws PillException {
@@ -52,7 +65,8 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Displays general help information for every command.
+     * Displays general help information for all available commands.
+     * Lists each command with a brief description of its function.
      */
     private void showGeneralHelp() {
         logger.info("Showing general help information");
@@ -72,8 +86,10 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Calls the appropriate method depending on what the user requests help for.
-     * @param command - optional user input that determines which help information is displayed to the user.
+     * Displays help information for a specific command.
+     * If the command is not recognized, attempts to find and suggest similar commands.
+     *
+     * @param command - The name of the command to show help for.
      */
     private void showSpecificHelp(String command) {
         assert command != null : "Command cannot be null";
@@ -119,8 +135,10 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Suggests a similar command when an unknown command is entered.
-     * @param command - the unknown command entered by the user.
+     * Suggests similar commands when an unknown command is entered.
+     * Uses string matching to find the closest matching valid command.
+     *
+     * @param command - The unknown command entered by the user.
      */
     private void suggestSimilarCommand(String command) {
         logger.info("Suggesting similar command for: " + command);
@@ -288,7 +306,9 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * @return false as this command does not exit the application.
+     * Determines whether this command will exit the application.
+     *
+     * @return - false as the help command does not exit the application.
      */
     @Override
     public boolean isExit() {
