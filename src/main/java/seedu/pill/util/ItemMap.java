@@ -269,30 +269,45 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
-     * Lists all expired items in this {@code ItemMap}.
+     * Lists all items in this {@code ItemMap} that have expired or are expiring before the specified cutoff date.
      * <p>
-     * Retrieves expired items from {@link #getExpiredItems()} and logs a message
-     * if no items have expired. If there are expired items, the items are printed.
+     * Retrieves expired or expiring items from {@link #getExpiringItems(LocalDate)}, and logs a message
+     * if there are no items meeting the specified date criteria. If there are items that have expired
+     * (when {@code cutOffDate} is today) or will expire before {@code cutOffDate} (for a future date),
+     * the method logs and prints a message listing these items.
+     * </p>
      *
+     * @param cutOffDate the date against which item expiry is checked. If the date is today,
+     *                   the method lists items that have expired. If the date is in the future,
+     *                   it lists items expiring before the cutoff date.
      */
-    public void listExpiredItems() {
-        ItemMap expiredItems = this.getExpiredItems();
-        if (expiredItems.isEmpty()) {
-            LOGGER.info("There are no items that have expired.");
-            System.out.println("There are no items that have expired.");
-        } else {
+    public void listExpiringItems(LocalDate cutOffDate) {
+        ItemMap expiringItems = this.getExpiringItems(cutOffDate);
+        if (expiringItems.isEmpty()) {
+            if (cutOffDate.isEqual(LocalDate.now())) {
+                LOGGER.info("There are no items that have expired.");
+                System.out.println("There are no items that have expired.");
+            } else {
+                LOGGER.info("There are no items expiring before " + cutOffDate + ".");
+                System.out.println("There are no items expiring before " + cutOffDate + ".");
+            }
+            return;
+        }
+        if (cutOffDate.isEqual(LocalDate.now())) {
             LOGGER.info("Listing all items that have expired");
             System.out.println("Listing all items that have expired");
-            int index = 1;
-            for (Map.Entry<String, TreeSet<Item>> entry : expiredItems.items.entrySet()) {
-                TreeSet<Item> itemSet = entry.getValue();
-                for (Item item : itemSet) {
-                    System.out.println(index + ". " + item.toString());
-                    index++;
-                }
-            }
-            System.out.println();
+        } else {
+            LOGGER.info("Listing all items expiring before " + cutOffDate);
+            System.out.println("Listing all items expiring before " + cutOffDate);
         }
+        List<Item> itemList = expiringItems.items.values().stream()
+                .flatMap(Collection::stream)
+                .toList();
+
+        IntStream.range(0, itemList.size())
+                .forEach(i -> System.out.println((i + 1) + ". " + itemList.get(i)));
+
+        System.out.println();
     }
 
     /**
@@ -361,28 +376,26 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
-     * Retrieves all items that have expired from the item map.
+     * Retrieves all items that expire before the cutOffDate from the item map.
      *
      * <p>This method iterates through all items in the item map and checks each item's expiry date.
-     * If the expiry date is before the current date, the item is added to a new {@code ItemMap}
-     * containing only the expired items.</p>
+     * If the expiry date is before the cut off date, the item is added to a new {@code ItemMap}
+     * containing only the expiring items.</p>
      *
-     * @return an {@code ItemMap} containing all items that have expired.
+     * @param cutOffDate date before which all items are considered to be expiring
+     * @return an {@code ItemMap} containing all items that are expiring.
      */
-    public ItemMap getExpiredItems() {
-        ItemMap expiredItems = new ItemMap();
-        LocalDate currDate = LocalDate.now();
+    public ItemMap getExpiringItems(LocalDate cutOffDate) {
+        ItemMap expiringItems = new ItemMap();
         for (Map.Entry<String, TreeSet<Item>> entry : items.entrySet()) {
             TreeSet<Item> itemSet = entry.getValue();
-            for (Item item : itemSet) {
-                item.getExpiryDate().ifPresent(expiry -> {
-                    if (expiry.isBefore(currDate)) {
-                        expiredItems.addItemSilent(item);
-                    }
-                });
-            }
+            itemSet.stream()
+                    .flatMap(item -> item.getExpiryDate().stream()
+                            .filter(expiry -> expiry.isBefore(cutOffDate))
+                            .map(expiry -> item))
+                    .forEach(expiringItems::addItemSilent);
         }
-        return expiredItems;
+        return expiringItems;
     }
 
     /**
