@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class HelpCommand extends Command {
     private static final Logger logger = PillLogger.getLogger();
     private static final List<String> VALID_COMMANDS = Arrays.asList(
-            "help", "add", "delete", "edit",
+            "help", "add", "delete", "edit", "expired", "expiring",
             "list", "exit", "stock-check");
     private final String commandName;
     private final boolean verbose;
@@ -62,6 +62,8 @@ public class HelpCommand extends Command {
         System.out.println("  add           - Adds a new item to the list");
         System.out.println("  delete        - Deletes an item from the list");
         System.out.println("  edit          - Edits an item in the list");
+        System.out.println("  expired       - Lists all items that have expired");
+        System.out.println("  expiring      - Lists items expiring before a specified date");
         System.out.println("  list          - Lists all items");
         System.out.println("  stock-check   - Lists all items that need to be restocked");
         System.out.println("  exit          - Exits the program");
@@ -89,6 +91,12 @@ public class HelpCommand extends Command {
             break;
         case "edit":
             showEditHelp();
+            break;
+        case "expired":
+            showExpiredHelp();
+            break;
+        case "expiring":
+            showExpiringHelp();
             break;
         case "list":
             showListHelp();
@@ -199,6 +207,40 @@ public class HelpCommand extends Command {
             System.out.println("  edit Aspirin 100 2024-05-24");
         }
         System.out.println("\nCorrect input format: edit <name> <quantity> <expiry>");
+    }
+
+    /**
+     * Prints detailed information about the 'expired' command.
+     */
+    private void showExpiredHelp() {
+        logger.fine("Showing help information for 'expired' command");
+
+        System.out.println("expired: Lists all items that have expired as of today.");
+        if (verbose) {
+            System.out.println("Usage: expired");
+            System.out.println("  Shows all items with expiry dates before today's date");
+            System.out.println("\nExample:");
+            System.out.println("  expired");
+            System.out.println("  This will show all items that have passed their expiry date");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'expiring' command.
+     */
+    private void showExpiringHelp() {
+        logger.fine("Showing help information for 'expiring' command");
+
+        System.out.println("expiring: Lists all items that will expire before a specified date.");
+        if (verbose) {
+            System.out.println("Usage: expiring <date>");
+            System.out.println("  <date> - The cutoff date in yyyy-MM-dd format");
+            System.out.println("  Shows all items with expiry dates before the specified date");
+            System.out.println("\nExample:");
+            System.out.println("  expiring 2024-12-31");
+            System.out.println("  This will show all items expiring before December 31, 2024");
+        }
+        System.out.println("\nCorrect input format: expiring yyyy-MM-dd");
     }
 
     /**

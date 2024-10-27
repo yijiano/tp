@@ -154,11 +154,6 @@ public class HelpCommandTest {
         assertFalse(command.isExit());
     }
 
-    @AfterEach
-    void restoreSystemStreams() {
-        System.setOut(originalOut);
-    }
-
     @Test
     void execute_helpWithMultipleWords_printsGeneralHelp() throws PillException {
         HelpCommand command = new HelpCommand("help more words", false);
@@ -304,5 +299,185 @@ public class HelpCommandTest {
 
         String output = outContent.toString();
         assertTrue(output.contains("Usage: help [command] [-v]"));
+    }
+
+    @Test
+    void execute_generalHelp_includesNewCommands() throws PillException {
+        HelpCommand command = new HelpCommand("", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("expired       - Lists all items that have expired"));
+        assertTrue(output.contains("expiring      - Lists items expiring before a specified date"));
+    }
+
+    @Test
+    void execute_expiredHelp_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("expired", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("expired: Lists all items that have expired as of today"));
+    }
+
+    @Test
+    void execute_verboseExpiredHelp_printsDetailedHelp() throws PillException {
+        HelpCommand command = new HelpCommand("expired", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: expired"));
+        assertTrue(output.contains("Shows all items with expiry dates before today's date"));
+        assertTrue(output.contains("Example:"));
+    }
+
+    @Test
+    void execute_expiringHelp_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("expiring", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("expiring: Lists all items that will expire before a specified date"));
+        assertTrue(output.contains("Correct input format: expiring yyyy-MM-dd"));
+    }
+
+    @Test
+    void execute_verboseExpiringHelp_printsDetailedHelp() throws PillException {
+        HelpCommand command = new HelpCommand("expiring", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: expiring <date>"));
+        assertTrue(output.contains("<date> - The cutoff date in yyyy-MM-dd format"));
+        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("expiring 2024-12-31"));
+    }
+
+    @Test
+    void execute_almostExpired_suggestsExpiredCommand() throws PillException {
+        HelpCommand command = new HelpCommand("expire", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: expired?"));
+    }
+
+    @Test
+    void execute_almostExpiring_suggestsExpiringCommand() throws PillException {
+        HelpCommand command = new HelpCommand("expirin", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: expiring?"));
+    }
+
+    @Test
+    void execute_mixedCaseExpired_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("ExPiReD", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("expired: Lists all items that have expired"));
+    }
+
+    @Test
+    void execute_mixedCaseExpiring_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("ExPiRiNg", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("expiring: Lists all items that will expire"));
+    }
+
+    @Test
+    void execute_expiringWithExtraSpaces_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("expiring    -v", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: expiring <date>"));
+        assertTrue(output.contains("Example:"));
+    }
+
+    @Test
+    void execute_expiredWithExtraSpaces_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("expired    -v", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: expired"));
+        assertTrue(output.contains("Example:"));
+    }
+
+    @Test
+    void execute_verboseHelpForAdd_printsDetailedAddHelp() throws PillException {
+        HelpCommand command = new HelpCommand("add", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: add <name> <quantity> <expiry>"));
+        assertTrue(output.contains("<name>     - Name of the item"));
+        assertTrue(output.contains("<quantity> - Initial quantity of the item"));
+        assertTrue(output.contains("<expiry>   - Expiry date of the item in yyyy-MM-dd format"));
+        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("add Aspirin 100 2024-05-24"));
+        assertTrue(output.contains("\nCorrect input format: add <name> <quantity> <expiry>"));
+    }
+
+    @Test
+    void execute_commandWithNoCloseMatch_printsNoSuggestion() throws PillException {
+        // Using a completely different string that won't match any command
+        HelpCommand command = new HelpCommand("xyzabc", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Unknown command: xyzabc"));
+        assertTrue(output.contains("No similar command found"));
+        assertTrue(output.contains("Available commands:"));
+        assertFalse(output.contains("Did you mean:"));
+    }
+
+    @Test
+    void execute_veryDifferentCommand_handleNullMatch() throws PillException {
+        // Using a long string that's definitely more than 2 edits away from any command
+        // This ensures StringMatcher.findClosestMatch returns null
+        HelpCommand command = new HelpCommand("pneumonoultramicroscopicsilicovolcanoconiosis", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Unknown command: pneumonoultramicroscopicsilicovolcanoconiosis"));
+        assertTrue(output.contains("No similar command found")); // This only appears in the else branch
+        assertTrue(output.contains("Available commands:")); // Common output
+        assertFalse(output.contains("Did you mean:")); // This shouldn't appear when there's no match
+    }
+
+    @Test
+    void execute_similarCommand_handleNonNullMatch() throws PillException {
+        HelpCommand command = new HelpCommand("ad", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+
+        // Checking only what actually appears in the output
+        assertTrue(output.contains("Did you mean: add?"));
+        assertTrue(output.contains("add: Adds a new item to the inventory"));
+    }
+
+    @Test
+    void execute_noSimilarCommand_handleNullMatch() throws PillException {
+        HelpCommand command = new HelpCommand("xyzabc", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+
+        // Checking only what actually appears in the output
+        assertTrue(output.contains("Unknown command: xyzabc"));
+        assertTrue(output.contains("No similar command found"));
+        assertTrue(output.contains("Available commands:"));
+    }
+
+    @AfterEach
+    void restoreSystemStreams() {
+        System.setOut(originalOut);
     }
 }
