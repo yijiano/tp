@@ -1,5 +1,7 @@
 package seedu.pill.util;
 
+import java.time.LocalDate;
+
 public final class Printer {
     private static final String NAME = "PILL";
     private static final String ASCII = """
@@ -39,7 +41,7 @@ public final class Printer {
         System.out.println(ASCII);
         printSpace();
         if (!items.isEmpty()) {
-            items.listExpiredItems();
+            items.listExpiringItems(LocalDate.now());
             items.listItemsToRestock(threshold);
             printSpace();
         }

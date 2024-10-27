@@ -5,12 +5,13 @@ import seedu.pill.util.Storage;
 
 import java.time.LocalDate;
 
-public class ExpiredCommand extends Command {
-    public ExpiredCommand() {}
+public class ExpiringCommand extends Command {
+    private LocalDate cutOffDate;
+    public ExpiringCommand(LocalDate cutOffDate) { this.cutOffDate = cutOffDate; }
 
     @Override
     public void execute(ItemMap itemMap, Storage storage) {
-        itemMap.listExpiringItems(LocalDate.now());
+        itemMap.listExpiringItems(cutOffDate);
     }
 
     @Override

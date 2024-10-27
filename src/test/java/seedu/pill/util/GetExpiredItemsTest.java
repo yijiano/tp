@@ -11,7 +11,7 @@ public class GetExpiredItemsTest {
     @Test
     public void getExpiredEmptyTest() {
         ItemMap items = new ItemMap();
-        ItemMap expiredItems = items.getExpiredItems();
+        ItemMap expiredItems = items.getExpiringItems(LocalDate.now());
         assertTrue(expiredItems.isEmpty());
     }
 
@@ -20,7 +20,7 @@ public class GetExpiredItemsTest {
         ItemMap items = new ItemMap();
         Item item1 = new Item("a", 5);
         items.addItem(item1);
-        ItemMap expiredItems = items.getExpiredItems();
+        ItemMap expiredItems = items.getExpiringItems(LocalDate.now());
         assertTrue(expiredItems.isEmpty());
     }
 
@@ -35,7 +35,7 @@ public class GetExpiredItemsTest {
         items.addItem(item3);
         ItemMap expectedItems = new ItemMap();
         expectedItems.addItem(item1);
-        ItemMap expiredItems = items.getExpiredItems();
+        ItemMap expiredItems = items.getExpiringItems(LocalDate.now());
         assertEquals(expectedItems, expiredItems);
     }
 
@@ -48,7 +48,7 @@ public class GetExpiredItemsTest {
         items.addItem(item1);
         items.addItem(item2);
         items.addItem(item3);
-        ItemMap expiredItems = items.getExpiredItems();
+        ItemMap expiredItems = items.getExpiringItems(LocalDate.now());
         assertTrue(expiredItems.isEmpty());
     }
 
@@ -68,7 +68,7 @@ public class GetExpiredItemsTest {
         ItemMap expectedItems = new ItemMap();
         expectedItems.addItem(item1);
         expectedItems.addItem(item2);
-        ItemMap expiredItems = items.getExpiredItems();
+        ItemMap expiredItems = items.getExpiringItems(LocalDate.now());
         assertEquals(expectedItems, expiredItems);
     }
 }
