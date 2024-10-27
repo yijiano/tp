@@ -8,6 +8,7 @@ import seedu.pill.command.HelpCommand;
 import seedu.pill.command.ListCommand;
 import seedu.pill.command.StockCheckCommand;
 import seedu.pill.command.ExpiredCommand;
+import seedu.pill.command.ExpiringCommand;
 
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
@@ -77,6 +78,16 @@ public class Parser {
             case "expired":
                 new ExpiredCommand().execute(this.items, this.storage);
                 break;
+            case "expiring":
+                if (splitInput.length > 2) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
+                if (!this.isValidDate(arguments)) {
+                    throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
+                }
+                LocalDate expiryDate = parseExpiryDate(arguments);
+                new ExpiringCommand(expiryDate).execute(this.items, this.storage);
+                break;
             default:
                 throw new PillException(ExceptionMessages.INVALID_COMMAND);
             }
@@ -90,7 +101,7 @@ public class Parser {
      * The input is expected to contain the item name, quantity, and optional expiry date.
      * If a valid date is found, it must be the last element in the input.
      * Only one date and one quantity are allowed.
-     *
+     * <p>
      * The method loops through the input array to determine the item name, quantity, and expiry date,
      * applying default values when necessary (e.g., quantity defaults to 1 if not specified).
      *
@@ -161,7 +172,7 @@ public class Parser {
      * Parses the user input and creates a {@code DeleteItemCommand} object.
      * The input is expected to contain the item name and optionally an expiry date.
      * If a valid date is found, it must be the last element in the input.
-     *
+     * <p>
      * The method constructs the item name by looping through the input until a valid date is found.
      * Any valid date found is treated as the item's expiry date.
      *
@@ -202,13 +213,11 @@ public class Parser {
     }
 
 
-
-
     /**
      * Parses the user input to create an {@code EditItemCommand} object.
      * The input is expected to contain the item name, the new quantity, and optionally the expiry date.
      * The expiry date, if present, must be the second-to-last element, with the quantity being the last element.
-     *
+     * <p>
      * The method loops through the input to determine the item name, quantity, and optional expiry date.
      * The quantity is mandatory for editing, while the expiry date is optional.
      *
@@ -290,8 +299,8 @@ public class Parser {
      * The method ensures that the item name is built by appending each element with a space between words.
      *
      * @param splitArguments An array of strings representing the user's input.
-     * @param startIndex The starting index (inclusive) for building the item name.
-     * @param endIndex The ending index (exclusive) for building the item name.
+     * @param startIndex     The starting index (inclusive) for building the item name.
+     * @param endIndex       The ending index (exclusive) for building the item name.
      * @return A string representing the item name, constructed from the input array.
      */
     private String buildItemName(String[] splitArguments, int startIndex, int endIndex) {

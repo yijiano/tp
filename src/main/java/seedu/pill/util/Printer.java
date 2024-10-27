@@ -1,5 +1,7 @@
 package seedu.pill.util;
 
+import java.time.LocalDate;
+
 public final class Printer {
     private static final String NAME = "PILL";
     private static final String ASCII = """
