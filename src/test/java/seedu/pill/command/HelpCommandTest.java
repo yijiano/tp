@@ -620,9 +620,9 @@ public class HelpCommandTest {
     void execute_helpWithOrderRelatedTypos_suggestsCorrectCommands() throws PillException {
         // Test multiple similar typos for order-related commands
         String[] typos = {
-                "order-list", "orderlist", "listorder", "list-ordr",
-                "cancle-order", "cancel-ordr", "cancelorder",
-                "fulfill", "fulfil-order", "fullfill-order"
+            "order-list", "orderlist", "listorder", "list-ordr",
+            "cancle-order", "cancel-ordr", "cancelorder",
+            "fulfill", "fulfil-order", "fullfill-order"
         };
 
         // StringBuilder to collect all outputs
