@@ -131,8 +131,8 @@ class TransactionTest {
         assertEquals(2, Transaction.TransactionType.values().length);
         assertArrayEquals(
             new Transaction.TransactionType[] {
-                    Transaction.TransactionType.INCOMING,
-                    Transaction.TransactionType.OUTGOING
+                Transaction.TransactionType.INCOMING,
+                Transaction.TransactionType.OUTGOING
             },
             Transaction.TransactionType.values()
         );
