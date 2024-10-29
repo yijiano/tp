@@ -14,5 +14,7 @@ public class ExpiredCommand extends Command {
     }
 
     @Override
-    public boolean isExit() { return false; }
+    public boolean isExit() {
+        return false;
+    }
 }

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 import seedu.pill.exceptions.PillException;
-import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.util.Item;
 
 import java.time.LocalDate;
@@ -13,7 +12,6 @@ import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for AddItemCommand class.
