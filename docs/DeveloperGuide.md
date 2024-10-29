@@ -53,6 +53,12 @@ AddItemCommand command = new AddItemCommand(itemName, quantity, expiryDate);
 command.execute(itemMap, storage);
 ```
 
+<!-- @@author cnivedit -->
+
+#### AddItemCommand
+
+<img src = "diagrams/AddItemCommand-SequenceDiagram.png"/>
+
 <!-- @@author yakultbottle -->
 
 ### Storage

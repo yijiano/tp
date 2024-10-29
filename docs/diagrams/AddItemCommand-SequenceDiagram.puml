@@ -1,0 +1,67 @@
+@startuml
+
+hide footbox
+skinparam sequenceReferenceBackgroundColor #f7807c
+
+actor Parser
+
+participant ":AddItemCommand" as AddItemCommand #E0BBE4
+participant ":Item" as Item #95E1D3
+participant ":ItemMap" as ItemMap #F9FBCB
+participant ":Storage" as Storage #FFABAB
+participant ":System.out" as System.out #FFE156
+participant ":Logger" as Logger #B9FBC0
+participant ":Treeset" as Treeset #A0D8D1
+
+Parser -> AddItemCommand : AddItemCommand(itemName, quantity, expiryDate)
+return
+Parser -> AddItemCommand : execute(items, storage)
+AddItemCommand -> Item : Item(itemName, quantity, expiryDate)
+return
+AddItemCommand -> ItemMap : addItem(item)
+ItemMap -> Item : get attributes
+return
+
+opt invalid params
+    ItemMap -> System.out : print
+    return
+    ItemMap -> Logger : log
+    return
+    ItemMap --> AddItemCommand
+end
+
+alt item with same name exists
+    ItemMap -> ItemMap : get(name)
+    loop until item with same expiry date is found or end of array is reached
+        alt item has same expiry date
+            ItemMap -> Item : setQuantity(newQuantity)
+            return
+            ItemMap -> System.out : print
+            return
+            ItemMap -> Logger : log
+            return
+
+        else
+            ItemMap -> Treeset : add(item)
+            return
+        end
+
+    end
+
+else
+    ItemMap -> Treeset : Treeset<>()
+    return
+    ItemMap -> Treeset : add(item)
+    return
+    ItemMap -> ItemMap : put(name, itemSet)
+    ItemMap -> System.out : print
+    return
+    ItemMap -> Logger : log
+    return
+end
+ItemMap --> AddItemCommand
+AddItemCommand -> Storage : saveItem(item)
+return
+AddItemCommand --> Parser
+
+@enduml
