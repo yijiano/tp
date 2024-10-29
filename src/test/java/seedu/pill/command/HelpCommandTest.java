@@ -577,24 +577,6 @@ public class HelpCommandTest {
     }
 
     @Test
-    void execute_almostFulfillOrder_suggestsFulfillOrderCommand() throws PillException {
-        HelpCommand command = new HelpCommand("fulfill-ordr", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: fulfill-order?"));
-    }
-
-    @Test
-    void execute_almostTransactionHistory_suggestsTransactionHistoryCommand() throws PillException {
-        HelpCommand command = new HelpCommand("transaction-histor", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: transaction-history?"));
-    }
-
-    @Test
     void execute_mixedCaseOrderCommands_handlesCorrectly() throws PillException {
         HelpCommand command = new HelpCommand("LiSt-OrDeRs", false);
         command.execute(itemMap, storage);

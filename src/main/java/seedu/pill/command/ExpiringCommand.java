@@ -7,7 +7,10 @@ import java.time.LocalDate;
 
 public class ExpiringCommand extends Command {
     private LocalDate cutOffDate;
-    public ExpiringCommand(LocalDate cutOffDate) { this.cutOffDate = cutOffDate; }
+
+    public ExpiringCommand(LocalDate cutOffDate) {
+        this.cutOffDate = cutOffDate;
+    }
 
     @Override
     public void execute(ItemMap itemMap, Storage storage) {
@@ -15,5 +18,7 @@ public class ExpiringCommand extends Command {
     }
 
     @Override
-    public boolean isExit() { return false; }
+    public boolean isExit() {
+        return false;
+    }
 }
