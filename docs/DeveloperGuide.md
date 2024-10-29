@@ -26,12 +26,37 @@
 
 ## Acknowledgements
 
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the
-original source as well}
+<!-- @@author yijiano -->
+
+PILL uses the following tools for development:
+1. [JUnit 5](https://junit.org/junit5/) - Used for testing.
+2. [Gradle](https://gradle.org/) - Used for build automation.
 
 ## Design & implementation
 
-{Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
+The project is designed using the Model-View-Controller (MVC) architecture, with the following components:
+
+1. **Model**: Contains the core logic of the application, including the Item, ItemMap, and Storage classes.
+2. **View**: The user interface, which is implemented as a command-line interface (CLI).
+3. **Controller**: The command classes, which interpret user input and call the appropriate methods from the Model and
+   Storage classes.
+4. **Storage**: Handles the reading and writing of data to a CSV file.
+5. **DateTime**: A utility class to handle date and time operations.
+6. **Exceptions and Logging**: Custom exceptions and a logging utility class to manage application-wide logging.
+7. **PillLogger**: A centralized utility class to handle logging across the entire application.
+8. **PillException**: A custom exception class to handle exceptions specific to the PILL application.
+9. **Item**: A class to represent an item in the inventory.
+10. **ItemMap**: A class to store items in a map-like structure.
+11. **Command**: A class to represent a command that can be executed by the application.
+12. **Parser**: A class to parse user input and return the corresponding command.
+13. **Pill**: The main class that initializes the application and starts the CLI.
+
+### High-Level Overview
+
+The high-level overview of the project structure is as follows:
+
+<img src = "diagrams/High-Level-Overview.png" alt="High Level Overview of PILL"/>
+
 
 <!-- @@author cxc0418 -->
 
@@ -39,6 +64,14 @@ original source as well}
 
 The program uses a command-line interface (CLI) for interaction with the user.
 It receives input as text commands, processes these commands, and provides feedback through the console.
+
+The UI consists of the following components:
+
+1. **Parser**: The Parser class is responsible for interpreting user input and returning the corresponding command.
+2. **Command**: The Command class represents a command that can be executed by the application.
+3. **Pill**: The main class that initializes the application and starts the CLI.
+
+The UI components work together to provide a seamless user experience, allowing users to interact with the application.
 
 ### Commands
 
@@ -82,6 +115,38 @@ The Storage class depends on self-defined classes PillException, Item, and
 ItemMap. While it has other dependencies, such as File and FileWriter from
 the Java standard library, PillException is the only custom class it depends on.
 
+<!-- @@author cnivedit -->
+
+### Logging
+
+**API**: PillLogger.java
+
+<img src = "diagrams/PillLogger.png" alt="Component Diagram for PillLogger"/>
+
+The project uses the `java.util.logging` package for logging, with PillLogger serving as a centralized utility class to
+handle logging across the entire application. PillLogger implements the singleton pattern by maintaining a single static
+logger instance, which manages log creation, configuration, and output redirection.
+
+#### Key Components
+- File Output Configuration: The log level for file output is set by the `fileHandler.setLevel()` call, using `Level.ALL` to
+capture all events during execution. The log file, named according to the `FILE_NAME` attribute, is created in the
+directory specified by `PATH`.
+
+- Console Output Configuration: Console output is managed by `consoleHandler.setLevel()`. To maintain a clean terminal
+output for end-users, console logging is set to `Level.OFF` by default, ensuring it is suppressed unless required for
+debugging.
+
+#### Resilience and Error Handling
+In the event of a failure in log file creation, PillLogger logs the error to the console and allows the application to
+continue running. This design ensures the application’s functionality is not hindered by logging setup issues.
+
+#### API Access
+PillLogger exposes a single public method, `getLogger()`, which provides application-wide access to the singleton Logger
+instance. Classes within the application use `getLogger()` to record events, without needing to set up or manage their own
+loggers.
+
+<!-- @@author yakultbottle -->
+
 ### Item and ItemMap
 
 The Item class has three private variables, a name, a quantity, and an
@@ -107,7 +172,7 @@ Optional.empty(), will be the last entry in the TreeSet.
 
 The usage of TreeSet is to facilitate storing multiple batches of items with
 different expiry dates and quantities, and to be able to extract items with the
-soonest expiry date when taking out of storage. 
+soonest expiry date when taking out of storage.
 
 <!-- @@author -->
 
@@ -142,12 +207,46 @@ complexity.
 
 ## Non-Functional Requirements
 
-{Give non-functional requirements}
+* Technical Requirements: Any mainstream OS, i.e. Windows, macOS or Linux, with Java 11 installed. Instructions for downloading Java 11 can be found [here](https://www.oracle.com/sg/java/technologies/javase/jdk11-archive-downloads.html).
+* Project Scope Constraints: The application should only be used for tracking. It is not meant to be involved in any form of monetary transaction.
+* Project Scope Constraints: Data storage is only to be performed locally.
+* Quality Requirements: The application should be able to be used effectively by a novice with little experience with CLIs.
 
 ## Glossary
 
-* *glossary item* - Definition
+[ADD GLOSSARY HERE]
 
-## Instructions for manual testing
+## Instructions for Testing
 
-{Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
+### Manual Testing
+
+View the [User Guide](UserGuide.md) for the full list of UI commands and their related use case and expected outcomes.
+
+### JUnit Testing
+
+JUnit tests are written in the [test directory](../src/test/java/seedu/pill/) and serve to test key methods part of the application.
+
+### Text UI Testing
+
+Files relating to Text UI Testing can be found [here](../text-ui-test/).
+
+To run the Text UI tests, navigate to the `text-ui-test` directory in the terminal.
+
+When running tests on a Windows system, run the following command from the specified directory:
+
+```
+./runtest.bat
+```
+
+When running tests on a UNIX-based system, run the following command from the specified directory:
+```
+./runtest.sh
+```
+
+Outcomes of these tests are listed in the below code segment.
+```
+// Successfully passed all tests
+All tests passed!
+
+// Tests failed: 1
+```
