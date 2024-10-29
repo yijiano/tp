@@ -476,6 +476,148 @@ public class HelpCommandTest {
         assertTrue(output.contains("Available commands:"));
     }
 
+    @Test
+    void execute_verboseHelpForCancelOrder_printsDetailedCancelOrderHelp() throws PillException {
+        HelpCommand command = new HelpCommand("cancel-order", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: cancel-order <order-id>"));
+        assertTrue(output.contains("<order-id> - The unique identifier of the order to cancel"));
+        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("Only pending orders can be cancelled"));
+    }
+
+    @Test
+    void execute_verboseHelpForFulfillOrder_printsDetailedFulfillOrderHelp() throws PillException {
+        HelpCommand command = new HelpCommand("fulfill-order", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: fulfill-order <order-id>"));
+        assertTrue(output.contains("<order-id> - The unique identifier of the order to fulfill"));
+        assertTrue(output.contains("This will create the necessary transactions and update inventory levels"));
+    }
+
+    @Test
+    void execute_verboseHelpForListOrders_printsDetailedListOrdersHelp() throws PillException {
+        HelpCommand command = new HelpCommand("list-orders", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: list-orders [type] [status] [start-date] [end-date]"));
+        assertTrue(output.contains("[type]      - Optional: Filter by 'purchase' or 'dispense'"));
+        assertTrue(output.contains("[status]    - Optional: Filter by 'pending', 'fulfilled', or 'cancelled'"));
+        assertTrue(output.contains("Examples:"));
+        assertTrue(output.contains("list-orders purchase pending"));
+    }
+
+    @Test
+    void execute_verboseHelpForTransactionHistory_printsDetailedTransactionHistoryHelp() throws PillException {
+        HelpCommand command = new HelpCommand("transaction-history", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: transaction-history [item-name] [type] [start-date] [end-date]"));
+        assertTrue(output.contains("[item-name] - Optional: Filter by specific item"));
+        assertTrue(output.contains("[type]      - Optional: Filter by 'incoming' or 'outgoing'"));
+        assertTrue(output.contains("Examples:"));
+        assertTrue(output.contains("transaction-history incoming 2024-01-01 2024-12-31"));
+    }
+
+    @Test
+    void execute_commandWithMultipleConsecutiveSpaces_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("help     -v", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: help [command] [-v]"));
+    }
+
+    @Test
+    void execute_nullCommandWithVerbose_printsDetailedGeneralHelp() throws PillException {
+        HelpCommand command = new HelpCommand(null, true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Available commands:"));
+        assertTrue(output.contains("\nItem Management:"));
+        assertTrue(output.contains("\nOrder Management:"));
+        assertTrue(output.contains("\nTransaction Management:"));
+    }
+
+    @Test
+    void execute_orderRelatedCommands_showsAllInGeneralHelp() throws PillException {
+        HelpCommand command = new HelpCommand("", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("order         - Creates a new purchase or dispense order"));
+        assertTrue(output.contains("fulfill-order - Processes and completes a pending order"));
+        assertTrue(output.contains("cancel-order  - Cancels a pending order"));
+        assertTrue(output.contains("list-orders   - Lists all orders with optional filtering"));
+    }
+
+    @Test
+    void execute_almostListOrders_suggestsListOrdersCommand() throws PillException {
+        HelpCommand command = new HelpCommand("list-order", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: list-orders?"));
+    }
+
+    @Test
+    void execute_almostCancelOrder_suggestsCancelOrderCommand() throws PillException {
+        HelpCommand command = new HelpCommand("cancl-order", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: cancel-order?"));
+    }
+
+    @Test
+    void execute_almostFulfillOrder_suggestsFulfillOrderCommand() throws PillException {
+        HelpCommand command = new HelpCommand("fulfill-ordr", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: fulfill-order?"));
+    }
+
+    @Test
+    void execute_almostTransactionHistory_suggestsTransactionHistoryCommand() throws PillException {
+        HelpCommand command = new HelpCommand("transaction-histor", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: transaction-history?"));
+    }
+
+    @Test
+    void execute_mixedCaseOrderCommands_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("LiSt-OrDeRs", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("list-orders: Lists all orders with optional filtering"));
+    }
+
+    @Test
+    void execute_commandConstructorWithNull_handlesCorrectly() {
+        HelpCommand command = new HelpCommand(null, true);
+        assertFalse(command.isExit());
+    }
+
+    @Test
+    void execute_emptyConstructorInput_printsGeneralHelp() throws PillException {
+        HelpCommand command = new HelpCommand("", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Available commands:"));
+    }
+
     @AfterEach
     void restoreSystemStreams() {
         System.setOut(originalOut);
