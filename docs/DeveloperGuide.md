@@ -76,6 +76,38 @@ The Storage class depends on self-defined classes PillException, Item, and
 ItemMap. While it has other dependencies, such as File and FileWriter from
 the Java standard library, PillException is the only custom class it depends on.
 
+<!-- @@author cnivedit -->
+
+### Logging
+
+**API**: PillLogger.java
+
+<img src = "diagrams/PillLogger.png" alt="Component Diagram for PillLogger"/>
+
+The project uses the `java.util.logging` package for logging, with PillLogger serving as a centralized utility class to
+handle logging across the entire application. PillLogger implements the singleton pattern by maintaining a single static
+logger instance, which manages log creation, configuration, and output redirection.
+
+#### Key Components
+- File Output Configuration: The log level for file output is set by the `fileHandler.setLevel()` call, using `Level.ALL` to
+capture all events during execution. The log file, named according to the `FILE_NAME` attribute, is created in the
+directory specified by `PATH`.
+
+- Console Output Configuration: Console output is managed by `consoleHandler.setLevel()`. To maintain a clean terminal
+output for end-users, console logging is set to `Level.OFF` by default, ensuring it is suppressed unless required for
+debugging.
+
+#### Resilience and Error Handling
+In the event of a failure in log file creation, PillLogger logs the error to the console and allows the application to
+continue running. This design ensures the application’s functionality is not hindered by logging setup issues.
+
+#### API Access
+PillLogger exposes a single public method, `getLogger()`, which provides application-wide access to the singleton Logger
+instance. Classes within the application use `getLogger()` to record events, without needing to set up or manage their own
+loggers.
+
+<!-- @@author yakultbottle -->
+
 ### Item and ItemMap
 
 The Item class has three private variables, a name, a quantity, and an
@@ -101,7 +133,7 @@ Optional.empty(), will be the last entry in the TreeSet.
 
 The usage of TreeSet is to facilitate storing multiple batches of items with
 different expiry dates and quantities, and to be able to extract items with the
-soonest expiry date when taking out of storage. 
+soonest expiry date when taking out of storage.
 
 <!-- @@author -->
 
