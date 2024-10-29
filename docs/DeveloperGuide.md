@@ -106,6 +106,8 @@ PillLogger exposes a single public method, `getLogger()`, which provides applica
 instance. Classes within the application use `getLogger()` to record events, without needing to set up or manage their own
 loggers.
 
+<!-- @@author yakultbottle -->
+
 ### Item and ItemMap
 
 The Item class has three private variables, a name, a quantity, and an
@@ -131,7 +133,7 @@ Optional.empty(), will be the last entry in the TreeSet.
 
 The usage of TreeSet is to facilitate storing multiple batches of items with
 different expiry dates and quantities, and to be able to extract items with the
-soonest expiry date when taking out of storage. 
+soonest expiry date when taking out of storage.
 
 <!-- @@author -->
 
