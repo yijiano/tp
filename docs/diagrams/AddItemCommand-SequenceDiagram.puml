@@ -33,21 +33,20 @@ end
 alt item with same name exists
     ItemMap -> ItemMap : get(name)
     loop until item with same expiry date is found or end of array is reached
-        alt item has same expiry date
+        opt item has same expiry date
             ItemMap -> Item : setQuantity(newQuantity)
             return
             ItemMap -> System.out : print
             return
             ItemMap -> Logger : log
             return
-
-        else
-            ItemMap -> Treeset : add(item)
-            return
         end
 
     end
-
+    opt item with same expiry date not found
+        ItemMap -> Treeset : add(item)
+        return
+    end
 else
     ItemMap -> Treeset : Treeset<>()
     return
