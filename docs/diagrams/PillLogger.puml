@@ -1,0 +1,30 @@
+@startuml
+
+' Define main components of the system
+package "Pharmacy Inventory & Logistics Ledger" {
+    [Commands] <<Component>>
+    [Utils] <<Component>>
+    [Pill] <<Component>>
+    [PillLogger] <<Singleton>>
+}
+
+' Define external dependencies
+[JavaLoggingAPI] <<External>>
+
+' Relationships between components
+[Commands] --> [PillLogger] : uses getLogger()
+[Utils] --> [PillLogger] : uses getLogger()
+[Pill] --> [PillLogger] : uses getLogger()
+[PillLogger] --> [JavaLoggingAPI] : utilizes
+
+' Additional notes to describe each component
+note right of PillLogger
+    Centralized logging utility using
+    singleton pattern for unified log management
+end note
+
+note right of JavaLoggingAPI
+    java.util.logging package
+end note
+
+@enduml
