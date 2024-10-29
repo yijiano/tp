@@ -1,0 +1,47 @@
+``` plantuml
+@startuml
+package "PILL" {
+    package "UI" {
+        class TextUI
+    }
+
+    package "Command" {
+        class Command
+        class AddItemCommand
+        class DeleteItemCommand
+        class ListItemsCommand
+        class FindItemCommand
+        class ExitCommand
+    }
+
+    package "Storage" {
+        class Storage
+    }
+
+    package "Item" {
+        class Item
+        class ItemMap
+    }
+
+    package "DateTime" {
+        class DateTime
+    }
+
+    package "Exceptions" {
+        class PillException
+    }
+
+    package "Logging" {
+        class PillLogger
+    }
+
+    TextUI --> Command
+    Command --> Item
+    Command --> Storage
+    Command --> Exceptions
+    Command --> Logging
+    Command --> DateTime
+    Command --> ItemMap
+}
+@enduml
+```
