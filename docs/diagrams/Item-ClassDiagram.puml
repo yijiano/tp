@@ -1,0 +1,20 @@
+@startuml
+
+class Item
+interface Comparable<Item>
+skinparam classAttributeIconSize 0
+
+Comparable <|-[dashed]- Item
+
+Item : - String name
+Item : - int quantity
+Item : - Optional<LocalDate> expiryDate
+
+Item : + String getName()
+Item : + int getQuantity()
+Item : + Optional<LocalDate> getExpiryDate()
+Item : + int compareTo(Item other)
+
+note right of Item : Item compares to other \nItems based on expiryDate
+
+@enduml
