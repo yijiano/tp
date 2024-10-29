@@ -76,6 +76,33 @@ The Storage class depends on self-defined classes PillException, Item, and
 ItemMap. While it has other dependencies, such as File and FileWriter from
 the Java standard library, PillException is the only custom class it depends on.
 
+### Item and ItemMap
+
+The Item class has three private variables, a name, a quantity, and an
+expiry date. An Item may or may not have an expiry date, so we store it
+as an Optional, which handles empty values for us without using null. 
+
+![](diagrams/Item-ClassDiagram.png)
+
+Quantity will always be a positive integer, and if no quantity is specified
+in the constructor, the default value is 1. Similarly, if no value is provided
+for expiry date, then it will be an Optional.empty().
+
+The ItemMap class contains a key-value pair, implemented as a Map, from the
+item name(String) to the item(TreeSet\<Item>)
+
+![](diagrams/ItemMap-ClassDiagram.png)
+
+Each TreeSet\<Item> represents an item type, with each entry in the TreeSet
+having a unique expiry date. The TreeSet then orders Items based on the
+compareTo method overridden in the Item class, which sorts by the earliest
+expiry date to the latest. Items with no expiry date, aka an expiry date of
+Optional.empty(), will be the last entry in the TreeSet. 
+
+The usage of TreeSet is to facilitate storing multiple batches of items with
+different expiry dates and quantities, and to be able to extract items with the
+soonest expiry date when taking out of storage. 
+
 <!-- @@author -->
 
 ## Product scope

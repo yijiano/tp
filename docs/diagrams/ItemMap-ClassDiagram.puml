@@ -1,0 +1,21 @@
+@startuml
+
+class ItemMap
+interface Map
+skinparam classAttributeIconSize 0
+
+ItemMap "1" *-- "1" Map : contains >
+ItemMap : + addItem(Item newItem)
+ItemMap : + deleteItem(String name, Optional<LocalDate> expiryDate)
+ItemMap : + editItem(Item updatedItem)
+ItemMap : + listItems()
+ItemMap : + listExpiringItems()
+ItemMap : + listToRestock()
+ItemMap : + findItem(String itemName)
+ItemMap : + getExpiringItems(String itemName)
+
+note right of Map : Maps key(itemName) to value(item)
+Map : String itemName
+Map : TreeSet<Item> item
+
+@enduml
