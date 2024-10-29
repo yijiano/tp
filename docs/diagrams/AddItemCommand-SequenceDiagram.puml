@@ -47,7 +47,7 @@ alt item with same name exists
         ItemMap -> Treeset : add(item)
         return
     end
-else
+else [else]
     ItemMap -> Treeset : Treeset<>()
     return
     ItemMap -> Treeset : add(item)
