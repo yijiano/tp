@@ -476,6 +476,175 @@ public class HelpCommandTest {
         assertTrue(output.contains("Available commands:"));
     }
 
+    @Test
+    void execute_orderHelp_printsBasicOrderHelp() throws PillException {
+        HelpCommand command = new HelpCommand("order", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("order: Creates a new purchase or dispense order"));
+        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
+    }
+
+    @Test
+    void execute_verboseOrderHelp_printsDetailedOrderHelp() throws PillException {
+        HelpCommand command = new HelpCommand("order", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: order <type> <item1> <quantity1> [item2 quantity2 ...] [-n \"notes\"]"));
+        assertTrue(output.contains("<type>     - Type of order: 'purchase' or 'dispense'"));
+        assertTrue(output.contains("Examples:"));
+        assertTrue(output.contains("order purchase Aspirin 100 Bandages 50"));
+        assertTrue(output.contains("order dispense Paracetamol 20"));
+    }
+
+    @Test
+    void execute_fulfillOrderHelp_printsBasicFulfillOrderHelp() throws PillException {
+        HelpCommand command = new HelpCommand("fulfill-order", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("fulfill-order: Processes and completes a pending order"));
+        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
+    }
+
+    @Test
+    void execute_verboseFulfillOrderHelp_printsDetailedFulfillOrderHelp() throws PillException {
+        HelpCommand command = new HelpCommand("fulfill-order", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: fulfill-order <order-id>"));
+        assertTrue(output.contains("<order-id> - The unique identifier of the order to fulfill"));
+        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("This will create the necessary transactions"));
+    }
+
+    @Test
+    void execute_transactionHistoryHelp_printsBasicTransactionHelp() throws PillException {
+        HelpCommand command = new HelpCommand("transaction-history", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("transaction-history: Views transaction history with optional filtering"));
+        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
+    }
+
+    @Test
+    void execute_verboseTransactionHistoryHelp_printsDetailedTransactionHelp() throws PillException {
+        HelpCommand command = new HelpCommand("transaction-history", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: transaction-history [item-name] [type] [start-date] [end-date]"));
+        assertTrue(output.contains("[type]      - Optional: Filter by 'incoming' or 'outgoing'"));
+        assertTrue(output.contains("Examples:"));
+        assertTrue(output.contains("transaction-history Aspirin"));
+        assertTrue(output.contains("transaction-history incoming 2024-01-01 2024-12-31"));
+    }
+
+    @Test
+    void execute_almostOrder_suggestsOrderCommand() throws PillException {
+        HelpCommand command = new HelpCommand("ordr", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: order?"));
+    }
+
+    @Test
+    void execute_almostFulfillOrder_suggestsFulfillOrderCommand() throws PillException {
+        HelpCommand command = new HelpCommand("fulfill-ordr", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: fulfill-order?"));
+    }
+
+    @Test
+    void execute_almostTransactionHistory_suggestsTransactionHistoryCommand() throws PillException {
+        HelpCommand command = new HelpCommand("transaction-histry", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Did you mean: transaction-history?"));
+    }
+
+    @Test
+    void execute_listOrdersHelp_printsBasicListOrdersHelp() throws PillException {
+        HelpCommand command = new HelpCommand("list-orders", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("list-orders: Lists all orders with optional filtering"));
+        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
+    }
+
+    @Test
+    void execute_verboseListOrdersHelp_printsDetailedListOrdersHelp() throws PillException {
+        HelpCommand command = new HelpCommand("list-orders", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: list-orders [type] [status] [start-date] [end-date]"));
+        assertTrue(output.contains("[type]      - Optional: Filter by 'purchase' or 'dispense'"));
+        assertTrue(output.contains("[status]    - Optional: Filter by 'pending', 'fulfilled', or 'cancelled'"));
+        assertTrue(output.contains("Examples:"));
+        assertTrue(output.contains("list-orders purchase pending"));
+    }
+
+    @Test
+    void execute_cancelOrderHelp_printsBasicCancelOrderHelp() throws PillException {
+        HelpCommand command = new HelpCommand("cancel-order", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("cancel-order: Cancels a pending order"));
+        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
+    }
+
+    @Test
+    void execute_verboseCancelOrderHelp_printsDetailedCancelOrderHelp() throws PillException {
+        HelpCommand command = new HelpCommand("cancel-order", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: cancel-order <order-id>"));
+        assertTrue(output.contains("<order-id> - The unique identifier of the order to cancel"));
+        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("Note: Only pending orders can be cancelled"));
+    }
+
+    @Test
+    void execute_helpWithOrderRelatedTypos_suggestsCorrectCommands() throws PillException {
+        // Test multiple similar typos for order-related commands
+        String[] typos = {
+            "order-list", "orderlist", "listorder", "list-ordr",
+            "cancle-order", "cancel-ordr", "cancelorder",
+            "fulfill", "fulfil-order", "fullfill-order"
+        };
+
+        // StringBuilder to collect all outputs
+        StringBuilder allOutput = new StringBuilder();
+
+        for (String typo : typos) {
+            HelpCommand command = new HelpCommand(typo, false);
+            command.execute(itemMap, storage);
+            allOutput.append(outContent.toString());
+            outContent.reset(); // Clear for next iteration
+        }
+
+        // Check for presence of suggestions in combined output
+        String output = allOutput.toString();
+        assertTrue(output.contains("Did you mean: list-orders?"),
+                "Should suggest 'list-orders' for list-related typos");
+        assertTrue(output.contains("Did you mean: cancel-order?"),
+                "Should suggest 'cancel-order' for cancel-related typos");
+        assertTrue(output.contains("Did you mean: fulfill-order?"),
+                "Should suggest 'fulfill-order' for fulfill-related typos");
+    }
+
     @AfterEach
     void restoreSystemStreams() {
         System.setOut(originalOut);
