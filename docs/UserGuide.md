@@ -2,7 +2,7 @@
 
 # Pharmacy Inventory & Logistics Ledger (PILL) User Guide
 
-**Version 1.0**
+**Version 2.0**
 
 1. [Introduction](#introduction)
 2. [Features](#features)
@@ -10,6 +10,11 @@
     - [Adding New Item: `add`](#adding-new-item-add)
     - [Listing All Items: `list`](#listing-all-items-list)
     - [Deleting Existing Item: `delete`](#deleting-existing-item-delete)
+    - [Editing Existing Item: `edit`](#editing-existing-item-edit)
+    - [Finding Items: `find`](#finding-items-find)
+    - [List Expiring Items: `expiring`](#list-expiring-items-expiring)
+    - [List Expired Items: `expired`](#list-expired-items-expired)
+    - [Query Existing Stock: `stock-check`](#query-existing-stock-stock-check)
     - [Exiting the Program: `exit`](#exiting-the-program-exit)
     - [Saving the Data](#saving-the-data)
     - [Editing the Data File](#editing-the-data-file)
