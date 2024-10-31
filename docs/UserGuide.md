@@ -126,8 +126,29 @@ Deleted the following item from the inventory:
 	2. Ibuprofen: 1
 ```
 
+### Editing Existing Item: 'edit'
 
+Edits the quantity of an existing item entry in the inventory. 
 
+**Format**: `edit NAME QUANTITY (EXPIRY_DATE)`
+
+- Edits the items with specified `NAME` to have quantity `QUANTITY`.
+- Edit can be called with an optional expiry date. If no expiry date is supplied,
+it will attempt to edit the item entry with no expiry date. 
+
+**Sample Output**
+
+- `> edit Panadol 20`
+
+```
+Edited item: Panadol: 20 in stock
+```
+
+- `> edit Zyrtec 30 2025-02-03`
+
+```
+Edited item: Zyrtec: 30 in stock, expiring: 2025-02-03
+```
 ---
 
 ### Exiting the Program: `exit`
