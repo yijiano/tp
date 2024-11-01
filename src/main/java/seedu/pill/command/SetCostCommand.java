@@ -26,7 +26,7 @@ public class SetCostCommand extends Command {
         for (Item item : itemMap.getItemsByName(itemName)) {
             item.setCost(cost);
             if (!msgIsPrinted) {
-                System.out.println("Cost of " + itemName + " updated successfully!");
+                System.out.println("Set cost of " + itemName +  " to $" + cost + ".");
                 msgIsPrinted = true;
             }
             itemFound = true;

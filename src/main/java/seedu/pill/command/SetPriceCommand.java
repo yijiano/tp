@@ -26,7 +26,7 @@ public class SetPriceCommand extends Command {
         for (Item item : itemMap.getItemsByName(itemName)) {
             item.setPrice(price);
             if (!msgIsPrinted) {
-                System.out.println("Price of " + itemName + " updated successfully!");
+                System.out.println("Set price of " + itemName +  " to $" + price + ".");
                 msgIsPrinted = true;
             }
             itemFound = true;
