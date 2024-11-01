@@ -10,15 +10,23 @@ public class Item implements Comparable<Item> {
     private String name;
     private int quantity;
     private Optional<LocalDate> expiryDate;
+    private double cost;
+    private double price;
 
     public Item(String name, int quantity) {
-        this(name, quantity, null);
+        this(name, quantity, null, 0, 0);
     }
 
     public Item(String name, int quantity, LocalDate expiryDate) {
+        this(name, quantity, expiryDate, 0, 0);
+    }
+
+    public Item(String name, int quantity, LocalDate expiryDate, double cost, double price) {
         this.name = name;
         this.quantity = quantity;
-        this.expiryDate = Optional.<LocalDate>ofNullable(expiryDate);
+        this.expiryDate = Optional.ofNullable(expiryDate);
+        this.cost = cost;
+        this.price = price;
     }
 
     public String getName() {
@@ -35,6 +43,22 @@ public class Item implements Comparable<Item> {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     /**
@@ -57,12 +81,12 @@ public class Item implements Comparable<Item> {
 
     @Override
     public String toString() {
-        if (quantity <= 0) {
-            return name;
-        }
-        return this.expiryDate
-                .map(exDate -> name + ": " + quantity + " in stock, expiring: " + exDate)
-                .orElse(name + ": " + quantity + " in stock");
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append(": ").append(quantity).append(" in stock");
+        expiryDate.ifPresent(date -> sb.append(", expiring: ").append(date));
+        if (cost > 0) sb.append(", cost: $").append(cost);
+        if (price > 0) sb.append(", price: $").append(price);
+        return sb.toString();
     }
 
     @Override
@@ -72,7 +96,9 @@ public class Item implements Comparable<Item> {
         }
         if (obj instanceof Item item) {
             return name.equals(item.getName()) && quantity == item.getQuantity()
-                    && expiryDate.equals(item.getExpiryDate());
+                    && expiryDate.equals(item.getExpiryDate())
+                    && Double.compare(cost, item.cost) == 0
+                    && Double.compare(price, item.price) == 0;
         }
         return false;
     }

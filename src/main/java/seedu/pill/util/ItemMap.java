@@ -4,13 +4,7 @@ import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.List;
-import java.util.LinkedHashMap;
-import java.util.Collection;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
@@ -412,6 +406,18 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
         }
         return totalSize;
     }
+
+    /**
+     * Returns a collection of all items with the specified name.
+     * If no items are found, returns an empty collection.
+     *
+     * @param itemName The name of the items to retrieve.
+     * @return A collection of items with the specified name, or an empty collection if none are found.
+     */
+    public Collection<Item> getItemsByName(String itemName) {
+        return items.containsKey(itemName) ? new TreeSet<>(items.get(itemName)) : Collections.emptySet();
+    }
+
 
     /**
      * Returns the set of items with the given name.

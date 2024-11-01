@@ -1,14 +1,6 @@
 package seedu.pill.util;
 
-import seedu.pill.command.AddItemCommand;
-import seedu.pill.command.DeleteItemCommand;
-import seedu.pill.command.EditItemCommand;
-import seedu.pill.command.FindCommand;
-import seedu.pill.command.HelpCommand;
-import seedu.pill.command.ListCommand;
-import seedu.pill.command.StockCheckCommand;
-import seedu.pill.command.ExpiredCommand;
-import seedu.pill.command.ExpiringCommand;
+import seedu.pill.command.*;
 
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
@@ -44,56 +36,120 @@ public class Parser {
             String arguments = String.join(" ", Arrays.copyOfRange(splitInput, 1, splitInput.length));
 
             switch (commandString) {
-            case "exit":
-                this.exitFlag = true;
-                break;
-            case "add":
-                parseAddItemCommand(arguments).execute(this.items, this.storage);
-                break;
-            case "delete":
-                parseDeleteItemCommand(arguments).execute(this.items, this.storage);
-                break;
-            case "edit":
-                parseEditItemCommand(arguments).execute(this.items, this.storage);
-                break;
-            case "find":
-                new FindCommand(arguments).execute(this.items, this.storage);
-                break;
-            case "help":
-                boolean flag = flagStr.equals("-v");
-                new HelpCommand(argument, flag).execute(this.items, this.storage);
-                break;
-            case "list":
-                if (splitInput.length > 1) {
-                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-                }
-                new ListCommand().execute(this.items, this.storage);
-                break;
-            case "stock-check":
-                if (splitInput.length > 2) {
-                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-                }
-                new StockCheckCommand(argument).execute(this.items, this.storage);
-                break;
-            case "expired":
-                new ExpiredCommand().execute(this.items, this.storage);
-                break;
-            case "expiring":
-                if (splitInput.length > 2) {
-                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-                }
-                if (!this.isValidDate(arguments)) {
-                    throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
-                }
-                LocalDate expiryDate = parseExpiryDate(arguments);
-                new ExpiringCommand(expiryDate).execute(this.items, this.storage);
-                break;
-            default:
-                throw new PillException(ExceptionMessages.INVALID_COMMAND);
+                case "exit":
+                    this.exitFlag = true;
+                    break;
+                case "add":
+                    parseAddItemCommand(arguments).execute(this.items, this.storage);
+                    break;
+                case "delete":
+                    parseDeleteItemCommand(arguments).execute(this.items, this.storage);
+                    break;
+                case "edit":
+                    parseEditItemCommand(arguments).execute(this.items, this.storage);
+                    break;
+                case "find":
+                    new FindCommand(arguments).execute(this.items, this.storage);
+                    break;
+                case "help":
+                    boolean flag = flagStr.equals("-v");
+                    new HelpCommand(argument, flag).execute(this.items, this.storage);
+                    break;
+                case "list":
+                    if (splitInput.length > 1) {
+                        throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                    }
+                    new ListCommand().execute(this.items, this.storage);
+                    break;
+                case "stock-check":
+                    if (splitInput.length > 2) {
+                        throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                    } else if (splitInput.length < 2) {
+                        throw new PillException(ExceptionMessages.INVALID_STKCHECK_COMMAND);
+                    }
+                    new StockCheckCommand(argument).execute(this.items, this.storage);
+                    break;
+                case "expired":
+                    new ExpiredCommand().execute(this.items, this.storage);
+                    break;
+                case "expiring":
+                    if (splitInput.length > 2) {
+                        throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                    }
+                    if (!this.isValidDate(arguments)) {
+                        throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
+                    }
+                    LocalDate expiryDate = parseExpiryDate(arguments);
+                    new ExpiringCommand(expiryDate).execute(this.items, this.storage);
+                    break;
+                case "cost":
+                    parseSetCostCommand(arguments).execute(this.items, this.storage);
+                    break;
+                case "price":
+                    parseSetPriceCommand(arguments).execute(this.items, this.storage);
+                    break;
+                default:
+                    throw new PillException(ExceptionMessages.INVALID_COMMAND);
             }
         } catch (PillException e) {
             PillException.printException(e);
         }
+    }
+
+    /**
+     * Parses the user input and creates a {@code SetCostCommand} object.
+     *
+     * @param arguments A string representing the user's input for setting the cost.
+     * @return A {@code SetCostCommand} containing the parsed item name and cost.
+     * @throws PillException If the input format is invalid.
+     */
+    private SetCostCommand parseSetCostCommand(String arguments) throws PillException {
+        String[] splitArguments = arguments.split("\\s+");
+        if (splitArguments.length < 2) {
+            throw new PillException(ExceptionMessages.INVALID_COST_COMMAND);
+        }
+
+        String itemName = buildItemName(splitArguments, 0, splitArguments.length - 1);
+        String costStr = splitArguments[splitArguments.length - 1];
+
+        if (!isANumber(costStr)) {
+            throw new PillException(ExceptionMessages.INVALID_COST_COMMAND);
+        }
+
+        double cost = Double.parseDouble(costStr);
+        if (cost < 0) {
+            throw new PillException(ExceptionMessages.INVALID_COST_COMMAND);
+        }
+
+        return new SetCostCommand(itemName, cost);
+    }
+
+    /**
+     * Parses the user input and creates a {@code SetPriceCommand} object.
+     *
+     * @param arguments A string representing the user's input for setting the price.
+     * @return A {@code SetPriceCommand} containing the parsed item name and price.
+     * @throws PillException If the input format is invalid.
+     */
+    private SetPriceCommand parseSetPriceCommand(String arguments) throws PillException {
+        String[] splitArguments = arguments.split("\\s+");
+        if (splitArguments.length < 2) {
+            throw new PillException(ExceptionMessages.INVALID_PRICE_COMMAND);
+        }
+
+        String itemName = buildItemName(splitArguments, 0, splitArguments.length - 1);
+        String priceStr = splitArguments[splitArguments.length - 1];
+
+        if (!isANumber(priceStr)) {
+            throw new PillException(ExceptionMessages.INVALID_PRICE_COMMAND);
+        }
+
+        double price = Double.parseDouble(priceStr);
+        if (price < 0) {
+            throw new PillException(ExceptionMessages.INVALID_PRICE_COMMAND);
+        }
+
+        return new SetPriceCommand(itemName, price);
     }
 
     /**
