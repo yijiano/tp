@@ -56,8 +56,9 @@ public class HelpCommand extends Command {
      */
     @Override
     public void execute(ItemMap itemMap, Storage storage) throws PillException {
-        assert itemMap != null : "ItemMap cannot be null";
+        assert itemMap != null : "ItemList cannot be null";
         assert storage != null : "Storage cannot be null";
+        logger.info("Executing HelpCommand");
 
         if (commandName == null || commandName.isEmpty()) {
             showGeneralHelp();
@@ -71,6 +72,8 @@ public class HelpCommand extends Command {
      * Lists each command with a brief description of its function.
      */
     private void showGeneralHelp() {
+        logger.info("Showing general help information");
+
         System.out.println("Available commands:");
 
         System.out.println("\nItem Management:");
