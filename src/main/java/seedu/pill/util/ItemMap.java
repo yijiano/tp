@@ -400,6 +400,61 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
+     * Retrieves the item with the soonest expiry date for the specified item name.
+     *
+     * @param itemName the name of the item to retrieve
+     * @return the {@code Item} with the soonest expiry date
+     * @throws PillException If the input string is invalid or there is no such key-value mapping in ItemMap
+     */
+    public Item getSoonestExpiringItem(String itemName) throws PillException {
+        assert itemName != null : "Item name cannot be null";
+
+        if (itemName == null || itemName.trim().isEmpty()) {
+            throw new PillException(ExceptionMessages.INVALID_COMMAND);
+        }
+
+        TreeSet<Item> item = this.items.get(itemName);
+
+        if (item == null) {
+            throw new PillException(ExceptionMessages.NO_ITEM_ERROR);
+        }
+
+        return item.first();
+    }
+
+    /**
+     * Calculates the total quantity in stock for the specified item name.
+     * <p>
+     * Iterates over all instances of the item to aggregate quantities
+     * from each entry, where each {@code Item} represents a distinct batch
+     * with an associated quantity.
+     * </p>
+     *
+     * @param itemName the name of the item to query
+     * @return the total quantity in stock for the specified item; returns 0 if the item does not exist or the name is invalid
+     */
+    public int stockCount(String itemName) {
+        assert itemName != null : "Item name cannot be null";
+
+        if (itemName == null || itemName.trim().isEmpty()) {
+            return 0;
+        }
+
+        TreeSet<Item> item = this.items.get(itemName);
+
+        if (item == null) {
+            return 0;
+        }
+
+        int totalQuantity = 0;
+        for (Item currentItem : item) {
+            totalQuantity += currentItem.getQuantity();
+        }
+
+        return totalQuantity;
+    }
+
+    /**
      * Returns the total number of items in the map.
      * This counts each individual item, including those with different expiry dates.
      *

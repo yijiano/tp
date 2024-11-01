@@ -11,7 +11,9 @@ public enum ExceptionMessages {
     INVALID_ADD_COMMAND     ("Invalid Add command format..."),
     INVALID_DELETE_COMMAND  ("Invalid Delete command format..."),
     INVALID_EDIT_COMMAND    ("Invalid Edit command format..."),
-    INVALID_USE_COMMAND    ("Invalid Use command format..."),
+    INVALID_USE_COMMAND     ("Invalid Use command format..."),
+    STOCK_UNDERFLOW         ("Trying to use more items than is available, please try again."),
+    NO_ITEM_ERROR           ("No item with that name in inventory, please try again."),
     PARSE_DATE_ERROR        ("Date provided is in the wrong format, please try again."),
     TOO_MANY_ARGUMENTS      ("Too many arguments. Please type 'help' for accepted commands.");
 
