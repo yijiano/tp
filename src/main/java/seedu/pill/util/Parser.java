@@ -86,7 +86,7 @@ public class Parser {
                 if (splitInput.length > 2) {
                     throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
                 }
-                if (!isValidDate(arguments)) {
+                if (!this.isValidDate(arguments)) {
                     throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
                 }
                 LocalDate expiryDate = parseExpiryDate(arguments);
