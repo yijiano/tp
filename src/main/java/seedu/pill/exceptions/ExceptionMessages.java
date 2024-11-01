@@ -1,22 +1,24 @@
 package seedu.pill.exceptions;
 
 public enum ExceptionMessages {
-    INVALID_COMMAND         ("Invalid command, please try again." +
+    INVALID_COMMAND              ("Invalid command, please try again." +
             "\nType the 'help' command for a list of valid commands."),
-    SAVE_ERROR              ("Error saving to file, please try again."),
-    LOAD_ERROR              ("Error loading saved data"),
-    INVALID_LINE_FORMAT     ("File corrupted. Ignoring invalid line format..."),
-    INVALID_QUANTITY        ("Quantity is invalid, please try again"),
-    INVALID_QUANTITY_FORMAT ("Quantity provided is not a number, please try again."),
-    INVALID_ADD_COMMAND     ("Invalid Add command format..."),
-    INVALID_DELETE_COMMAND  ("Invalid Delete command format..."),
-    INVALID_EDIT_COMMAND    ("Invalid Edit command format..."),
-    PARSE_DATE_ERROR        ("Date provided is in the wrong format, please try again."),
-    ITEM_NOT_FOUND_ERROR    ("Item not found..."),
-    TOO_MANY_ARGUMENTS      ("Too many arguments. Please type 'help' for accepted commands."),
-    INVALID_STKCHECK_COMMAND("Invalid stock-check command format..."),
-    INVALID_COST_COMMAND    ("Invalid Cost command format..."),
-    INVALID_PRICE_COMMAND   ("Invalid Price command format...");
+    SAVE_ERROR                   ("Error saving to file, please try again."),
+    LOAD_ERROR                   ("Error loading saved data"),
+    INVALID_LINE_FORMAT          ("File corrupted. Ignoring invalid line format..."),
+    INVALID_QUANTITY             ("Quantity is invalid, please try again"),
+    INVALID_QUANTITY_FORMAT      ("Quantity provided is not a number, please try again."),
+    INVALID_ADD_COMMAND          ("Invalid Add command format..."),
+    INVALID_DELETE_COMMAND       ("Invalid Delete command format..."),
+    INVALID_EDIT_COMMAND         ("Invalid Edit command format..."),
+    PARSE_DATE_ERROR             ("Date provided is in the wrong format, please try again."),
+    ITEM_NOT_FOUND_ERROR         ("Item not found..."),
+    TOO_MANY_ARGUMENTS           ("Too many arguments. Please type 'help' for accepted commands."),
+    INVALID_STOCKCHECK_COMMAND   ("Invalid stock-check command format..."),
+    INVALID_COST_COMMAND         ("Invalid Cost command format..."),
+    INVALID_PRICE_COMMAND        ("Invalid Price command format..."),
+    INVALID_RESTOCKALL_COMMAND   ("Invalid restockall command format..."),
+    INVALID_RESTOCK_COMMAND      ("Invalid restock item command format...");
 
     private final String message;
 

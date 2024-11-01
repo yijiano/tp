@@ -84,10 +84,15 @@ public class Item implements Comparable<Item> {
         StringBuilder sb = new StringBuilder();
         sb.append(name).append(": ").append(quantity).append(" in stock");
         expiryDate.ifPresent(date -> sb.append(", expiring: ").append(date));
-        if (cost > 0) sb.append(", cost: $").append(cost);
-        if (price > 0) sb.append(", price: $").append(price);
+        if (cost > 0) {
+            sb.append(", cost: $").append(cost);
+        }
+        if (price > 0) {
+            sb.append(", price: $").append(price);
+        }
         return sb.toString();
     }
+
 
     @Override
     public boolean equals(Object obj) {

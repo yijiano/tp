@@ -4,7 +4,15 @@ import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.TreeSet;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
@@ -408,6 +416,20 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
+     * Returns a list of all items in the ItemMap.
+     *
+     * @return A list containing all items in the inventory.
+     */
+    public List<Item> getAllItems() {
+        List<Item> allItems = new ArrayList<>();
+        for (TreeSet<Item> itemSet : items.values()) {
+            allItems.addAll(itemSet);
+        }
+        return allItems;
+    }
+
+
+    /**
      * Returns a collection of all items with the specified name.
      * If no items are found, returns an empty collection.
      *
@@ -416,6 +438,31 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      */
     public Collection<Item> getItemsByName(String itemName) {
         return items.containsKey(itemName) ? new TreeSet<>(items.get(itemName)) : Collections.emptySet();
+    }
+
+    /**
+     * Retrieves an item by its name and optional expiry date.
+     *
+     * @param itemName   The name of the item.
+     * @param expiryDate An optional expiry date. If provided, it will look for an item with this expiry date.
+     * @return The item with the specified name and expiry date, or null if not found.
+     */
+    public Item getItemByNameAndExpiry(String itemName, Optional<LocalDate> expiryDate) {
+        TreeSet<Item> itemSet = items.get(itemName);
+        if (itemSet == null) {
+            return null;
+        }
+
+        for (Item item : itemSet) {
+            if (expiryDate.isPresent()) {
+                if (item.getExpiryDate().equals(expiryDate)) {
+                    return item;
+                }
+            } else if (item.getExpiryDate().isEmpty()) {
+                return item;
+            }
+        }
+        return null;
     }
 
 

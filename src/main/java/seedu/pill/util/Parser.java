@@ -1,13 +1,25 @@
 package seedu.pill.util;
 
-import seedu.pill.command.*;
-
+import seedu.pill.command.HelpCommand;
+import seedu.pill.command.AddItemCommand;
+import seedu.pill.command.DeleteItemCommand;
+import seedu.pill.command.EditItemCommand;
+import seedu.pill.command.ExpiredCommand;
+import seedu.pill.command.ExpiringCommand;
+import seedu.pill.command.FindCommand;
+import seedu.pill.command.ListCommand;
+import seedu.pill.command.RestockAllCommand;
+import seedu.pill.command.RestockItemCommand;
+import seedu.pill.command.SetCostCommand;
+import seedu.pill.command.SetPriceCommand;
+import seedu.pill.command.StockCheckCommand;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Parser {
     private boolean exitFlag = false;
@@ -36,64 +48,127 @@ public class Parser {
             String arguments = String.join(" ", Arrays.copyOfRange(splitInput, 1, splitInput.length));
 
             switch (commandString) {
-                case "exit":
-                    this.exitFlag = true;
-                    break;
-                case "add":
-                    parseAddItemCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "delete":
-                    parseDeleteItemCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "edit":
-                    parseEditItemCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "find":
-                    new FindCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "help":
-                    boolean flag = flagStr.equals("-v");
-                    new HelpCommand(argument, flag).execute(this.items, this.storage);
-                    break;
-                case "list":
-                    if (splitInput.length > 1) {
-                        throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-                    }
-                    new ListCommand().execute(this.items, this.storage);
-                    break;
-                case "stock-check":
-                    if (splitInput.length > 2) {
-                        throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-                    } else if (splitInput.length < 2) {
-                        throw new PillException(ExceptionMessages.INVALID_STKCHECK_COMMAND);
-                    }
-                    new StockCheckCommand(argument).execute(this.items, this.storage);
-                    break;
-                case "expired":
-                    new ExpiredCommand().execute(this.items, this.storage);
-                    break;
-                case "expiring":
-                    if (splitInput.length > 2) {
-                        throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-                    }
-                    if (!this.isValidDate(arguments)) {
-                        throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
-                    }
-                    LocalDate expiryDate = parseExpiryDate(arguments);
-                    new ExpiringCommand(expiryDate).execute(this.items, this.storage);
-                    break;
-                case "cost":
-                    parseSetCostCommand(arguments).execute(this.items, this.storage);
-                    break;
-                case "price":
-                    parseSetPriceCommand(arguments).execute(this.items, this.storage);
-                    break;
-                default:
-                    throw new PillException(ExceptionMessages.INVALID_COMMAND);
+            case "exit":
+                this.exitFlag = true;
+                break;
+            case "add":
+                parseAddItemCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "delete":
+                parseDeleteItemCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "edit":
+                parseEditItemCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "find":
+                new FindCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "help":
+                boolean flag = flagStr.equals("-v");
+                new HelpCommand(argument, flag).execute(this.items, this.storage);
+                break;
+            case "list":
+                if (splitInput.length > 1) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
+                new ListCommand().execute(this.items, this.storage);
+                break;
+            case "stock-check":
+                if (splitInput.length != 2) {
+                    throw new PillException(ExceptionMessages.INVALID_STOCKCHECK_COMMAND);
+                }
+                new StockCheckCommand(argument).execute(this.items, this.storage);
+                break;
+            case "expired":
+                new ExpiredCommand().execute(this.items, this.storage);
+                break;
+            case "expiring":
+                if (splitInput.length > 2) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
+                if (!isValidDate(arguments)) {
+                    throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
+                }
+                LocalDate expiryDate = parseExpiryDate(arguments);
+                new ExpiringCommand(expiryDate).execute(this.items, this.storage);
+                break;
+            case "cost":
+                parseSetCostCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "price":
+                parseSetPriceCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "restockall":
+                parseRestockAllCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "restock":
+                parseRestockItemCommand(arguments).execute(this.items, this.storage);
+                break;
+            default:
+                throw new PillException(ExceptionMessages.INVALID_COMMAND);
             }
         } catch (PillException e) {
             PillException.printException(e);
         }
+    }
+
+    /**
+     * Parses the `restockall` command with an optional threshold.
+     *
+     * @param arguments The user's input after the `restockall` command.
+     * @return A `RestockAllCommand` with the parsed threshold.
+     * @throws PillException If the input format is invalid.
+     */
+    private RestockAllCommand parseRestockAllCommand(String arguments) throws PillException {
+        int threshold = 50;
+        if (!arguments.isEmpty()) {
+            if (!isANumber(arguments)) {
+                throw new PillException(ExceptionMessages.INVALID_RESTOCKALL_COMMAND);
+            }
+            threshold = Integer.parseInt(arguments);
+            if (threshold <= 0) {
+                throw new PillException(ExceptionMessages.INVALID_QUANTITY);
+            }
+        }
+        return new RestockAllCommand(threshold);
+    }
+
+    /**
+     * Parses the `restock` command for a specific item, with an optional expiry date and quantity.
+     *
+     * @param arguments The user's input after the `restock` command.
+     * @return A `RestockItemCommand` with the parsed item name, expiry date, and quantity.
+     * @throws PillException If the input format is invalid.
+     */
+    private RestockItemCommand parseRestockItemCommand(String arguments) throws PillException {
+        String[] splitArguments = arguments.split("\\s+");
+        if (splitArguments.length < 2) {
+            throw new PillException(ExceptionMessages.INVALID_RESTOCK_COMMAND);
+        }
+
+        String itemName;
+        Optional<LocalDate> expiryDate = Optional.empty();
+        String quantityStr;
+
+        if (isValidDate(splitArguments[splitArguments.length - 2])) {
+            expiryDate = Optional.of(parseExpiryDate(splitArguments[splitArguments.length - 2]));
+            quantityStr = splitArguments[splitArguments.length - 1];
+            itemName = buildItemName(splitArguments, 0, splitArguments.length - 2);
+        } else {
+            quantityStr = splitArguments[splitArguments.length - 1];
+            itemName = buildItemName(splitArguments, 0, splitArguments.length - 1);
+        }
+
+        if (!isANumber(quantityStr)) {
+            throw new PillException(ExceptionMessages.INVALID_QUANTITY);
+        }
+
+        int quantity = Integer.parseInt(quantityStr);
+        if (quantity <= 0) {
+            throw new PillException(ExceptionMessages.INVALID_QUANTITY);
+        }
+
+        return new RestockItemCommand(itemName, expiryDate, quantity);
     }
 
     /**

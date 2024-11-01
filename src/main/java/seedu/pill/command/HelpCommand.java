@@ -20,7 +20,9 @@ public class HelpCommand extends Command {
     private static final List<String> VALID_COMMANDS = Arrays.asList(
             "help", "add", "delete", "edit", "expired", "expiring",
             "list", "order", "cancel-order", "fulfill-order", "list-orders",
-            "stock-check", "transaction-history", "exit");
+            "stock-check", "transaction-history", "exit", "cost", "price", "restock", "restockall"
+    );
+
     private final String commandName;
     private final boolean verbose;
 
@@ -54,10 +56,6 @@ public class HelpCommand extends Command {
      */
     @Override
     public void execute(ItemMap itemMap, Storage storage) throws PillException {
-        assert itemMap != null : "ItemList cannot be null";
-        assert storage != null : "Storage cannot be null";
-        logger.info("Executing HelpCommand");
-
         if (commandName == null || commandName.isEmpty()) {
             showGeneralHelp();
         } else {
@@ -70,8 +68,6 @@ public class HelpCommand extends Command {
      * Lists each command with a brief description of its function.
      */
     private void showGeneralHelp() {
-        logger.info("Showing general help information");
-
         System.out.println("Available commands:");
 
         System.out.println("\nItem Management:");
@@ -82,6 +78,12 @@ public class HelpCommand extends Command {
         System.out.println("  expiring      - Lists items expiring before a specified date");
         System.out.println("  list          - Lists all items");
         System.out.println("  stock-check   - Lists all items that need to be restocked");
+        System.out.println("  restock       - Restocks a specified item with an optional expiry date and quantity");
+        System.out.println("  restockall    - Restocks all items below a specified threshold");
+
+        System.out.println("\nPrice and Cost Management:");
+        System.out.println("  cost          - Sets the cost for a specified item");
+        System.out.println("  price         - Sets the selling price for a specified item");
 
         System.out.println("\nOrder Management:");
         System.out.println("  order         - Creates a new purchase or dispense order");
@@ -111,6 +113,18 @@ public class HelpCommand extends Command {
         logger.info("Showing specific help for command: " + command);
 
         switch (command.toLowerCase()) {
+        case "restock":
+            showRestockHelp();
+            break;
+        case "restockall":
+            showRestockAllHelp();
+            break;
+        case "cost":
+            showCostHelp();
+            break;
+        case "price":
+            showPriceHelp();
+            break;
         case "help":
             showHelpHelp();
             break;
@@ -185,6 +199,64 @@ public class HelpCommand extends Command {
         System.out.println("\nAvailable commands: " + String.join(", ", VALID_COMMANDS));
         System.out.println("Type 'help <command>' for more information on a specific command.");
     }
+
+    /**
+     * Prints detailed information about the 'restock' command.
+     */
+    private void showRestockHelp() {
+        System.out.println("restock: Restocks a specified item with an optional expiry date and quantity.");
+        if (verbose) {
+            System.out.println("Usage: restock <item-name> [expiry-date] <quantity>");
+            System.out.println("  <item-name>    - The name of the item to restock.");
+            System.out.println("  [expiry-date]  - Optional. The expiry date of the item in yyyy-MM-dd format.");
+            System.out.println("  <quantity>     - The quantity to restock up to.");
+            System.out.println("\nExamples:");
+            System.out.println("  restock apple 100");
+            System.out.println("  restock orange 2025-12-12 50");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'restockall' command.
+     */
+    private void showRestockAllHelp() {
+        System.out.println("restockall: Restocks all items below a specified threshold.");
+        if (verbose) {
+            System.out.println("Usage: restockall [threshold]");
+            System.out.println("  [threshold] - Optional. The minimum quantity for restocking. Defaults to 50.");
+            System.out.println("\nExample:");
+            System.out.println("  restockall 100");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'cost' command.
+     */
+    private void showCostHelp() {
+        System.out.println("cost: Sets the cost for a specified item.");
+        if (verbose) {
+            System.out.println("Usage: cost <item-name> <cost>");
+            System.out.println("  <item-name> - The name of the item.");
+            System.out.println("  <cost>      - The cost value to set for the item.");
+            System.out.println("\nExample:");
+            System.out.println("  cost apple 20.0");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'price' command.
+     */
+    private void showPriceHelp() {
+        System.out.println("price: Sets the selling price for a specified item.");
+        if (verbose) {
+            System.out.println("Usage: price <item-name> <price>");
+            System.out.println("  <item-name> - The name of the item.");
+            System.out.println("  <price>     - The price value to set for the item.");
+            System.out.println("\nExample:");
+            System.out.println("  price apple 30.0");
+        }
+    }
+
 
     /**
      * Prints detailed information about the 'help' command.
