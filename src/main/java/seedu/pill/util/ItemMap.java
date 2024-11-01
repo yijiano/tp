@@ -400,6 +400,83 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     }
 
     /**
+     * Uses a specified quantity of items with the given name, consuming from the earliest expiring items first.
+     * If the quantity to use equals or exceeds an item's quantity, that item is deleted.
+     * If the quantity to use is less than an item's quantity, the item's quantity is reduced.
+     *
+     * @param itemName the name of the item to use
+     * @param quantityToUse the quantity of the item to consume
+     * @throws PillException if:
+     *         - the requested quantity exceeds the total available stock for the item
+     *         - the specified item name does not exist in the inventory
+     */
+    public void useItem(String itemName, int quantityToUse) throws PillException {
+        if (quantityToUse > this.stockCount(itemName)) {
+            LOGGER.warning("Attempt to use more items than available: name=" + itemName +
+                    ", requested=" + quantityToUse +
+                    ", available=" + this.stockCount(itemName));
+            throw new PillException(ExceptionMessages.STOCK_UNDERFLOW);
+        }
+
+        int originalQuantity = quantityToUse;  // Store for logging purposes
+        while (quantityToUse > 0) {
+            // throws PillException if no key-value pair for itemName exists
+            Item itemToUse = this.getSoonestExpiringItem(itemName);
+
+            if (itemToUse.getQuantity() == quantityToUse) {
+                quantityToUse = 0;
+                this.deleteItem(itemName, itemToUse.getExpiryDate());
+
+                itemToUse.getExpiryDate().ifPresentOrElse(
+                        expiry -> {
+                            LOGGER.info("Completely used item with expiry date: " + itemToUse);
+                            System.out.println("Completely used item with expiry date " + expiry + ": \n" + itemToUse);
+                        },
+                        () -> {
+                            LOGGER.info("Completely used item: " + itemToUse);
+                            System.out.println("Completely used item: \n" + itemToUse);
+                        }
+                );
+            } else if (itemToUse.getQuantity() > quantityToUse) {
+                int oldQuantity = itemToUse.getQuantity();
+                itemToUse.setQuantity(oldQuantity - quantityToUse);
+                this.editItem(itemToUse);
+                quantityToUse = 0;
+
+                itemToUse.getExpiryDate().ifPresentOrElse(
+                        expiry -> {
+                            LOGGER.info("Partially used item with expiry date: " + itemToUse +
+                                    " (reduced from " + oldQuantity + " to " + itemToUse.getQuantity() + ")");
+                            System.out.println("Partially used item with expiry date " + expiry +
+                                    " (reduced from " + oldQuantity + " to " + itemToUse.getQuantity() + "): \n" +
+                                    itemToUse);
+                        },
+                        () -> {
+                            LOGGER.info("Partially used item with no expiry date: " + itemToUse +
+                                    " (reduced from " + oldQuantity + " to " + itemToUse.getQuantity() + ")");
+                            System.out.println("Partially used item with no expiry date" +
+                                    " (reduced from " + oldQuantity + " to " + itemToUse.getQuantity() + "): \n" +
+                                    itemToUse);
+                        }
+                );
+            } else {
+                quantityToUse -= itemToUse.getQuantity();
+                this.deleteItem(itemName, itemToUse.getExpiryDate());
+
+                itemToUse.getExpiryDate().ifPresentOrElse(
+                        expiry -> {
+                            LOGGER.info("Completely used item with expiry date " + expiry + "(more remaining to use): " + itemToUse);
+                        },
+                        () -> {
+                            // below shouldn't be reachable
+                            LOGGER.warning("Completely used all items, but still need to use more.");
+                        }
+                );
+            }
+        }
+    }
+
+    /**
      * Retrieves the item with the soonest expiry date for the specified item name.
      *
      * @param itemName the name of the item to retrieve
