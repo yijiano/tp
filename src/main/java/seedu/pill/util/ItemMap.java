@@ -465,7 +465,8 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
 
                 itemToUse.getExpiryDate().ifPresentOrElse(
                         expiry -> {
-                            LOGGER.info("Completely used item with expiry date " + expiry + "(more remaining to use): " + itemToUse);
+                            LOGGER.info("Completely used item with expiry date " + expiry
+                                    + "(more remaining to use): " + itemToUse);
                         },
                         () -> {
                             // below shouldn't be reachable
@@ -508,7 +509,8 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      * </p>
      *
      * @param itemName the name of the item to query
-     * @return the total quantity in stock for the specified item; returns 0 if the item does not exist or the name is invalid
+     * @return the total quantity in stock for the specified item; returns 0 if
+     *         the item does not exist or the name is invalid
      */
     public int stockCount(String itemName) {
         assert itemName != null : "Item name cannot be null";
