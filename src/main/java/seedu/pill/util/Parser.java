@@ -105,6 +105,7 @@ public class Parser {
                 break;
             case "restock":
                 parseRestockItemCommand(arguments).execute(this.items, this.storage);
+                break;
             case "use":
                 parseUseItemCommand(arguments).execute(this.items, this.storage);
                 break;
