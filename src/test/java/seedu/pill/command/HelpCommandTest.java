@@ -912,10 +912,10 @@ public class HelpCommandTest {
     void execute_mixedCaseCommands_handlesCorrectly() throws PillException {
         String[] commands = {"ReStOcK", "ReStOcKaLl", "CoSt", "PrIcE"};
         String[] expectedOutputs = {
-                "restock: Restocks a specified item",
-                "restockall: Restocks all items",
-                "cost: Sets the cost",
-                "price: Sets the selling price"
+            "restock: Restocks a specified item",
+            "restockall: Restocks all items",
+            "cost: Sets the cost",
+            "price: Sets the selling price"
         };
 
         for (int i = 0; i < commands.length; i++) {
