@@ -19,23 +19,32 @@ public class StringMatcher {
      * @return   - The minimum number of edits needed to transform s1 into s2
      */
     public static int levenshteinDistance(String s1, String s2) {
+        // Create a matrix with one extra row and column for empty string comparisons
+        // dp[i][j] will store the distance between the first i characters of s1 and the first j characters of s2
         int[][] dp = new int[s1.length() + 1][s2.length() + 1];
 
         for (int i = 0; i <= s1.length(); i++) {
             for (int j = 0; j <= s2.length(); j++) {
                 if (i == 0) {
+                    // If first string is empty, the only option is to insert all characters of second string
                     dp[i][j] = j;
                 } else if (j == 0) {
+                    // If second string is empty, the only option is to delete all characters of first string
                     dp[i][j] = i;
                 } else {
-                    dp[i][j] = min(dp[i - 1][j - 1]
-                                    + (s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1),
-                            dp[i - 1][j] + 1,
-                            dp[i][j - 1] + 1);
+                    // Calculate minimum cost for current position using three possible operations:
+                    dp[i][j] = min(
+                        // Substitution (or no change if characters are same)
+                        dp[i - 1][j - 1] + (s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1),
+                        // Deletion from s1
+                        dp[i - 1][j] + 1,
+                        // Insertion into s1
+                        dp[i][j - 1] + 1);
                 }
             }
         }
 
+        // Return the final distance between the complete strings
         return dp[s1.length()][s2.length()];
     }
 
