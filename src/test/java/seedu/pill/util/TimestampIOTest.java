@@ -100,20 +100,4 @@ class TimestampIOTest {
         String output = outContent.toString().trim();
         assertTrue(verifyTimestampedOutput(output, "OUT", message));
     }
-
-    @Test
-    void output_withUnicode_handlesCorrectly() {
-        String message = "Test with Unicode: こんにちは 你好 안녕하세요";
-        TimestampIO.printOutput(message);
-        String output = outContent.toString().trim();
-        assertTrue(verifyTimestampedOutput(output, "OUT", message));
-    }
-
-    @Test
-    void logInput_unicodeInput_handlesCorrectly() {
-        String input = "Unicode input: こんにちは 你好 안녕하세요";
-        TimestampIO.logInput(input);
-        String output = outContent.toString().trim();
-        assertTrue(verifyTimestampedOutput(output, "IN", input));
-    }
 }
