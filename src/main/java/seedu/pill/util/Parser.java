@@ -13,6 +13,8 @@ import seedu.pill.command.RestockItemCommand;
 import seedu.pill.command.SetCostCommand;
 import seedu.pill.command.SetPriceCommand;
 import seedu.pill.command.StockCheckCommand;
+import seedu.pill.command.UseItemCommand;
+
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
@@ -103,6 +105,8 @@ public class Parser {
                 break;
             case "restock":
                 parseRestockItemCommand(arguments).execute(this.items, this.storage);
+            case "use":
+                parseUseItemCommand(arguments).execute(this.items, this.storage);
                 break;
             default:
                 throw new PillException(ExceptionMessages.INVALID_COMMAND);
@@ -407,6 +411,46 @@ public class Parser {
         assert isANumber(quantityStr) : "Quantity should be a valid number";
 
         return new EditItemCommand(itemName, parseQuantity(quantityStr), parseExpiryDate(expiryDateStr));
+    }
+
+    /**
+     * Parses the user input and creates an {@code UseItemCommand} object.
+     * The input is expected to contain the item name and an optional quantity.
+     * Only one quantity is allowed.
+     * <p>
+     * The method loops through the input array to determine the item name and quantity,
+     * applying default values when necessary (e.g., quantity defaults to 1 if not specified).
+     *
+     * @param arguments A string representing the user's input for using an item
+     * @return An {@code UseItemCommand} containing the parsed item name and quantity.
+     * @throws PillException If the input format is invalid
+     */
+    private UseItemCommand parseUseItemCommand(String arguments) throws PillException {
+        String[] splitArguments = arguments.split("\\s+");
+
+        if (splitArguments.length < 2) {
+            throw new PillException(ExceptionMessages.INVALID_USE_COMMAND);
+        }
+
+        StringBuilder itemNameBuilder = new StringBuilder();
+        int currentIndex = 0;
+        int quantity = 1; // default use amount is 1
+
+        while (currentIndex < splitArguments.length) {
+            if (isANumber(splitArguments[currentIndex])) {
+                quantity = parseQuantity(splitArguments[currentIndex]);
+                break;
+            } else if (currentIndex > 0) {
+                itemNameBuilder.append(" ");
+            }
+            itemNameBuilder.append(splitArguments[currentIndex]);
+            currentIndex++;
+        }
+
+        String itemName = itemNameBuilder.toString().trim();
+        assert !itemName.isEmpty() : "Item name should not be empty";
+
+        return new UseItemCommand(itemName, quantity);
     }
 
     /**

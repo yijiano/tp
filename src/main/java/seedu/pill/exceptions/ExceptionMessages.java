@@ -11,6 +11,9 @@ public enum ExceptionMessages {
     INVALID_ADD_COMMAND          ("Invalid Add command format..."),
     INVALID_DELETE_COMMAND       ("Invalid Delete command format..."),
     INVALID_EDIT_COMMAND         ("Invalid Edit command format..."),
+    INVALID_USE_COMMAND          ("Invalid Use command format..."),
+    STOCK_UNDERFLOW              ("Trying to use more items than is available, please try again."),
+    NO_ITEM_ERROR                ("No item with that name i
     PARSE_DATE_ERROR             ("Date provided is in the wrong format, please try again."),
     ITEM_NOT_FOUND_ERROR         ("Item not found..."),
     TOO_MANY_ARGUMENTS           ("Too many arguments. Please type 'help' for accepted commands."),
@@ -19,6 +22,7 @@ public enum ExceptionMessages {
     INVALID_PRICE_COMMAND        ("Invalid Price command format..."),
     INVALID_RESTOCKALL_COMMAND   ("Invalid restockall command format..."),
     INVALID_RESTOCK_COMMAND      ("Invalid restock item command format...");
+
 
     private final String message;
 
