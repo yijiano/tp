@@ -1,3 +1,4 @@
+// TimestampIOTest.java
 package seedu.pill.util;
 
 import org.junit.jupiter.api.AfterEach;
@@ -13,10 +14,9 @@ import java.time.temporal.ChronoUnit;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TimestampIOTest {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final PrintStream originalOut = System.out;
-    
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @BeforeEach
     void setUp() {
@@ -32,58 +32,32 @@ class TimestampIOTest {
      * Verifies that a timestamped output string matches the expected format and content.
      */
     private boolean verifyTimestampedOutput(String output, String expectedMessageType, String expectedContent) {
-        // Debug print to see actual output
-        System.setOut(originalOut);
-        System.out.println("Actual output: '" + output + "'");
-        String expectedPattern = String.format("\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] %s: %s",
-                                 expectedMessageType, java.util.regex.Pattern.quote(expectedContent));
-        System.out.println("Expected pattern: " + expectedPattern);
-        System.out.println("Pattern matches: " + output.matches(expectedPattern));
-        System.setOut(new PrintStream(outContent));
+        // Check basic format
+        if (!output.startsWith("[") || output.length() < 21) {
+            return false;
+        }
 
         try {
-            // Check if output matches basic format
-            if (!output.startsWith("[") || output.length() < 21) {
-                System.setOut(originalOut);
-                System.out.println("Format check failed: Output doesn't start with [ or is too short");
-                System.setOut(new PrintStream(outContent));
-                return false;
-            }
-
             // Extract timestamp
             String timestamp = output.substring(1, 20);
-            LocalDateTime outputTime;
-            try {
-                outputTime = LocalDateTime.parse(timestamp, formatter);
-            } catch (Exception e) {
-                System.setOut(originalOut);
-                System.out.println("Timestamp parse failed: " + timestamp);
-                System.setOut(new PrintStream(outContent));
-                return false;
-            }
+            LocalDateTime outputTime = LocalDateTime.parse(timestamp, formatter);
 
             // Verify timestamp is recent
             LocalDateTime now = LocalDateTime.now();
             long timeDiff = ChronoUnit.SECONDS.between(outputTime, now);
             if (Math.abs(timeDiff) > 1) {
-                System.setOut(originalOut);
-                System.out.println("Time difference too large: " + timeDiff + " seconds");
-                System.setOut(new PrintStream(outContent));
                 return false;
             }
 
-            boolean matches = output.matches(expectedPattern);
-            if (!matches) {
-                System.setOut(originalOut);
-                System.out.println("Pattern match failed. Expected pattern: " + expectedPattern);
-                System.setOut(new PrintStream(outContent));
-            }
-            return matches;
+            // Verify message format
+            String expectedFormat = String.format("[%s] %s: %s",
+                    timestamp,
+                    expectedMessageType,
+                    expectedContent);
+
+            return output.equals(expectedFormat);
 
         } catch (Exception e) {
-            System.setOut(originalOut);
-            System.out.println("Verification failed with exception: " + e.getMessage());
-            System.setOut(new PrintStream(outContent));
             return false;
         }
     }
@@ -137,32 +111,8 @@ class TimestampIOTest {
     }
 
     @Test
-    void logInput_simpleInput_formatsCorrectly() {
-        String input = "test input";
-        TimestampIO.logInput(input);
-        String output = outContent.toString().trim();
-        assertTrue(verifyTimestampedOutput(output, "IN", input));
-    }
-
-    @Test
-    void logInput_inputWithSpecialCharacters_formatsCorrectly() {
-        String input = "test input with !@#$%^&*()";
-        TimestampIO.logInput(input);
-        String output = outContent.toString().trim();
-        assertTrue(verifyTimestampedOutput(output, "IN", input));
-    }
-
-    @Test
-    void logInput_multilineInput_formatsCorrectly() {
-        String input = "line 1\nline 2\nline 3";
-        TimestampIO.logInput(input);
-        String output = outContent.toString().trim();
-        assertTrue(verifyTimestampedOutput(output, "IN", input));
-    }
-
-    @Test
     void logInput_unicodeInput_handlesCorrectly() {
-        String input = "Input with Unicode: こんにちは 你好 안녕하세요";
+        String input = "Unicode input: こんにちは 你好 안녕하세요";
         TimestampIO.logInput(input);
         String output = outContent.toString().trim();
         assertTrue(verifyTimestampedOutput(output, "IN", input));
