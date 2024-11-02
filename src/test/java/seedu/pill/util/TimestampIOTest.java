@@ -1,4 +1,3 @@
-// TimestampIOTest.java
 package seedu.pill.util;
 
 import org.junit.jupiter.api.AfterEach;
@@ -14,9 +13,9 @@ import java.time.temporal.ChronoUnit;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TimestampIOTest {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @BeforeEach
     void setUp() {
