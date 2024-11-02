@@ -13,9 +13,10 @@ import java.time.temporal.ChronoUnit;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TimestampIOTest {
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final PrintStream originalOut = System.out;
+    
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @BeforeEach
     void setUp() {
