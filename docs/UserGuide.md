@@ -1,5 +1,3 @@
-
-
 # Pharmacy Inventory & Logistics Ledger (PILL) User Guide
 
 **Version 2.0**
@@ -15,6 +13,10 @@
     - [List Expiring Items: `expiring`](#list-expiring-items-expiring)
     - [List Expired Items: `expired`](#list-expired-items-expired)
     - [Query Existing Stock: `stock-check`](#query-existing-stock-stock-check)
+    - [Set Item Cost: `cost`](#set-item-cost-cost)
+    - [Set Item Price: `price`](#set-item-price-price)
+    - [Restock Specific Item: `restock`](#restock-specific-item-restock)
+    - [Restock All Items Below Threshold: `restockall`](#restock-all-items-below-threshold-restockall)
     - [Exiting the Program: `exit`](#exiting-the-program-exit)
     - [Saving the Data](#saving-the-data)
     - [Editing the Data File](#editing-the-data-file)
@@ -125,7 +127,7 @@ Deletes an existing item entry in the inventory.
 Deleted the following item from the inventory: 
 	2. Ibuprofen: 1
 ```
-
+---
 ### Editing Existing Item: 'edit'
 
 Edits the quantity of an existing item entry in the inventory. 
@@ -151,6 +153,138 @@ Edited item: Zyrtec: 30 in stock, expiring: 2025-02-03
 ```
 ---
 
+### Finding Items: `find`
+
+Finds all items in the inventory that match a specified name or partial name.
+
+**Format**: `find ITEM_NAME`
+
+**Sample Output**:
+
+`> find Panadol`
+
+```
+Listing all items:
+
+1. Panadol: 20 in stock, expiring: 2024-12-31
+2. Big Panadol: 50 in stock
+```
+---
+### List Expiring Items: `expiring`
+
+Displays all items that will expire before a specified date.
+
+**Format**: `expiring EXPIRY_DATE`
+
+- The `EXPIRY_DATE` must be in `YYYY-MM-DD` format.
+
+**Sample Output**:
+
+`> expiring 2024-12-31`
+```
+Listing all items expiring before 2024-12-31:
+
+1. Panadol: 99 in stock, expiring: 2024-12-12
+```
+
+---
+
+### List Expired Items: `expired`
+
+Lists all items that have expired as of the current date.
+
+**Format**: `expired`
+
+**Sample Output**:
+
+`> expired`
+```
+Listing all items that have expired:
+
+1. Ibuprofen: 10 in stock, expiring: 2023-11-01
+2. Aspirin: 5 in stock, expiring: 2023-10-10
+```
+---
+### Query Existing Stock: `stock-check`
+
+Displays all items that have stock levels below a specified threshold.
+
+**Format**: `stock-check THRESHOLD`
+
+- `THRESHOLD` is the minimum stock level for listing items.
+
+**Sample Output**:
+
+`> stock-check 50`
+```
+Listing all items that need too be restocked (less than 50):
+
+Ibuprofen: 10 in stock
+Aspirin: 5 in stock
+```
+
+---
+### Set Item Cost: `cost`
+
+Sets the cost for a specified item, applied to all entries with the same name.
+
+**Format**: `cost ITEM_NAME AMOUNT`
+
+**Sample Output**:
+
+`> cost Panadol 15.50`
+
+```
+Set cost of Panadol to $15.50.
+```
+---
+### Set Item Price: `price`
+
+Sets the selling price for a specified item, applied to all entries with the same name.
+
+**Format**: `price ITEM_NAME AMOUNT`
+
+**Sample Output**:
+
+`> price Panadol 20.00`
+
+```
+Set price of Panadol to $20.00.
+```
+---
+### Restock Specific Item: `restock`
+
+Restocks a specific item to a new quantity if it is below the desired level, displaying the restock cost.
+
+**Format**: `restock ITEM_NAME (EXPIRY_DATE) QUANTITY`
+
+- Optional `EXPIRY_DATE` in `YYYY-MM-DD` format specifies a specific entry if multiple exist.
+
+**Sample Output**:
+
+`> restock Panadol 2024-12-31 100`
+
+```
+Restocked Item: Panadol, Current Stock: 1, New Stock: 100, Total Restock Cost: $1485.00
+```
+
+---
+
+### Restock All Items Below Threshold: `restockall`
+
+Restocks all items with a quantity below a specified threshold to that threshold, listing each item's restock cost.
+
+**Format**: `restockall THRESHOLD`
+
+**Sample Output**:
+
+`> restockall 50`
+
+```
+Item: Ibuprofen, Current Stock: 10, New Stock: 50, Restock Cost: $40.00 
+Total Restock Cost for all items below threshold 50: $40.00
+```
+---
 ### Exiting the Program: `exit`
 
 Exits the program.

@@ -61,11 +61,9 @@ public class Storage {
                 for (Item item : itemSet) {
                     fw.write(item.getName() + SEPARATOR + item.getQuantity());
 
-                    if (item.getExpiryDate().isPresent()) {
-                        fw.write(SEPARATOR + item.getExpiryDate().get().toString());
-                    } else {
-                        fw.write(SEPARATOR + "");
-                    }
+                    fw.write(SEPARATOR + item.getExpiryDate().map(LocalDate::toString).orElse(""));
+                    fw.write(SEPARATOR + (item.getCost() > 0 ? item.getCost() : ""));
+                    fw.write(SEPARATOR + (item.getPrice() > 0 ? item.getPrice() : ""));
 
                     fw.write(System.lineSeparator());
                 }
@@ -90,9 +88,11 @@ public class Storage {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file, true);
             fw.write(item.getName() + SEPARATOR + item.getQuantity());
-            if (item.getExpiryDate().isPresent()) {
-                fw.write(SEPARATOR + item.getExpiryDate().get());
-            }
+
+            fw.write(SEPARATOR + item.getExpiryDate().map(LocalDate::toString).orElse(""));
+            fw.write(SEPARATOR + (item.getCost() > 0 ? item.getCost() : ""));
+            fw.write(SEPARATOR + (item.getPrice() > 0 ? item.getPrice() : ""));
+
             fw.write(System.lineSeparator());
             fw.close();
         } catch (IOException e) {
@@ -135,23 +135,23 @@ public class Storage {
     public Item loadLine(String line) throws PillException {
         Item item;
         String[] data = line.split(SEPARATOR);
-        if (data.length == 3) {
-            try {
-                item = new Item(data[0], Integer.parseInt(data[1]), LocalDate.parse(data[2]));
-            } catch (NumberFormatException e) {
-                throw new PillException(ExceptionMessages.INVALID_QUANTITY_FORMAT);
-            } catch (DateTimeParseException e) {
-                throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
-            }
-        } else if (data.length == 2) {
-            try {
-                item = new Item(data[0], Integer.parseInt(data[1]));
-            } catch (NumberFormatException e) {
-                throw new PillException(ExceptionMessages.INVALID_QUANTITY_FORMAT);
-            }
-        } else {
+
+        try {
+            String name = data[0];
+            int quantity = Integer.parseInt(data[1]);
+            LocalDate expiryDate = data.length > 2 && !data[2].isEmpty() ? LocalDate.parse(data[2]) : null;
+            double cost = data.length > 3 && !data[3].isEmpty() ? Double.parseDouble(data[3]) : 0;
+            double price = data.length > 4 && !data[4].isEmpty() ? Double.parseDouble(data[4]) : 0;
+
+            item = new Item(name, quantity, expiryDate, cost, price);
+        } catch (NumberFormatException e) {
+            throw new PillException(ExceptionMessages.INVALID_QUANTITY_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
+        } catch (ArrayIndexOutOfBoundsException e) {
             throw new PillException(ExceptionMessages.INVALID_LINE_FORMAT);
         }
+
         return item;
     }
 }

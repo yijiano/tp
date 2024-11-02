@@ -1,13 +1,17 @@
 package seedu.pill.util;
 
+import seedu.pill.command.HelpCommand;
 import seedu.pill.command.AddItemCommand;
 import seedu.pill.command.DeleteItemCommand;
 import seedu.pill.command.EditItemCommand;
 import seedu.pill.command.ExpiredCommand;
 import seedu.pill.command.ExpiringCommand;
 import seedu.pill.command.FindCommand;
-import seedu.pill.command.HelpCommand;
 import seedu.pill.command.ListCommand;
+import seedu.pill.command.RestockAllCommand;
+import seedu.pill.command.RestockItemCommand;
+import seedu.pill.command.SetCostCommand;
+import seedu.pill.command.SetPriceCommand;
 import seedu.pill.command.StockCheckCommand;
 import seedu.pill.command.UseItemCommand;
 
@@ -17,6 +21,7 @@ import seedu.pill.exceptions.PillException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Parser {
     private boolean exitFlag = false;
@@ -71,8 +76,8 @@ public class Parser {
                 new ListCommand().execute(this.items, this.storage);
                 break;
             case "stock-check":
-                if (splitInput.length > 2) {
-                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                if (splitInput.length != 2) {
+                    throw new PillException(ExceptionMessages.INVALID_STOCKCHECK_COMMAND);
                 }
                 new StockCheckCommand(argument).execute(this.items, this.storage);
                 break;
@@ -89,6 +94,18 @@ public class Parser {
                 LocalDate expiryDate = parseExpiryDate(arguments);
                 new ExpiringCommand(expiryDate).execute(this.items, this.storage);
                 break;
+            case "cost":
+                parseSetCostCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "price":
+                parseSetPriceCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "restockall":
+                parseRestockAllCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "restock":
+                parseRestockItemCommand(arguments).execute(this.items, this.storage);
+                break;
             case "use":
                 parseUseItemCommand(arguments).execute(this.items, this.storage);
                 break;
@@ -98,6 +115,121 @@ public class Parser {
         } catch (PillException e) {
             PillException.printException(e);
         }
+    }
+
+    /**
+     * Parses the `restockall` command with an optional threshold.
+     *
+     * @param arguments The user's input after the `restockall` command.
+     * @return A `RestockAllCommand` with the parsed threshold.
+     * @throws PillException If the input format is invalid.
+     */
+    private RestockAllCommand parseRestockAllCommand(String arguments) throws PillException {
+        int threshold = 50;
+        if (!arguments.isEmpty()) {
+            if (!isANumber(arguments)) {
+                throw new PillException(ExceptionMessages.INVALID_RESTOCKALL_COMMAND);
+            }
+            threshold = Integer.parseInt(arguments);
+            if (threshold <= 0) {
+                throw new PillException(ExceptionMessages.INVALID_QUANTITY);
+            }
+        }
+        return new RestockAllCommand(threshold);
+    }
+
+    /**
+     * Parses the `restock` command for a specific item, with an optional expiry date and quantity.
+     *
+     * @param arguments The user's input after the `restock` command.
+     * @return A `RestockItemCommand` with the parsed item name, expiry date, and quantity.
+     * @throws PillException If the input format is invalid.
+     */
+    private RestockItemCommand parseRestockItemCommand(String arguments) throws PillException {
+        String[] splitArguments = arguments.split("\\s+");
+        if (splitArguments.length < 2) {
+            throw new PillException(ExceptionMessages.INVALID_RESTOCK_COMMAND);
+        }
+
+        String itemName;
+        Optional<LocalDate> expiryDate = Optional.empty();
+        String quantityStr;
+
+        if (isValidDate(splitArguments[splitArguments.length - 2])) {
+            expiryDate = Optional.of(parseExpiryDate(splitArguments[splitArguments.length - 2]));
+            quantityStr = splitArguments[splitArguments.length - 1];
+            itemName = buildItemName(splitArguments, 0, splitArguments.length - 2);
+        } else {
+            quantityStr = splitArguments[splitArguments.length - 1];
+            itemName = buildItemName(splitArguments, 0, splitArguments.length - 1);
+        }
+
+        if (!isANumber(quantityStr)) {
+            throw new PillException(ExceptionMessages.INVALID_QUANTITY);
+        }
+
+        int quantity = Integer.parseInt(quantityStr);
+        if (quantity <= 0) {
+            throw new PillException(ExceptionMessages.INVALID_QUANTITY);
+        }
+
+        return new RestockItemCommand(itemName, expiryDate, quantity);
+    }
+
+    /**
+     * Parses the user input and creates a {@code SetCostCommand} object.
+     *
+     * @param arguments A string representing the user's input for setting the cost.
+     * @return A {@code SetCostCommand} containing the parsed item name and cost.
+     * @throws PillException If the input format is invalid.
+     */
+    private SetCostCommand parseSetCostCommand(String arguments) throws PillException {
+        String[] splitArguments = arguments.split("\\s+");
+        if (splitArguments.length < 2) {
+            throw new PillException(ExceptionMessages.INVALID_COST_COMMAND);
+        }
+
+        String itemName = buildItemName(splitArguments, 0, splitArguments.length - 1);
+        String costStr = splitArguments[splitArguments.length - 1];
+
+        if (!isANumber(costStr)) {
+            throw new PillException(ExceptionMessages.INVALID_COST_COMMAND);
+        }
+
+        double cost = Double.parseDouble(costStr);
+        if (cost < 0) {
+            throw new PillException(ExceptionMessages.INVALID_COST_COMMAND);
+        }
+
+        return new SetCostCommand(itemName, cost);
+    }
+
+    /**
+     * Parses the user input and creates a {@code SetPriceCommand} object.
+     *
+     * @param arguments A string representing the user's input for setting the price.
+     * @return A {@code SetPriceCommand} containing the parsed item name and price.
+     * @throws PillException If the input format is invalid.
+     */
+    private SetPriceCommand parseSetPriceCommand(String arguments) throws PillException {
+        String[] splitArguments = arguments.split("\\s+");
+        if (splitArguments.length < 2) {
+            throw new PillException(ExceptionMessages.INVALID_PRICE_COMMAND);
+        }
+
+        String itemName = buildItemName(splitArguments, 0, splitArguments.length - 1);
+        String priceStr = splitArguments[splitArguments.length - 1];
+
+        if (!isANumber(priceStr)) {
+            throw new PillException(ExceptionMessages.INVALID_PRICE_COMMAND);
+        }
+
+        double price = Double.parseDouble(priceStr);
+        if (price < 0) {
+            throw new PillException(ExceptionMessages.INVALID_PRICE_COMMAND);
+        }
+
+        return new SetPriceCommand(itemName, price);
     }
 
     /**
