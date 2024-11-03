@@ -1,21 +1,25 @@
 @startuml
 
-class ItemMap
-interface Map
 skinparam classAttributeIconSize 0
 
-ItemMap "1" *-- "1" Map : contains >
-ItemMap : + addItem(Item newItem)
-ItemMap : + deleteItem(String name, Optional<LocalDate> expiryDate)
-ItemMap : + editItem(Item updatedItem)
-ItemMap : + listItems()
-ItemMap : + listExpiringItems()
-ItemMap : + listToRestock()
-ItemMap : + findItem(String itemName)
-ItemMap : + getExpiringItems(String itemName)
+class ItemMap {
+    + addItem(newItem: Item)
+    + deleteItem(name: String, expiryDate: Optional<LocalDate>)
+    + editItem(updatedItem: Item)
+    + listItems()
+    + listExpiringItems()
+    + listToRestock()
+    + findItem(itemName: String) : ItemMap
+    + getExpiringItems(itemName: String) : ItemMap
+}
 
-note right of Map : Maps key(itemName) to value(item)
-Map : String itemName
-Map : TreeSet<Item> item
+ItemMap "1" *-- "1" Map : contains >
+
+interface Map {
+    itemName: String
+    item: TreeSet<Item>
+}
+
+note right of Map : Maps key(itemName) to value(item)\nHas any amount of key-value pairs
 
 @enduml
