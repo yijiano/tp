@@ -33,7 +33,6 @@ Command Line Interface (CLI).
     - What it does: Tests the functionality of the commands in the application.
     - Justification: Ensures that the commands are robust and working as intended.
     - Highlights: Success cases, failure cases and various edge cases and scenarios are tested to ensure that the commands are working as intended.
-- 
 - **Code contributed**: [RepoSense link](https://nus-cs2113-ay2425s1.github.io/tp-dashboard/?search=yijiano&sort=groupTitle&sortWithin=title&timeframe=commit&mergegroup=&groupSelect=groupByRepos&breakdown=true&checkedFileTypes=docs~functional-code~test-code~other&since=2024-09-20&tabOpen=true&tabType=authorship&tabAuthor=yijiano&tabRepo=AY2425S1-CS2113-W14-4%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code~other&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
 - **Project Management**:
     - Creation of the fork and pull request to the original repository: [PR Link](https://github.com/nus-cs2113-AY2425S1/tp/pull/28)
