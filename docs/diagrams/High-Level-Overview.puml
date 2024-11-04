@@ -2,7 +2,6 @@
 @startuml
 
 hide circle
-hide empty members
 skinparam packageStyle rectangle
 
 left to right direction
@@ -17,6 +16,7 @@ package "pill" {
         class Printer
         class Storage
         class ItemMap
+        class Item
         class DateTime
         class PillLogger
         class TimestampIO
@@ -35,9 +35,11 @@ package "pill" {
     Pill --> Ui
     Pill --> Printer
 
+
     Ui --> Parser
     Ui --> ItemMap
     Ui --> Storage
+    ItemMap --> Item
 
 
     Parser --> command

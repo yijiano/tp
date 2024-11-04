@@ -3,6 +3,7 @@
 hide footbox
 skinparam sequenceReferenceBackgroundColor #f7807c
 
+
 actor Parser
 
 participant ":AddItemCommand" as AddItemCommand #E0BBE4
@@ -13,54 +14,88 @@ participant ":System.out" as System.out #FFE156
 participant ":Logger" as Logger #B9FBC0
 participant ":Treeset" as Treeset #A0D8D1
 
+activate Parser
 Parser -> AddItemCommand : AddItemCommand(itemName, quantity, expiryDate)
-return
+activate AddItemCommand
+deactivate AddItemCommand
+
 Parser -> AddItemCommand : execute(items, storage)
+activate AddItemCommand
+
 AddItemCommand -> Item : Item(itemName, quantity, expiryDate)
-return
+activate Item
+deactivate Item
+
 AddItemCommand -> ItemMap : addItem(item)
+activate ItemMap
+
 ItemMap -> Item : get attributes
-return
+activate Item
+deactivate Item
 
 opt invalid params
     ItemMap -> System.out : print
-    return
+    activate System.out
+    deactivate System.out
     ItemMap -> Logger : log
-    return
+    activate Logger
+    deactivate Logger
     ItemMap --> AddItemCommand
 end
 
 alt item with same name exists
     ItemMap -> ItemMap : get(name)
+    activate ItemMap
+    deactivate ItemMap
+
     loop until item with same expiry date is found or end of array is reached
         opt item has same expiry date
             ItemMap -> Item : setQuantity(newQuantity)
-            return
+            activate Item
+            deactivate Item
             ItemMap -> System.out : print
-            return
+            activate System.out
+            deactivate System.out
             ItemMap -> Logger : log
-            return
+            activate Logger
+            deactivate Logger
         end
-
     end
+
     opt item with same expiry date not found
         ItemMap -> Treeset : add(item)
-        return
+        activate Treeset
+        deactivate Treeset
     end
-else [else]
+
+
+else else
     ItemMap -> Treeset : Treeset<>()
-    return
+    activate Treeset
+    deactivate Treeset
     ItemMap -> Treeset : add(item)
-    return
+    activate Treeset
+    deactivate Treeset
     ItemMap -> ItemMap : put(name, itemSet)
+    activate ItemMap
+    deactivate ItemMap
     ItemMap -> System.out : print
-    return
+    activate System.out
+    deactivate System.out
     ItemMap -> Logger : log
-    return
+    activate Logger
+    deactivate Logger
 end
+
+deactivate ItemMap
 ItemMap --> AddItemCommand
+
 AddItemCommand -> Storage : saveItem(item)
-return
+activate Storage
+deactivate Storage
+
 AddItemCommand --> Parser
+deactivate AddItemCommand
+deactivate Parser
 
 @enduml
