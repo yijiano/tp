@@ -1,47 +1,62 @@
 ``` plantuml
 @startuml
-package "PILL" {
-    package "UI" {
-        class TextUI
-    }
 
-    package "Command" {
-        class Command
-        class AddItemCommand
-        class DeleteItemCommand
-        class ListItemsCommand
-        class FindItemCommand
-        class ExitCommand
-    }
+hide circle
+hide empty members
+skinparam packageStyle rectangle
 
-    package "Storage" {
+left to right direction
+
+package "pill" {
+    class Pill
+
+    package "util" {
+        class Ui
+        class Parser
+        class StringMatcher
+        class Printer
         class Storage
-    }
-
-    package "Item" {
-        class Item
         class ItemMap
-    }
-
-    package "DateTime" {
         class DateTime
-    }
-
-    package "Exceptions" {
-        class PillException
-    }
-
-    package "Logging" {
         class PillLogger
+        class TimestampIO
     }
 
-    TextUI --> Command
-    Command --> Item
-    Command --> Storage
-    Command --> Exceptions
-    Command --> Logging
-    Command --> DateTime
-    Command --> ItemMap
+    package exceptions {
+        class PillException
+        class ExceptionMessages
+    }
+    package command {
+        class Command
+    }
+
+
+
+    Pill --> Ui
+    Pill --> Printer
+
+    Ui --> Parser
+    Ui --> ItemMap
+    Ui --> Storage
+
+
+    Parser --> command
+    Parser -up> StringMatcher
+    Parser --> DateTime
+    DateTime -up> TimestampIO
+    StringMatcher -> Parser
+    Parser -> PillLogger
+    command --> exceptions
+    command -> PillLogger
+    Parser --> exceptions
+
+    ItemMap -> Storage
+
+    PillException -left> ExceptionMessages
+
 }
+
+
+
 @enduml
 ```
