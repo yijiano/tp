@@ -9,30 +9,26 @@ Command Line Interface (CLI).
 
 ### Summary of Contributions
 
-- **New Feature**: Added User Interface for the application (Ui Class)
-    - What it does: The Ui class is responsible for handling the user interface of the application ([#39](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/39)).
+- **New Feature**: Added User Interface for the application ([#39](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/39)).
+    - What it does: The Ui class is responsible for handling the user interface of the application.
     - Justification: Abstraction of the user interface from the main logic of the application.
     - Highlights: ASCII Art, welcome message, exit message, error messages and command prompt.
-- **New Feature**: Added parser for commands.
-    - What it does: Abstracts the parsing of user input into commands ([#39](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/39)).
+- **New Feature**: Added parser for commands. ([#39](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/39)).
+    - What it does: Abstracts the parsing of user input into commands.
     - Justification: Separation of concerns between user input and command execution.
     - Highlights: Handles all exceptions and errors within the Parser class, allowing for cleaner code in the main logic.
-- **New Feature**: Added custom exceptions for the application ([#39](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/39)).
-    - What it does: Allows us to handle exceptions in a more structured manner.
-    - Justification: Allows for more specific error messages to be displayed to the user.
-    - Highlights: Custom messages that better fit the theme and are more in-line with other flavour text can be implemented.
 - **New Feature**: Added `stock-check` command ([#106](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/106)).
     - What it does: Queries for the items in the inventory that are below a threshold quantity determined by the user input.
     - Justification: Allows for easy tracking of items that are running low in stock.
     - Highlights: Allows for Ui to prompt user to restock relevant items upon launch. Allows for other commands to determine which items are running low.
-- **General Contributions**: Refactor ItemList to ItemMap ([#79](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/79)).
-    - What it does: Allows for input of duplicate item names with different expiry dates.
-    - Justification: Differentiates between items with the same name but different expiry dates. This is common occurrence in real pharmacies that deal with different batches of stock.
-    - Highlights: Allows for more accurate tracking of stock levels through using expiry dates.
 - **New Feature**: Added tests for various commands ([#122](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/122)).
     - What it does: Tests the functionality of the commands in the application.
     - Justification: Ensures that the commands are robust and working as intended.
     - Highlights: Success cases, failure cases and various edge cases and scenarios are tested to ensure that the commands are working as intended.
+- **General Contributions**: Refactor ItemList to ItemMap ([#79](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/79)).
+    - What it does: Allows for input of duplicate item names with different expiry dates.
+    - Justification: Differentiates between items with the same name but different expiry dates. This is common occurrence in real pharmacies that deal with different batches of stock.
+    - Highlights: Allows for more accurate tracking of stock levels through using expiry dates.
 - **Code contributed**: [RepoSense link](https://nus-cs2113-ay2425s1.github.io/tp-dashboard/?search=yijiano&sort=groupTitle&sortWithin=title&timeframe=commit&mergegroup=&groupSelect=groupByRepos&breakdown=true&checkedFileTypes=docs~functional-code~test-code~other&since=2024-09-20&tabOpen=true&tabType=authorship&tabAuthor=yijiano&tabRepo=AY2425S1-CS2113-W14-4%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code~other&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
 - **Project Management**:
     - Creation of the fork and pull request to the original repository: [PR Link](https://github.com/nus-cs2113-AY2425S1/tp/pull/28)
