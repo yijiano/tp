@@ -195,7 +195,7 @@ public class Parser {
      * @param arguments The command input containing either one or two date-time arguments
      *                  representing the start (and optionally the end) of the date range.
      * @return A {@link TransactionHistoryCommand} instance that contains the specified
-     * date range and transaction manager.
+     *                  date range and transaction manager.
      * @throws PillException if the input contains too many arguments, is empty,
      *                       has an invalid date-time format, or if only one date is provided.
      *
@@ -247,7 +247,7 @@ public class Parser {
      * @param arguments The command input containing the order type (either "PURCHASE" or "DISPENSE")
      *                  and the number of items to order.
      * @return An {@link OrderCommand} instance that contains the specified items to order,
-     * transaction manager, and order type.
+     *                  transaction manager, and order type.
      * @throws PillException if the input contains too many arguments, is empty, has an invalid order type,
      *                       or if item details are incorrectly formatted.
      *
