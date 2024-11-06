@@ -9,14 +9,6 @@ Command Line Interface (CLI).
 
 ### Summary of Contributions
 
-- **New Feature**: Added ListCommand class
-    - What it does: The class is responsible for handling the execution of the list command ([#7](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/7)).
-    - Justification: Abstraction of the list command, inheriting from the base command class.
-    - Highlights: Receives ItemMap instance and lists items.
-- **New Feature**: Added FindItemCommand class
-    - What it does: The class is responsible for handling the execution of the find command ([#20](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/20)).
-    - Justification: Abstraction of the find command, inheriting from the base command class.
-    - Highlights: Receives item name to search for and executes the command.
 - **New Feature**: Added feature to fetch expired items ([#113](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/113)).
     - What it does: Filters and lists expired items to the user.
     - Justification: Allows user to retrieve and view expired items without reading through the entire inventory.
@@ -25,7 +17,7 @@ Command Line Interface (CLI).
     - What it does: Filters and lists expiring items based on the entered cut-off date to the user.
     - Justification: Allows for easy tracking of items that are expiring post a specified cut-off date.
     - Highlights: Can be accessed using the `expiring <date>` command.
-- **General Contributions**: Create PillLogger class ([#103](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/103)).
+- **General Contributions**: Created PillLogger class ([#103](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/103)).
     - What it does: Responsible for console and file logging.
     - Justification: Logging is essential to understand and track the behaviour of the application.
     - Highlights: Singleton PillLogger class acts as a single entity responsible for all logging purposes.
@@ -33,6 +25,14 @@ Command Line Interface (CLI).
     - What it does: Loads data stored in the local CSV file.
     - Justification: Enables loading of previously saved data.
     - Highlights: Loads any data on disk, skips corrupt lines.
+- **New Feature**: Added ListCommand class
+    - What it does: The class is responsible for handling the execution of the list command ([#7](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/7)).
+    - Justification: Abstraction of the list command, inheriting from the base command class.
+    - Highlights: Receives ItemMap instance and lists items.
+- **New Feature**: Added FindItemCommand class
+    - What it does: The class is responsible for handling the execution of the find command ([#20](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/20)).
+    - Justification: Abstraction of the find command, inheriting from the base command class.
+    - Highlights: Receives item name to search for and executes the command.
 - **Code contributed**: [RepoSense link](https://nus-cs2113-ay2425s1.github.io/tp-dashboard/?search=cnivedit&sort=groupTitle&sortWithin=title&timeframe=commit&mergegroup=&groupSelect=groupByRepos&breakdown=true&checkedFileTypes=docs~functional-code~test-code~other&since=2024-09-20&tabOpen=true&tabType=authorship&tabAuthor=yijiano&tabRepo=AY2425S1-CS2113-W14-4%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code~other&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
 - **Project Management**:
     - Helped maintain some issues, opening
