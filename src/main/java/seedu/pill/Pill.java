@@ -11,7 +11,7 @@ public final class Pill {
     private static ItemMap items = new ItemMap();
     private static final Ui ui = new Ui(items);
     private static final Logger logger = PillLogger.getLogger();
-    private static TransactionManager transactionManager = new TransactionManager(items);
+    private static TransactionManager transactionManager;
     private static Parser parser = new Parser(items, storage, transactionManager, ui);
 
     /**
@@ -19,6 +19,7 @@ public final class Pill {
      */
     public void run() {
         items = storage.loadData();
+        transactionManager  = new TransactionManager(items);
         Printer.printInitMessage(items, 50);
         parser = new Parser(items, storage, transactionManager, ui);
         logger.info("New Chatbot Conversation Created");
