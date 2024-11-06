@@ -1,19 +1,23 @@
 package seedu.pill.util;
 
+import seedu.pill.Pill;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
+import java.util.stream.IntStream;
 
 /**
  * Manages all transactions and orders in the inventory management system.
  * This class serves as the central point for handling inventory movements,
  * both incoming (purchases) and outgoing (dispensing) transactions, as well as
  * managing orders and their fulfillment.
- *
+ * <p>
  * The TransactionManager maintains a complete audit trail of all inventory changes
  * and ensures data consistency between transactions and the actual inventory state.
  */
@@ -93,8 +97,8 @@ public class TransactionManager {
      * @param notes - Any additional notes or comments about the order
      * @return      - The created Order object
      */
-    public Order createOrder(Order.OrderType type, String notes) {
-        Order order = new Order(type, notes);
+    public Order createOrder(Order.OrderType type, ItemMap itemsToOrder, String notes) {
+        Order order = new Order(type, itemsToOrder, notes);
         orders.add(order);
         return order;
     }
@@ -111,23 +115,33 @@ public class TransactionManager {
      */
     public void fulfillOrder(Order order) throws PillException {
         if (order.getStatus() != Order.OrderStatus.PENDING) {
-            throw new PillException(ExceptionMessages.INVALID_COMMAND);
+            throw new PillException(ExceptionMessages.ORDER_NOT_PENDING);
         }
 
         Transaction.TransactionType transactionType = order.getType() == Order.OrderType.PURCHASE
                 ? Transaction.TransactionType.INCOMING
                 : Transaction.TransactionType.OUTGOING;
 
-        for (OrderItem item : order.getItems()) {
-            createTransaction(
-                    item.getItemName(),
-                    item.getQuantity(),
-                    transactionType,
-                    "Order fulfillment",
-                    order
-            );
+        for (Map.Entry<String, TreeSet<Item>> entry : order.getItems().items.entrySet()) {
+            TreeSet<Item> itemSet = entry.getValue();
+            try {
+                itemSet.forEach(item -> {
+                    try {
+                        createTransaction(
+                                item.getName(),
+                                item.getQuantity(),
+                                transactionType,
+                                "Order fulfillment",
+                                order
+                        );
+                    } catch (PillException e) {
+                        throw new RuntimeException("Error creating transaction", e);
+                    }
+                });
+            } catch (RuntimeException e) {
+                throw new PillException(ExceptionMessages.TRANSACTION_ERROR);
+            }
         }
-
         order.fulfill();
     }
 
