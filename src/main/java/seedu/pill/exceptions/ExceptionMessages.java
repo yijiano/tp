@@ -21,7 +21,8 @@ public enum ExceptionMessages {
     INVALID_COST_COMMAND         ("Invalid Cost command format..."),
     INVALID_PRICE_COMMAND        ("Invalid Price command format..."),
     INVALID_RESTOCKALL_COMMAND   ("Invalid restockall command format..."),
-    INVALID_RESTOCK_COMMAND      ("Invalid restock item command format...");
+    INVALID_RESTOCK_COMMAND      ("Invalid restock item command format..."),
+    TRANSACTION_ERROR            ("Error creating transaction");
 
 
     private final String message;
