@@ -1,10 +1,8 @@
 package seedu.pill.util;
 
-import seedu.pill.Pill;
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
