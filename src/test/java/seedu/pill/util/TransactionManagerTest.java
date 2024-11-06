@@ -109,7 +109,7 @@ class TransactionManagerTest {
     @Test
     void createTransaction_withOrder_associatesCorrectly() throws PillException {
         // Arrange
-        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, "Test order");
+        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(), "Test order");
         String itemName = "Aspirin";
         int quantity = 100;
 
@@ -133,7 +133,7 @@ class TransactionManagerTest {
         String notes = "Test purchase order";
 
         // Act
-        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, notes);
+        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(), notes);
 
         // Assert
         assertNotNull(order);
@@ -148,7 +148,7 @@ class TransactionManagerTest {
         String notes = "Test dispense order";
 
         // Act
-        Order order = transactionManager.createOrder(Order.OrderType.DISPENSE, notes);
+        Order order = transactionManager.createOrder(Order.OrderType.DISPENSE, new ItemMap(), notes);
 
         // Assert
         assertNotNull(order);
@@ -160,10 +160,10 @@ class TransactionManagerTest {
     @Test
     void fulfillOrder_purchaseOrder_updatesInventoryAndStatus() throws PillException {
         // Arrange
-        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, "Test purchase");
+        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(),"Test purchase");
         String itemName = "Aspirin";
         int quantity = 100;
-        order.addItem(itemName, quantity);
+        order.addItem(new Item(itemName, quantity));
 
         // Act
         transactionManager.fulfillOrder(order);
@@ -195,8 +195,8 @@ class TransactionManagerTest {
         );
 
         // Create and fulfill dispense order
-        Order order = transactionManager.createOrder(Order.OrderType.DISPENSE, "Test dispense");
-        order.addItem(itemName, dispenseQuantity);
+        Order order = transactionManager.createOrder(Order.OrderType.DISPENSE, new ItemMap(),"Test dispense");
+        order.addItem(new Item(itemName, dispenseQuantity));
 
         // Act
         transactionManager.fulfillOrder(order);
@@ -214,7 +214,7 @@ class TransactionManagerTest {
     @Test
     void fulfillOrder_nonPendingOrder_throwsException() throws PillException {
         // Arrange
-        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, "Test order");
+        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(),"Test order");
         order.fulfill(); // Change status to FULFILLED
 
         // Act & Assert
@@ -241,8 +241,8 @@ class TransactionManagerTest {
     @Test
     void getOrders_returnsCorrectOrders() {
         // Arrange
-        transactionManager.createOrder(Order.OrderType.PURCHASE, "First order");
-        transactionManager.createOrder(Order.OrderType.DISPENSE, "Second order");
+        transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(), "First order");
+        transactionManager.createOrder(Order.OrderType.DISPENSE, new ItemMap(), "Second order");
 
         // Act
         List<Order> orders = transactionManager.getOrders();
@@ -296,10 +296,10 @@ class TransactionManagerTest {
     @Test
     void fulfillOrder_multipleItems_updatesInventoryCorrectly() throws PillException {
         // Arrange
-        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, "Multi-item order");
-        order.addItem("Aspirin", 100);
-        order.addItem("Bandage", 50);
-        order.addItem("Syringe", 25);
+        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(), "Multi-item order");
+        order.addItem(new Item("Aspirin", 100));
+        order.addItem(new Item("Bandage", 50));
+        order.addItem(new Item("Syringe", 25));
 
         // Act
         transactionManager.fulfillOrder(order);

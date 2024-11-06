@@ -47,19 +47,19 @@ class OrderTest {
     @Test
     void addItem_addsItemsCorrectly() {
         // Add single item
-        purchaseOrder.addItem("Aspirin", 100);
-        List<OrderItem> items = purchaseOrder.getItems();
+        purchaseOrder.addItem(new Item("Aspirin", 100));
+        ItemMap items = purchaseOrder.getItems();
         assertEquals(1, items.size(), "Should have one item");
-        OrderItem item = items.get(0);
-        assertEquals("Aspirin", item.getItemName(), "Item name should match");
+        Item item = items.get("Aspirin").first();
+        assertEquals("Aspirin", item.getName(), "Item name should match");
         assertEquals(100, item.getQuantity(), "Item quantity should match");
 
         // Add multiple items
-        purchaseOrder.addItem("Bandages", 50);
+        purchaseOrder.addItem(new Item("Bandages", 50));
         items = purchaseOrder.getItems();
         assertEquals(2, items.size(), "Should have two items");
-        item = items.get(1);
-        assertEquals("Bandages", item.getItemName(), "Second item name should match");
+        item = items.get("Bandages").first();
+        assertEquals("Bandages", item.getName(), "Second item name should match");
         assertEquals(50, item.getQuantity(), "Second item quantity should match");
     }
 
