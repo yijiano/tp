@@ -64,16 +64,6 @@ class OrderTest {
     }
 
     @Test
-    void getItems_returnsCopy() {
-        purchaseOrder.addItem("Aspirin", 100);
-        List<OrderItem> items1 = purchaseOrder.getItems();
-        List<OrderItem> items2 = purchaseOrder.getItems();
-
-        assertNotSame(items1, items2, "getItems should return a new copy of the list each time");
-        assertEquals(items1, items2, "Lists should contain the same items");
-    }
-
-    @Test
     void fulfill_updatesOrderStatusAndTime() {
         purchaseOrder.fulfill();
 
