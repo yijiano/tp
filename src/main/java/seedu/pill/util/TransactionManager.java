@@ -176,6 +176,36 @@ public class TransactionManager {
     }
 
     /**
+     * Lists all transactions by printing each transaction with a numbered format.
+     *
+     * <p>This method retrieves a list of {@link Transaction} objects using {@link #getTransactions()}.
+     * It then iterates through the list, printing each transaction with an index in the format
+     * "1. transaction details", "2. transaction details", etc.</p>
+     */
+    public void listTransactions() {
+        List<Transaction> transactions = getTransactions();
+        IntStream.rangeClosed(1, transactions.size())
+                .forEach(i -> System.out.println(i + ". " + transactions.get(i - 1).toString()));
+    }
+
+    /**
+     * Lists all current orders by printing the items in each order.
+     *
+     * <p>This method retrieves a list of {@link Order} objects using {@link #getOrders()}.
+     * It then iterates through each order, invoking {@code listItems()} on each
+     * order to print the details of its items to the console.</p>
+     */
+    public void listOrders() {
+        List<Order> orders = getOrders();
+        IntStream.rangeClosed(1, orders.size())
+                .forEach(i -> {
+                    System.out.print(i + ". ");
+                    orders.get(i - 1).listItems();
+                    System.out.println();
+                });
+    }
+
+    /**
      * Retrieves all transactions that occurred within a specified time period.
      *
      * @param start - The start date/time of the period (inclusive)
@@ -186,5 +216,22 @@ public class TransactionManager {
         return transactions.stream()
                 .filter(t -> !t.getTimestamp().isBefore(start) && !t.getTimestamp().isAfter(end))
                 .toList();
+    }
+
+    /**
+     * Lists the transaction history within the specified date-time range by printing each transaction
+     * to the console with a numbered format.
+     *
+     * @param start The start of the date-time range for retrieving transactions.
+     * @param end   The end of the date-time range for retrieving transactions.
+     *
+     *              <p>This method retrieves a list of {@link Transaction} objects within the specified range
+     *              using {@link #getTransactionHistory(LocalDateTime, LocalDateTime)}. It then prints each transaction
+     *              with an index, formatted as "1. transaction details", "2. transaction details", etc.</p>
+     */
+    public void listTransactionHistory(LocalDateTime start, LocalDateTime end) {
+        List<Transaction> transactions = getTransactionHistory(start, end);
+        IntStream.rangeClosed(1, transactions.size())
+                .forEach(i -> System.out.println(i + ". " + transactions.get(i - 1).toString()));
     }
 }
