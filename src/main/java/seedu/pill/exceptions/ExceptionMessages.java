@@ -22,7 +22,15 @@ public enum ExceptionMessages {
     INVALID_PRICE_COMMAND        ("Invalid Price command format..."),
     INVALID_RESTOCKALL_COMMAND   ("Invalid restockall command format..."),
     INVALID_RESTOCK_COMMAND      ("Invalid restock item command format..."),
-    TRANSACTION_ERROR            ("Error creating transaction");
+    TRANSACTION_ERROR            ("Error creating transaction"),
+    INVALID_FULFILL_COMMAND      ("Invalid fulfillment command format..."),
+    INVALID_TRANSACTION_HISTORY_COMMAND ("Invalid transaction history command format..."),
+    INVALID_DATETIME_FORMAT      ("Invalid datetime format, please try again."),
+    INVALID_ORDER                ("Order not found..."),
+    INVALID_INDEX                ("Index out of bounds, please try again."),
+    INVALID_ORDER_COMMAND        ("Invalid order command format..."),
+    INVALID_ITEM_FORMAT          ("Invalid item format..."),
+    ORDER_NOT_PENDING            ("Order already fulfilled...");
 
 
     private final String message;
