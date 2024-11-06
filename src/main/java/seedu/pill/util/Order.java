@@ -1,9 +1,9 @@
 package seedu.pill.util;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
+import java.util.Map;
+import java.util.TreeSet;
 
 /**
  * Represents an order in the inventory management system.
@@ -17,7 +17,7 @@ public class Order {
     private final LocalDateTime creationTime;
     private LocalDateTime fulfillmentTime;
     private OrderStatus status;
-    private final List<OrderItem> items;
+    private final ItemMap items;
     private final String notes;
 
     /**
@@ -55,7 +55,24 @@ public class Order {
         this.type = type;
         this.creationTime = LocalDateTime.now();
         this.status = OrderStatus.PENDING;
-        this.items = new ArrayList<>();
+        this.items = new ItemMap();
+        this.notes = notes;
+    }
+
+    /**
+     * Creates a new Order with the specified type and notes.
+     * The order is automatically assigned a unique identifier and initialized
+     * with a PENDING status and the current timestamp.
+     *
+     * @param type  - The type of order (PURCHASE or DISPENSE)
+     * @param notes - Additional information or comments about the order
+     */
+    public Order(OrderType type, ItemMap itemsToOrder, String notes) {
+        this.id = UUID.randomUUID();
+        this.type = type;
+        this.creationTime = LocalDateTime.now();
+        this.status = OrderStatus.PENDING;
+        this.items = itemsToOrder;
         this.notes = notes;
     }
 
@@ -63,11 +80,10 @@ public class Order {
      * Adds an item to this order with the specified name and quantity.
      * Multiple items can be added to a single order.
      *
-     * @param itemName - The name of the item to add
-     * @param quantity - The quantity of the item to add
+     * @param item - The item to add
      */
-    public void addItem(String itemName, int quantity) {
-        items.add(new OrderItem(itemName, quantity));
+    public void addItem(Item item) {
+        items.addItemSilent(item);
     }
 
     /**
@@ -137,8 +153,8 @@ public class Order {
      *
      * @return - A new ArrayList containing the OrderItems in this order
      */
-    public List<OrderItem> getItems() {
-        return new ArrayList<>(items);
+    public ItemMap getItems() {
+        return items;
     }
 
     /**
@@ -148,5 +164,16 @@ public class Order {
      */
     public String getNotes() {
         return notes;
+    }
+
+    public void listItems() {
+        int index = 1;
+        for (Map.Entry<String, TreeSet<Item>> entry : items.items.entrySet()) {
+            TreeSet<Item> itemSet = entry.getValue();
+            for (Item item : itemSet) {
+                System.out.println(index + ". " + item.toString());
+                index++;
+            }
+        }
     }
 }
