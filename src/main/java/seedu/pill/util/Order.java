@@ -165,9 +165,23 @@ public class Order {
     public String getNotes() {
         return notes;
     }
-
+    /**
+     * Lists the details of the order, including UUID, type, creation time, fulfillment time,
+     * status, notes, and the items in the order with a serial number for each item.
+     *
+     * <p>This method prints the order's metadata such as UUID, type, creation time, fulfillment time,
+     * status, and notes. It then iterates through the items in the order, printing each item's details
+     * with a serial number (starting from 1) to differentiate the items within the order.</p>
+     */
     public void listItems() {
         int index = 1;
+        System.out.println("UUID: " + id);
+        System.out.println("Type: " + type);
+        System.out.println("Creation Time: " + creationTime);
+        System.out.println("Fulfillment Time: " + fulfillmentTime);
+        System.out.println("Status: " + status);
+        System.out.println("Notes: " + notes);
+        System.out.println("Items: ");
         for (Map.Entry<String, TreeSet<Item>> entry : items.items.entrySet()) {
             TreeSet<Item> itemSet = entry.getValue();
             for (Item item : itemSet) {
