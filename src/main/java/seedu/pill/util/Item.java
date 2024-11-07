@@ -85,10 +85,10 @@ public class Item implements Comparable<Item> {
         sb.append(name).append(": ").append(quantity).append(" in stock");
         expiryDate.ifPresent(date -> sb.append(", expiring: ").append(date));
         if (cost > 0) {
-            sb.append(", cost: $").append(cost);
+            sb.append(", cost: $").append(String.format("%.2f", cost));
         }
         if (price > 0) {
-            sb.append(", price: $").append(price);
+            sb.append(", price: $").append(String.format("%.2f", price));
         }
         return sb.toString();
     }
