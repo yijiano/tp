@@ -249,7 +249,7 @@ public class Parser {
         }
 
         for (int i = 0; i < numberOfItems; i++) {
-            String userInput = ui.getInput();
+            String userInput = ui.getRawInput();
             String[] itemArguments = userInput.split("\\s+");
             if (itemArguments.length < 2) {
                 throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
