@@ -12,9 +12,9 @@ import java.text.DecimalFormat;
  * Command to set the price of all items with a specified name.
  */
 public class SetPriceCommand extends Command {
+    private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
     private final String itemName;
     private final double price;
-    private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     public SetPriceCommand(String itemName, double price) {
         this.itemName = itemName;
