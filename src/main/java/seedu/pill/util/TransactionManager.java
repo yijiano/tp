@@ -184,8 +184,12 @@ public class TransactionManager {
      */
     public void listTransactions() {
         List<Transaction> transactions = getTransactions();
-        IntStream.rangeClosed(1, transactions.size())
-                .forEach(i -> System.out.println(i + ". " + transactions.get(i - 1).toString()));
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions found");
+        } else {
+            IntStream.rangeClosed(1, transactions.size())
+                    .forEach(i -> System.out.println(i + ". " + transactions.get(i - 1).toString()));
+        }
     }
 
     /**
