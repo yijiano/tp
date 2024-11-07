@@ -87,7 +87,8 @@ public class HelpCommand extends Command {
         System.out.println("  expiring              - Lists items expiring before a specified date");
         System.out.println("  list                  - Lists all items");
         System.out.println("  stock-check           - Lists all items that need to be restocked");
-        System.out.println("  restock               - Restocks a specified item with an optional expiry date and quantity");
+        System.out.println("  restock               - Restocks a specified item " +
+                "with an optional expiry date and quantity");
         System.out.println("  restock-all           - Restocks all items below a specified threshold");
         System.out.println("  use                   - Priority removal of items from the list, " +
                 "starting with earliest expiry date");
