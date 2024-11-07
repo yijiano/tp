@@ -18,4 +18,8 @@ public final class Ui {
         Printer.printSpace();
         return this.sc.nextLine();
     }
+
+    public String getRawInput() {
+        return this.sc.nextLine();
+    }
 }
