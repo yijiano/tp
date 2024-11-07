@@ -272,8 +272,10 @@ public class Parser {
      *
      * <p>The parsing logic follows these rules:
      * <ul>
-     *     <li>If the quantity is specified, it should be a numeric value located at the end or second to last position.</li>
-     *     <li>If an expiry date is specified, it should be a valid date string located at the last position in the array.</li>
+     *     <li>If the quantity is specified, it should be a numeric value located at the end or second to last position.
+     *     </li>
+     *     <li>If an expiry date is specified, it should be a valid date string located at the last position in the
+     *     array.</li>
      *     <li>If no quantity is specified, it defaults to "1".</li>
      *     <li>If no date is specified, it defaults to {@code null}.</li>
      * </ul>
@@ -281,7 +283,8 @@ public class Parser {
      * @param itemArguments An array of strings containing the arguments for the item.
      *                      It may include an item name, quantity, and an optional expiry date.
      * @return An {@code Item} object constructed from the parsed item arguments.
-     * @throws PillException If there are multiple dates, an invalid date format, or if the arguments are in an invalid format.
+     * @throws PillException If there are multiple dates, an invalid date format, or if the arguments are in an invalid
+     *                       format.
      */
     public Item parseItem(String[] itemArguments) throws PillException {
         Integer quantityIndex = null;
