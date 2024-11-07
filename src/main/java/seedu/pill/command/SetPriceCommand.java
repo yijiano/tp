@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
 public class SetPriceCommand extends Command {
     private final String itemName;
     private final double price;
-    private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    private final static DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     public SetPriceCommand(String itemName, double price) {
         this.itemName = itemName;
