@@ -176,6 +176,27 @@ soonest expiry date when taking out of storage.
 
 <!-- @@author -->
 
+### Exceptions and logging
+
+All exceptions are of the PillException type, constructed with an
+ExceptionMessages enum value to indicate specific error cases. The
+ExceptionMessages enum provides predefined messages accessible through
+getMessage(), ensuring consistent error descriptions across the application.
+Most importantly, this keeps code of thrown exceptions readable.
+
+Example usage:
+```
+} catch (NumberFormatException e) {
+    throw new PillException(ExceptionMessages.INVALID_INDEX);
+```
+
+The PillLogger module provides centralized logging for the application, capturing
+logs in ./log/PillLog.log while keeping console output disabled. It is primarily
+used for debugging and includes all log levels in the file output. By centralizing
+logging here, we can easily trace events or issues without cluttering the console.
+
+<!-- insert diagram here maybe -->
+
 ## Product scope
 
 ### Target user profile
