@@ -235,9 +235,11 @@ public class Parser {
         } else if (commandArguments.length < 2) {
             throw new PillException(ExceptionMessages.INVALID_ORDER_COMMAND);
         }
+
         ItemMap itemsToOrder = new ItemMap();
         OrderType orderType = null;
         int numberOfItems = parseQuantity(commandArguments[1]);
+
         if (commandArguments[0].equalsIgnoreCase("PURCHASE")) {
             orderType = OrderType.PURCHASE;
         } else if (commandArguments[0].equalsIgnoreCase("DISPENSE")) {
@@ -245,62 +247,89 @@ public class Parser {
         } else {
             throw new PillException(ExceptionMessages.INVALID_ORDER_COMMAND);
         }
+
         for (int i = 0; i < numberOfItems; i++) {
             String userInput = ui.getInput();
             String[] itemArguments = userInput.split("\\s+");
             if (itemArguments.length < 2) {
                 throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
             }
-
-            Integer quantityIndex = null;
-            Integer dateIndex = null;
-
-            for (int j = 0; j < itemArguments.length; j++) {
-                String currentArgument = itemArguments[j];
-
-                if (isValidDate(currentArgument)) {
-                    if (dateIndex != null) {
-                        throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
-                    }
-                    dateIndex = j;
-
-                    if (j != itemArguments.length - 1) {
-                        throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
-                    }
-                }
-
-                if (isANumber(currentArgument)) {
-                    quantityIndex = j;
-                }
+            try {
+                Item item = parseItem(itemArguments);
+                itemsToOrder.addItemSilent(item);
+            } catch (PillException e) {
+                throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
             }
-
-            String itemName;
-            String quantityStr = null;
-            String expiryDateStr = null;
-
-            if (quantityIndex != null && quantityIndex == itemArguments.length - 1) {
-                quantityStr = itemArguments[quantityIndex];
-                expiryDateStr = null;
-                itemName = buildItemName(itemArguments, 0, quantityIndex);
-            } else if (quantityIndex != null && quantityIndex == itemArguments.length - 2
-                    && isValidDate(itemArguments[quantityIndex + 1])) {
-                quantityStr = itemArguments[quantityIndex];
-                expiryDateStr = itemArguments[quantityIndex + 1];
-                itemName = buildItemName(itemArguments, 0, quantityIndex);
-            } else if (dateIndex != null && dateIndex == itemArguments.length - 1) {
-                expiryDateStr = itemArguments[dateIndex];
-                quantityStr = "1";
-                itemName = buildItemName(itemArguments, 0, dateIndex);
-            } else {
-                quantityStr = "1";
-                expiryDateStr = null;
-                itemName = buildItemName(itemArguments, 0, itemArguments.length);
-            }
-
-            Item item = new Item(itemName, parseQuantity(quantityStr), parseExpiryDate(expiryDateStr));
-            itemsToOrder.addItemSilent(item);
         }
+
         return new OrderCommand(itemsToOrder, transactionManager, orderType);
+    }
+    /**
+     * Parses an array of item arguments and returns an {@code Item} object.
+     * The item arguments array is expected to contain details such as item name, quantity, and optional expiry date.
+     * This method validates the format of the item arguments and ensures that only one date is included and
+     * positioned correctly as the last element if present.
+     *
+     * <p>The parsing logic follows these rules:
+     * <ul>
+     *     <li>If the quantity is specified, it should be a numeric value located at the end or second to last position.</li>
+     *     <li>If an expiry date is specified, it should be a valid date string located at the last position in the array.</li>
+     *     <li>If no quantity is specified, it defaults to "1".</li>
+     *     <li>If no date is specified, it defaults to {@code null}.</li>
+     * </ul>
+     *
+     * @param itemArguments An array of strings containing the arguments for the item.
+     *                      It may include an item name, quantity, and an optional expiry date.
+     * @return An {@code Item} object constructed from the parsed item arguments.
+     * @throws PillException If there are multiple dates, an invalid date format, or if the arguments are in an invalid format.
+     */
+    public Item parseItem(String[] itemArguments) throws PillException {
+        Integer quantityIndex = null;
+        Integer dateIndex = null;
+
+        for (int j = 0; j < itemArguments.length; j++) {
+            String currentArgument = itemArguments[j];
+
+            if (isValidDate(currentArgument)) {
+                if (dateIndex != null) {
+                    throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
+                }
+                dateIndex = j;
+
+                if (j != itemArguments.length - 1) {
+                    throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
+                }
+            }
+
+            if (isANumber(currentArgument)) {
+                quantityIndex = j;
+            }
+        }
+
+        String itemName;
+        String quantityStr = null;
+        String expiryDateStr = null;
+
+        if (quantityIndex != null && quantityIndex == itemArguments.length - 1) {
+            quantityStr = itemArguments[quantityIndex];
+            expiryDateStr = null;
+            itemName = buildItemName(itemArguments, 0, quantityIndex);
+        } else if (quantityIndex != null && quantityIndex == itemArguments.length - 2
+                && isValidDate(itemArguments[quantityIndex + 1])) {
+            quantityStr = itemArguments[quantityIndex];
+            expiryDateStr = itemArguments[quantityIndex + 1];
+            itemName = buildItemName(itemArguments, 0, quantityIndex);
+        } else if (dateIndex != null && dateIndex == itemArguments.length - 1) {
+            expiryDateStr = itemArguments[dateIndex];
+            quantityStr = "1";
+            itemName = buildItemName(itemArguments, 0, dateIndex);
+        } else {
+            quantityStr = "1";
+            expiryDateStr = null;
+            itemName = buildItemName(itemArguments, 0, itemArguments.length);
+        }
+
+        return new Item(itemName, parseQuantity(quantityStr), parseExpiryDate(expiryDateStr));
     }
 
     /**
