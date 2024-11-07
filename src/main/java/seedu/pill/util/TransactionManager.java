@@ -223,9 +223,6 @@ public class TransactionManager {
      * @param start The start of the date-time range for retrieving transactions.
      * @param end   The end of the date-time range for retrieving transactions.
      *
-     *              <p>This method retrieves a list of {@link Transaction} objects within the specified range
-     *              using {@link #getTransactionHistory(LocalDateTime, LocalDateTime)}. It then prints each transaction
-     *              with an index, formatted as "1. transaction details", "2. transaction details", etc.</p>
      */
     public void listTransactionHistory(LocalDateTime start, LocalDateTime end) {
         List<Transaction> transactions = getTransactionHistory(start, end);

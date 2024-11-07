@@ -158,17 +158,6 @@ public class Parser {
      * @throws PillException if the input contains too many arguments, is empty, cannot be parsed as a number,
      *                       or if the specified order index is invalid.
      *
-     *                       <p>Specifically, this method throws:</p>
-     *                       <ul>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.TOO_MANY_ARGUMENTS} if more
-     *                           than one argument is provided.</li>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.INVALID_FULFILL_COMMAND} if no
-     *                           argument is provided.</li>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.INVALID_INDEX} if the argument
-     *                           cannot be parsed as an integer.</li>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.INVALID_ORDER} if the specified
-     *                           order index is out of bounds.</li>
-     *                       </ul>
      */
     private FulfillCommand parseFulfillCommand(String arguments) throws PillException {
         String[] commandArguments = arguments.split("\\s+");
@@ -197,21 +186,8 @@ public class Parser {
      * @return A {@link TransactionHistoryCommand} instance that contains the specified
      *                                             date range and transaction manager.
      * @throws PillException if the input contains too many arguments, is empty,
-     *                       has an invalid date-time format, or if only one date is provided.
+     *                       has an invalid date-time format.
      *
-     *                       <p>Specifically, this method throws:</p>
-     *                       <ul>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.TOO_MANY_ARGUMENTS} if more
-     *                           than two arguments are provided.</li>
-     *                           <li>{@code PillException} with
-     *                           {@code ExceptionMessages.INVALID_TRANSACTION_HISTORY_COMMAND} if no argument
-     *                           is provided.</li>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.INVALID_DATETIME_FORMAT} if any
-     *                           date-time argument cannot be parsed correctly.</li>
-     *                       </ul>
-     *
-     *                       <p>If only one date is provided, the end date is set to the current date and time
-     *                       ({@link LocalDateTime#now()}).</p>
      */
     private TransactionHistoryCommand parseTransactionHistoryCommand(String arguments) throws PillException {
         String[] commandArguments = arguments.split("\\s+");
@@ -251,25 +227,6 @@ public class Parser {
      * @throws PillException if the input contains too many arguments, is empty, has an invalid order type,
      *                       or if item details are incorrectly formatted.
      *
-     *                       <p>Specifically, this method throws:</p>
-     *                       <ul>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.TOO_MANY_ARGUMENTS} if more
-     *                           than two arguments are provided.</li>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.INVALID_ORDER_COMMAND} if no
-     *                           argument or an invalid order type is provided.</li>
-     *                           <li>{@code PillException} with {@code ExceptionMessages.INVALID_ITEM_FORMAT} if item
-     *                           details are incorrectly formatted
-     *                               (such as an invalid quantity or date format).</li>
-     *                       </ul>
-     *
-     *                       <p>During item processing, the method:
-     *                       <ul>
-     *                           <li>Parses each item's name, quantity, and optional expiry date from user input.</li>
-     *                           <li>Assumes a default quantity of 1 if no quantity is specified.</li>
-     *                           <li>Checks for proper date and quantity formats and throws an exception if they are
-     *                           invalid.</li>
-     *                       </ul>
-     *                       </p>
      */
     private OrderCommand parseOrderCommand(String arguments) throws PillException {
         String[] commandArguments = arguments.split("\\s+");
