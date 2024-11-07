@@ -97,14 +97,14 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                     itemUpdated = true;
                     expiryDate.ifPresentOrElse(
                             expiry -> {
-                                LOGGER.info("Updated existing item with expiry date: " + newItem);
+                                LOGGER.info("Updated existing item with expiry date: " + item);
                                 System.out.println("Item already exists with the same expiry date. Updated quantity: \n"
-                                        + newItem);
+                                        + item);
                             },
                             () -> {
-                                LOGGER.info("Updated existing item with no expiry date: " + newItem);
+                                LOGGER.info("Updated existing item with no expiry date: " + item);
                                 System.out.println("Item already exists with no expiry date. Updated quantity: \n"
-                                    + newItem);
+                                    + item);
                             }
                     );
                     break;
@@ -336,12 +336,15 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                     .toList();
 
             if (filteredItems.isEmpty()) {
-                LOGGER.info(String.format("There are no items that have quantity less than %d.", threshold));
-                System.out.printf("There are no items that have quantity less than %d:%n", threshold);
+                LOGGER.info(String.format("There are no items that have quantity less than or equal to %d.",
+                        threshold));
+                System.out.printf("There are no items that have quantity less than or equal to %d:%n", threshold);
 
             } else {
-                LOGGER.info(String.format("Listing all items that need too be restocked (less than %d):", threshold));
-                System.out.printf("Listing all items that need too be restocked (less than %d):%n", threshold);
+                LOGGER.info(String.format("Listing all items that need too be restocked (less than or equal to %d):",
+                        threshold));
+                System.out.printf("Listing all items that need too be restocked (less than or equal to %d):%n",
+                        threshold);
                 IntStream.rangeClosed(1, filteredItems.size())
                         .forEach(i -> System.out.println(i + ". " + filteredItems.get(i - 1).toString()));
             }
