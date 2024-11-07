@@ -14,11 +14,19 @@ import seedu.pill.command.SetCostCommand;
 import seedu.pill.command.SetPriceCommand;
 import seedu.pill.command.StockCheckCommand;
 import seedu.pill.command.UseItemCommand;
+import seedu.pill.command.TransactionHistoryCommand;
+import seedu.pill.command.OrderCommand;
+import seedu.pill.command.FulfillCommand;
+import seedu.pill.command.ViewOrdersCommand;
+import seedu.pill.command.TransactionsCommand;
+
+import seedu.pill.util.Order.OrderType;
 
 import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Optional;
@@ -27,13 +35,17 @@ public class Parser {
     private boolean exitFlag = false;
     private final ItemMap items;
     private final Storage storage;
+    private final TransactionManager transactionManager;
+    private final Ui ui;
 
     /**
      * Public constructor for Parser.
      */
-    public Parser(ItemMap items, Storage storage) {
+    public Parser(ItemMap items, Storage storage, TransactionManager transactionManager, Ui ui) {
         this.items = items;
         this.storage = storage;
+        this.transactionManager = transactionManager;
+        this.ui = ui;
     }
 
     /**
@@ -82,6 +94,9 @@ public class Parser {
                 new StockCheckCommand(argument).execute(this.items, this.storage);
                 break;
             case "expired":
+                if (splitInput.length > 1) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
                 new ExpiredCommand().execute(this.items, this.storage);
                 break;
             case "expiring":
@@ -109,12 +124,215 @@ public class Parser {
             case "use":
                 parseUseItemCommand(arguments).execute(this.items, this.storage);
                 break;
+            case "order":
+                parseOrderCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "view-orders":
+                new ViewOrdersCommand(transactionManager).execute(this.items, this.storage);
+                break;
+            case "transactions":
+                if (splitInput.length > 1) {
+                    throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+                }
+                new TransactionsCommand(transactionManager).execute(this.items, this.storage);
+                break;
+            case "transaction-history":
+                parseTransactionHistoryCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "fulfill":
+                parseFulfillCommand(arguments).execute(this.items, this.storage);
+                break;
             default:
                 throw new PillException(ExceptionMessages.INVALID_COMMAND);
             }
         } catch (PillException e) {
             PillException.printException(e);
         }
+    }
+
+    /**
+     * Parses the arguments provided to create a {@link FulfillCommand} instance, which is used to fulfill an order.
+     *
+     * @param arguments The command input containing the order index to be fulfilled.
+     * @return A {@link FulfillCommand} instance that contains the order and transaction manager.
+     * @throws PillException if the input contains too many arguments, is empty, cannot be parsed as a number,
+     *                       or if the specified order index is invalid.
+     *
+     */
+    private FulfillCommand parseFulfillCommand(String arguments) throws PillException {
+        String[] commandArguments = arguments.split("\\s+");
+        if (commandArguments.length > 1) {
+            throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+        }
+        if (commandArguments.length == 0) {
+            throw new PillException(ExceptionMessages.INVALID_FULFILL_COMMAND);
+        }
+        try {
+            Order order = transactionManager.getOrders().get(Integer.parseInt(commandArguments[0]) - 1);
+            return new FulfillCommand(order, transactionManager);
+        } catch (NumberFormatException e) {
+            throw new PillException(ExceptionMessages.INVALID_INDEX);
+        } catch (IndexOutOfBoundsException e) {
+            throw new PillException(ExceptionMessages.INVALID_ORDER);
+        }
+    }
+
+    /**
+     * Parses the arguments provided to create a {@link TransactionHistoryCommand} instance,
+     * which retrieves the transaction history for a specified date range.
+     *
+     * @param arguments The command input containing either one or two date-time arguments
+     *                  representing the start (and optionally the end) of the date range.
+     * @return A {@link TransactionHistoryCommand} instance that contains the specified
+     *                                             date range and transaction manager.
+     * @throws PillException if the input contains too many arguments, is empty,
+     *                       has an invalid date-time format.
+     *
+     */
+    private TransactionHistoryCommand parseTransactionHistoryCommand(String arguments) throws PillException {
+        String[] commandArguments = arguments.split("\\s+");
+        LocalDateTime start;
+        LocalDateTime end;
+        if (commandArguments.length > 2) {
+            throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+        }
+        if (commandArguments.length == 0) {
+            throw new PillException(ExceptionMessages.INVALID_TRANSACTION_HISTORY_COMMAND);
+        } else if (commandArguments.length == 1) {
+            try {
+                start = LocalDateTime.parse(commandArguments[0]);
+                return new TransactionHistoryCommand(start, LocalDateTime.now(), transactionManager);
+            } catch (DateTimeParseException e) {
+                throw new PillException(ExceptionMessages.INVALID_DATETIME_FORMAT);
+            }
+        } else {
+            try {
+                start = LocalDateTime.parse(commandArguments[0]);
+                end = LocalDateTime.parse(commandArguments[1]);
+                return new TransactionHistoryCommand(start, end, transactionManager);
+            } catch (DateTimeParseException e) {
+                throw new PillException(ExceptionMessages.INVALID_DATETIME_FORMAT);
+            }
+        }
+    }
+
+    /**
+     * Parses the arguments provided to create an {@link OrderCommand} instance, which handles
+     * ordering items for either purchasing or dispensing, based on the specified order type.
+     *
+     * @param arguments The command input containing the order type (either "PURCHASE" or "DISPENSE")
+     *                  and the number of items to order.
+     * @return An {@link OrderCommand} instance that contains the specified items to order,
+     *                                 transaction manager, and order type.
+     * @throws PillException if the input contains too many arguments, is empty, has an invalid order type,
+     *                       or if item details are incorrectly formatted.
+     *
+     */
+    private OrderCommand parseOrderCommand(String arguments) throws PillException {
+        String[] commandArguments = arguments.split("\\s+");
+        if (commandArguments.length > 2) {
+            throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
+        } else if (commandArguments.length < 2) {
+            throw new PillException(ExceptionMessages.INVALID_ORDER_COMMAND);
+        }
+
+        ItemMap itemsToOrder = new ItemMap();
+        OrderType orderType = null;
+        int numberOfItems = parseQuantity(commandArguments[1]);
+
+        if (commandArguments[0].equalsIgnoreCase("PURCHASE")) {
+            orderType = OrderType.PURCHASE;
+        } else if (commandArguments[0].equalsIgnoreCase("DISPENSE")) {
+            orderType = OrderType.DISPENSE;
+        } else {
+            throw new PillException(ExceptionMessages.INVALID_ORDER_COMMAND);
+        }
+
+        for (int i = 0; i < numberOfItems; i++) {
+            String userInput = ui.getInput();
+            String[] itemArguments = userInput.split("\\s+");
+            if (itemArguments.length < 2) {
+                throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
+            }
+            try {
+                Item item = parseItem(itemArguments);
+                itemsToOrder.addItemSilent(item);
+            } catch (PillException e) {
+                throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
+            }
+        }
+
+        return new OrderCommand(itemsToOrder, transactionManager, orderType);
+    }
+    /**
+     * Parses an array of item arguments and returns an {@code Item} object.
+     * The item arguments array is expected to contain details such as item name, quantity, and optional expiry date.
+     * This method validates the format of the item arguments and ensures that only one date is included and
+     * positioned correctly as the last element if present.
+     *
+     * <p>The parsing logic follows these rules:
+     * <ul>
+     *     <li>If the quantity is specified, it should be a numeric value located at the end or second to last position.
+     *     </li>
+     *     <li>If an expiry date is specified, it should be a valid date string located at the last position in the
+     *     array.</li>
+     *     <li>If no quantity is specified, it defaults to "1".</li>
+     *     <li>If no date is specified, it defaults to {@code null}.</li>
+     * </ul>
+     *
+     * @param itemArguments An array of strings containing the arguments for the item.
+     *                      It may include an item name, quantity, and an optional expiry date.
+     * @return An {@code Item} object constructed from the parsed item arguments.
+     * @throws PillException If there are multiple dates, an invalid date format, or if the arguments are in an invalid
+     *                       format.
+     */
+    public Item parseItem(String[] itemArguments) throws PillException {
+        Integer quantityIndex = null;
+        Integer dateIndex = null;
+
+        for (int j = 0; j < itemArguments.length; j++) {
+            String currentArgument = itemArguments[j];
+
+            if (isValidDate(currentArgument)) {
+                if (dateIndex != null) {
+                    throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
+                }
+                dateIndex = j;
+
+                if (j != itemArguments.length - 1) {
+                    throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);
+                }
+            }
+
+            if (isANumber(currentArgument)) {
+                quantityIndex = j;
+            }
+        }
+
+        String itemName;
+        String quantityStr = null;
+        String expiryDateStr = null;
+
+        if (quantityIndex != null && quantityIndex == itemArguments.length - 1) {
+            quantityStr = itemArguments[quantityIndex];
+            expiryDateStr = null;
+            itemName = buildItemName(itemArguments, 0, quantityIndex);
+        } else if (quantityIndex != null && quantityIndex == itemArguments.length - 2
+                && isValidDate(itemArguments[quantityIndex + 1])) {
+            quantityStr = itemArguments[quantityIndex];
+            expiryDateStr = itemArguments[quantityIndex + 1];
+            itemName = buildItemName(itemArguments, 0, quantityIndex);
+        } else if (dateIndex != null && dateIndex == itemArguments.length - 1) {
+            expiryDateStr = itemArguments[dateIndex];
+            quantityStr = "1";
+            itemName = buildItemName(itemArguments, 0, dateIndex);
+        } else {
+            quantityStr = "1";
+            expiryDateStr = null;
+            itemName = buildItemName(itemArguments, 0, itemArguments.length);
+        }
+
+        return new Item(itemName, parseQuantity(quantityStr), parseExpiryDate(expiryDateStr));
     }
 
     /**

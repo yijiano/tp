@@ -6,14 +6,16 @@ import seedu.pill.exceptions.PillException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
+import java.util.stream.IntStream;
 
 /**
  * Manages all transactions and orders in the inventory management system.
  * This class serves as the central point for handling inventory movements,
  * both incoming (purchases) and outgoing (dispensing) transactions, as well as
  * managing orders and their fulfillment.
- *
+ * <p>
  * The TransactionManager maintains a complete audit trail of all inventory changes
  * and ensures data consistency between transactions and the actual inventory state.
  */
@@ -93,8 +95,8 @@ public class TransactionManager {
      * @param notes - Any additional notes or comments about the order
      * @return      - The created Order object
      */
-    public Order createOrder(Order.OrderType type, String notes) {
-        Order order = new Order(type, notes);
+    public Order createOrder(Order.OrderType type, ItemMap itemsToOrder, String notes) {
+        Order order = new Order(type, itemsToOrder, notes);
         orders.add(order);
         return order;
     }
@@ -111,23 +113,33 @@ public class TransactionManager {
      */
     public void fulfillOrder(Order order) throws PillException {
         if (order.getStatus() != Order.OrderStatus.PENDING) {
-            throw new PillException(ExceptionMessages.INVALID_COMMAND);
+            throw new PillException(ExceptionMessages.ORDER_NOT_PENDING);
         }
 
         Transaction.TransactionType transactionType = order.getType() == Order.OrderType.PURCHASE
                 ? Transaction.TransactionType.INCOMING
                 : Transaction.TransactionType.OUTGOING;
 
-        for (OrderItem item : order.getItems()) {
-            createTransaction(
-                    item.getItemName(),
-                    item.getQuantity(),
-                    transactionType,
-                    "Order fulfillment",
-                    order
-            );
+        for (Map.Entry<String, TreeSet<Item>> entry : order.getItems().items.entrySet()) {
+            TreeSet<Item> itemSet = entry.getValue();
+            try {
+                itemSet.forEach(item -> {
+                    try {
+                        createTransaction(
+                                item.getName(),
+                                item.getQuantity(),
+                                transactionType,
+                                "Order fulfillment",
+                                order
+                        );
+                    } catch (PillException e) {
+                        throw new RuntimeException("Error creating transaction", e);
+                    }
+                });
+            } catch (RuntimeException e) {
+                throw new PillException(ExceptionMessages.TRANSACTION_ERROR);
+            }
         }
-
         order.fulfill();
     }
 
@@ -162,6 +174,36 @@ public class TransactionManager {
     }
 
     /**
+     * Lists all transactions by printing each transaction with a numbered format.
+     *
+     * <p>This method retrieves a list of {@link Transaction} objects using {@link #getTransactions()}.
+     * It then iterates through the list, printing each transaction with an index in the format
+     * "1. transaction details", "2. transaction details", etc.</p>
+     */
+    public void listTransactions() {
+        List<Transaction> transactions = getTransactions();
+        IntStream.rangeClosed(1, transactions.size())
+                .forEach(i -> System.out.println(i + ". " + transactions.get(i - 1).toString()));
+    }
+
+    /**
+     * Lists all current orders by printing the items in each order.
+     *
+     * <p>This method retrieves a list of {@link Order} objects using {@link #getOrders()}.
+     * It then iterates through each order, invoking {@code listItems()} on each
+     * order to print the details of its items to the console.</p>
+     */
+    public void listOrders() {
+        List<Order> orders = getOrders();
+        IntStream.rangeClosed(1, orders.size())
+                .forEach(i -> {
+                    System.out.print(i + ". ");
+                    orders.get(i - 1).listItems();
+                    System.out.println();
+                });
+    }
+
+    /**
      * Retrieves all transactions that occurred within a specified time period.
      *
      * @param start - The start date/time of the period (inclusive)
@@ -172,5 +214,19 @@ public class TransactionManager {
         return transactions.stream()
                 .filter(t -> !t.getTimestamp().isBefore(start) && !t.getTimestamp().isAfter(end))
                 .toList();
+    }
+
+    /**
+     * Lists the transaction history within the specified date-time range by printing each transaction
+     * to the console with a numbered format.
+     *
+     * @param start The start of the date-time range for retrieving transactions.
+     * @param end   The end of the date-time range for retrieving transactions.
+     *
+     */
+    public void listTransactionHistory(LocalDateTime start, LocalDateTime end) {
+        List<Transaction> transactions = getTransactionHistory(start, end);
+        IntStream.rangeClosed(1, transactions.size())
+                .forEach(i -> System.out.println(i + ". " + transactions.get(i - 1).toString()));
     }
 }
