@@ -16,7 +16,11 @@
     - [Set Item Cost: `cost`](#set-item-cost-cost)
     - [Set Item Price: `price`](#set-item-price-price)
     - [Restock Specific Item: `restock`](#restock-specific-item-restock)
-    - [Restock All Items Below Threshold: `restockall`](#restock-all-items-below-threshold-restockall)
+    - [Restock All Items Below Threshold: `restock-all`](#restock-all-items-below-threshold-restockall)
+    - [Priority Removal of Items: `use`](#priority-removal-of-items-use)
+    - [Order Items: `order`](#order-items-order)
+    - [View All Orders `view-orders`](#view-all-orders-view-orders)
+    - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
     - [Exiting the Program: `exit`](#exiting-the-program-exit)
     - [Saving the Data](#saving-the-data)
     - [Editing the Data File](#editing-the-data-file)
@@ -33,35 +37,49 @@ Pharmacy Inventory & Logistics Ledger (PILL) is a Command Line Interface (CLI) t
 
 Displays a list of all available commands and their descriptions.
 
-**Format**: `help`
+**Format**: `help (COMMAND_NAME) (-v)`
+
+- Optional: COMMAND_NAME specifies the command to display help for.
+- Optional: `-v` flag to display verbose help for the specified command.
 
 **Sample Output**:
-
 `> help`
 
 ```
-help
-- Displays a list of all available commands and their descriptions
-```
+Available commands:
 
-```
-add n/NAME q/QUANTITY
-- Allows the user to add a new item to the inventory
-```
+Item Management:
+  add                   - Adds a new item to the list
+  delete                - Deletes an item from the list
+  edit                  - Edits an item in the list
+  find                  - Finds all items with the same keyword
+  expired               - Lists all items that have expired
+  expiring              - Lists items expiring before a specified date
+  list                  - Lists all items
+  stock-check           - Lists all items that need to be restocked
+  restock               - Restocks a specified item with an optional expiry date and quantity
+  restock-all           - Restocks all items below a specified threshold
+  use                   - Priority removal of items from the list, starting with earliest expiry date
 
-```
-list
-- Shows all the items that have been added to the inventory
-```
+Price and Cost Management:
+  cost                  - Sets the cost for a specified item
+  price                 - Sets the selling price for a specified item
 
-```
-delete INDEX 
-- Removes a specified item index from the inventory
-```
+Order Management:
+  order                 - Creates a new purchase or dispense order
+  fulfill-order         - Processes and completes a pending order
+  view-orders           - Lists all orders
 
-```
-exit
-- Terminates the application
+Transaction Management:
+  transactions          - Views all transactions
+  transaction-history   - Views transaction history in a given time period
+
+Other Commands:
+  help          - Shows this help message
+  exit          - Exits the program
+
+Type 'help <command>' for more information on a specific command.
+Type 'help <command> -v' for verbose output with examples.
 ```
 
 
@@ -72,15 +90,18 @@ exit
 
 Adds a new item to the inventory, specifying its name and quantity.
 
-**Format**: `add n/NAME e/QUANTITY`
+**Format**: `add NAME (QUANTITY) (EXPIRY_DATE)`
+
+- Optional: QUANTITY specifies the quantity of the item to add. Defaults to 1.
+- Optional: EXPIRY_DATE specifies the expiry date of the item in `YYYY-MM-DD` format.
 
 **Sample Output**:
 
-`> add n/Panadol q/2`
+`> add Aspirin 100 2024-05-24`
 
 ```
-Added the following item to the inventory:
-1. Panadol: 2 in stock
+Added the following item to the inventory: 
+Aspirin: 100 in stock, expiring: 2024-05-24
 ```
 
 
@@ -98,8 +119,14 @@ Displays a list of all items currently stored in the inventory, including their 
 `> list`
 
 ```
-1. Panadol: 2 in stock
-2. Ibuprofen: 1 in stock 
+Listing all items:
+1. candles: 900 in stock, cost: $110.0
+2. can: 900 in stock
+3. panadol: 999990 in stock, expiring: 2024-05-16
+4. panadol: 1000 in stock
+5. syringe: 100 in stock
+6. cans: 10 in stock
+7. Aspirin: 100 in stock, expiring: 2024-05-24
 ```
 
 
@@ -110,22 +137,22 @@ Displays a list of all items currently stored in the inventory, including their 
 
 Deletes an existing item entry in the inventory.
 
-**Format**: `delete n/NAME`
+**Format**: `delete NAME`
 
 - Delete the items with specified`NAME` .
 
 **Example**:
 
-- `delete n/NAME`  
+- `delete NAME`  
   deletes the item as referenced in the `list`.
 
 **Sample Output**:
 
-`> delete n/Ibuprofen`
+`> delete cans`
 
 ```
 Deleted the following item from the inventory: 
-	2. Ibuprofen: 1
+cans: 10 in stock
 ```
 ---
 ### Editing Existing Item: 'edit'
@@ -157,7 +184,7 @@ Edited item: Zyrtec: 30 in stock, expiring: 2025-02-03
 
 Finds all items in the inventory that match a specified name or partial name.
 
-**Format**: `find ITEM_NAME`
+**Format**: `find KEYWORD`
 
 **Sample Output**:
 
@@ -232,10 +259,10 @@ Sets the cost for a specified item, applied to all entries with the same name.
 
 **Sample Output**:
 
-`> cost Panadol 15.50`
+`> cost Panadol 15`
 
 ```
-Set cost of Panadol to $15.50.
+Set cost of Panadol to $15.00.
 ```
 ---
 ### Set Item Price: `price`
@@ -246,7 +273,7 @@ Sets the selling price for a specified item, applied to all entries with the sam
 
 **Sample Output**:
 
-`> price Panadol 20.00`
+`> price Panadol 20`
 
 ```
 Set price of Panadol to $20.00.
@@ -285,6 +312,102 @@ Item: Ibuprofen, Current Stock: 10, New Stock: 50, Restock Cost: $40.00
 Total Restock Cost for all items below threshold 50: $40.00
 ```
 ---
+
+### Priority Removal of Items `use`
+
+Priority removal of items from the list, starting with the earliest expiry date.
+
+**Format**: `use ITEM_NAME`
+
+**Sample Output**:
+
+`> use panadol 100`
+
+```
+Deleted the following item from the inventory: 
+panadol: 90 in stock, expiring: 2023-05-17
+Edited item: panadol: 999990 in stock, expiring: 2024-05-16
+Partially used item with expiry date 2024-05-16 (reduced from 1000000 to 999990): 
+panadol: 999990 in stock, expiring: 2024-05-16
+```
+
+---
+
+### Order Items: `order`
+
+Creates a new purchase or dispense order.
+
+**Format**: `order ORDER_TYPE ITEM_COUNT ITEM_NAME QUANTITY`
+
+- ORDER_TYPE: `purchase` or `dispense`
+
+**Sample Output**:
+
+`> order purchase 2 syringe 100 cans 10`
+
+```
+Order placed! Listing order details
+UUID: cec43f38-5c63-40b6-8964-00f8b4225c17
+Type: PURCHASE
+Creation Time: 2024-11-08T00:06:30.735047100
+Fulfillment Time: null
+Status: PENDING
+Notes: null
+Items: 
+1. syringe: 100 in stock
+2. cans: 10 in stock
+```
+
+---
+### View All Orders `view-orders`
+
+Lists all orders.
+
+**Format**: `view-orders`
+
+**Sample Output**:
+
+`> view-orders`
+
+```
+1. UUID: cec43f38-5c63-40b6-8964-00f8b4225c17
+Type: PURCHASE
+Creation Time: 2024-11-08T00:06:30.735047100
+Fulfillment Time: null
+Status: PENDING
+Notes: null
+Items: 
+1. syringe: 100 in stock
+2. cans: 10 in stock
+
+2. UUID: b213353f-31d3-46db-a4e7-b2ee7542d18e
+Type: DISPENSE
+Creation Time: 2024-11-08T00:08:21.386002300
+Fulfillment Time: null
+Status: PENDING
+Notes: null
+Items: 
+1. bottle: 10 in stock
+```
+
+---
+### Fulfill Order: `fulfill-order`
+
+**Format**: `fulfill-order ORDER_ID`
+
+**Sample Output**:
+
+`> fulfill-order 1`
+
+```
+Added the following item to the inventory: 
+syringe: 100 in stock
+Added the following item to the inventory: 
+cans: 10 in stock
+```
+
+---
+
 ### Exiting the Program: `exit`
 
 Exits the program.

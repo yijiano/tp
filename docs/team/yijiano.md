@@ -1,4 +1,4 @@
-# Zhang YIjian - Project Portfolio Page
+# Zhang Yijian - Project Portfolio Page
 
 ## Overview
 Pharmacy Inventory & Logistics Ledger (PILL) is a desktop application that allows

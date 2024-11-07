@@ -115,7 +115,7 @@ public class Parser {
             case "price":
                 parseSetPriceCommand(arguments).execute(this.items, this.storage);
                 break;
-            case "restockall":
+            case "restock-all":
                 parseRestockAllCommand(arguments).execute(this.items, this.storage);
                 break;
             case "restock":
@@ -139,7 +139,7 @@ public class Parser {
             case "transaction-history":
                 parseTransactionHistoryCommand(arguments).execute(this.items, this.storage);
                 break;
-            case "fulfill":
+            case "fulfill-order":
                 parseFulfillCommand(arguments).execute(this.items, this.storage);
                 break;
             default:
