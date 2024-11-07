@@ -277,7 +277,7 @@ public class HelpCommand extends Command {
      * Prints detailed information about the 'restockall' command.
      */
     private void showRestockAllHelp() {
-        System.out.println("restockall: Restocks all items below a specified threshold.");
+        System.out.println("restock-all: Restocks all items below a specified threshold.");
         if (verbose) {
             System.out.println("Usage: restockall [threshold]");
             System.out.println("  [threshold] - Optional. The minimum quantity for restocking. Defaults to 50.");
