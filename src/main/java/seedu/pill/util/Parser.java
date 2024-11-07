@@ -727,14 +727,14 @@ public class Parser {
     }
 
     /**
-     * Checks if a given string is a valid integer number.
+     * Checks if a given string is a valid number (integer or decimal).
      *
      * @param s The string to check.
-     * @return {@code true} if the string can be parsed into an integer; {@code false} otherwise.
+     * @return {@code true} if the string can be parsed into a double; {@code false} otherwise.
      */
     private boolean isANumber(String s) {
         try {
-            Integer.parseInt(s);
+            Double.parseDouble(s);
             return true;
         } catch (NumberFormatException e) {
             return false;
