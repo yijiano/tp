@@ -98,6 +98,8 @@ public class TransactionManager {
     public Order createOrder(Order.OrderType type, ItemMap itemsToOrder, String notes) {
         Order order = new Order(type, itemsToOrder, notes);
         orders.add(order);
+        System.out.println("Order placed! Listing order details");
+        order.listItems();
         return order;
     }
 
