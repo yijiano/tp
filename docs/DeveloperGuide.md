@@ -10,7 +10,12 @@
         - [Commands](#commands)
         - [Storage](#storage)
         - [Item and ItemMap](#item-and-itemmap)
+        - [Transaction and TransactionManager](#transaction-and-transactionmanager)
+        - [StringMatcher](#stringmatcher)
+        - [Order](#order)
+        - [Parser](#parser)
         - [DateTime](#datetime)
+        - [TimeStampIO](#timestampio)
         - [Exceptions](#exceptions)
         - [Logging](#logging)
     - [Product scope](#product-scope)
@@ -142,6 +147,19 @@ Optional.empty(), will be the last entry in the TreeSet.
 The usage of TreeSet is to facilitate storing multiple batches of items with
 different expiry dates and quantities, and to be able to extract items with the
 soonest expiry date when taking out of storage.
+
+### Order
+
+Orders are from the perspective of the Inventory, so purchases is items being
+received into the inventory, and dispense is items going out of the inventory. 
+Each order is a collection of one or more items, and is either purchase or dispense.
+Once an order is fulfilled, it is removed from the order list. 
+
+### Parser
+
+Deals with parsing of user inputs to corresponding commands, and also handles
+the execution of those commands. Private helper methods throw PillException, 
+but they are all caught within Parser itself, and do not propagate out of Parser.
 
 ### Exceptions
 
