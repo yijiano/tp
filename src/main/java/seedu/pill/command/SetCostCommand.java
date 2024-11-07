@@ -6,12 +6,15 @@ import seedu.pill.util.Item;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 
+import java.text.DecimalFormat;
+
 /**
  * Command to set the cost of all items with a specified name.
  */
 public class SetCostCommand extends Command {
     private final String itemName;
     private final double cost;
+    private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     public SetCostCommand(String itemName, double cost) {
         this.itemName = itemName;
@@ -26,7 +29,7 @@ public class SetCostCommand extends Command {
         for (Item item : itemMap.getItemsByName(itemName)) {
             item.setCost(cost);
             if (!msgIsPrinted) {
-                System.out.println("Set cost of " + itemName +  " to $" + cost + ".");
+                System.out.println("Set cost of " + itemName + " to $" + decimalFormat.format(cost) + ".");
                 msgIsPrinted = true;
             }
             itemFound = true;
