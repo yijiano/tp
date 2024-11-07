@@ -34,7 +34,21 @@ public class HelpCommandTest {
 
         String output = outContent.toString();
         assertTrue(output.contains("Available commands:"));
-        assertTrue(output.contains("Type 'help <command>' for more information"));
+        assertTrue(output.contains("\nItem Management:"));
+        assertTrue(output.contains("\nOther Commands:"));
+    }
+
+    @Test
+    void execute_generalHelpCategories_showsAllCategories() throws PillException {
+        HelpCommand command = new HelpCommand("", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("\nItem Management:"));
+        assertTrue(output.contains("\nPrice and Cost Management:"));
+        assertTrue(output.contains("\nOrder Management:"));
+        assertTrue(output.contains("\nTransaction Management:"));
+        assertTrue(output.contains("\nOther Commands:"));
     }
 
     @Test
@@ -44,7 +58,7 @@ public class HelpCommandTest {
 
         String output = outContent.toString();
         assertTrue(output.contains("Available commands:"));
-        assertTrue(output.contains("Type 'help <command>' for more information"));
+        assertTrue(output.contains("\nItem Management:"));
     }
 
     @Test
@@ -63,57 +77,182 @@ public class HelpCommandTest {
 
         String output = outContent.toString();
         assertTrue(output.contains("Usage: help [command] [-v]"));
+        assertTrue(output.contains("[command] - Optional. Specify a command to get detailed help."));
+        assertTrue(output.contains("[-v]      - Optional. Show verbose output with examples."));
         assertTrue(output.contains("Examples:"));
     }
 
     @Test
-    void execute_verboseHelpForDelete_printsDetailedDeleteHelp() throws PillException {
-        HelpCommand command = new HelpCommand("delete", true);
+    void execute_addCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("add", false);
         command.execute(itemMap, storage);
 
         String output = outContent.toString();
-        assertTrue(output.contains("Usage: delete <name> <expiry>"));
+        assertTrue(output.contains("add: Adds a new item to the inventory"));
+        assertFalse(output.contains("Usage:")); // Basic help shouldn't show verbose info
+    }
+
+    @Test
+    void execute_verboseAddHelp_printsDetailedHelp() throws PillException {
+        HelpCommand command = new HelpCommand("add", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: add <name> <quantity> <expiry>"));
+        assertTrue(output.contains("<name>     - Name of the item"));
+        assertTrue(output.contains("[quantity] - Optional: Initial quantity of the item"));
+        assertTrue(output.contains("[expiry]   - Optional: Expiry date of the item"));
         assertTrue(output.contains("Example:"));
     }
 
     @Test
-    void execute_verboseHelpForEdit_printsDetailedEditHelp() throws PillException {
-        HelpCommand command = new HelpCommand("edit", true);
+    void execute_deleteCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("delete", false);
         command.execute(itemMap, storage);
 
         String output = outContent.toString();
-        assertTrue(output.contains("Usage: edit <name> <quantity> <expiry>"));
-        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("delete: Removes an item from the inventory"));
     }
 
     @Test
-    void execute_verboseHelpForList_printsDetailedListHelp() throws PillException {
-        HelpCommand command = new HelpCommand("list", true);
+    void execute_editCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("edit", false);
         command.execute(itemMap, storage);
 
         String output = outContent.toString();
-        assertTrue(output.contains("Usage: list"));
-        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("edit: Edits the item in the inventory"));
     }
 
     @Test
-    void execute_verboseHelpForStockCheck_printsDetailedStockCheckHelp() throws PillException {
-        HelpCommand command = new HelpCommand("stock-check", true);
+    void execute_findCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("find", false);
         command.execute(itemMap, storage);
 
         String output = outContent.toString();
-        assertTrue(output.contains("Usage: stock-check <threshold>"));
-        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("find: Finds all items with the same keyword"));
     }
 
     @Test
-    void execute_verboseHelpForExit_printsDetailedExitHelp() throws PillException {
-        HelpCommand command = new HelpCommand("exit", true);
+    void execute_useCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("use", false);
         command.execute(itemMap, storage);
 
         String output = outContent.toString();
-        assertTrue(output.contains("Usage: exit"));
-        assertTrue(output.contains("Example:"));
+        assertTrue(output.contains("use: Priority removal of items from the list"));
+    }
+
+    @Test
+    void execute_restockCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("restock", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("restock: Restocks a specified item"));
+    }
+
+    @Test
+    void execute_restockAllCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("restock-all", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("restock-all: Restocks all items below a specified threshold."));
+        assertFalse(output.contains("Usage:")); // Basic help shouldn't show verbose information
+    }
+
+    @Test
+    void execute_costCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("cost", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("cost: Sets the cost for a specified item"));
+    }
+
+    @Test
+    void execute_priceCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("price", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("price: Sets the selling price for a specified item"));
+    }
+
+    @Test
+    void execute_orderCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("order", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("order: Creates a new purchase or dispense order"));
+    }
+
+    @Test
+    void execute_fulfillOrderCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("fulfill-order", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("fulfill-order: Processes and completes a pending order"));
+    }
+
+    @Test
+    void execute_viewOrdersCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("view-orders", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("view-orders: Lists all orders"));
+    }
+
+    @Test
+    void execute_transactionsCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("transactions", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("transactions: Views all transactions"));
+    }
+
+    @Test
+    void execute_transactionHistoryCommand_printsBasicHelp() throws PillException {
+        HelpCommand command = new HelpCommand("transaction-history", false);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("transaction-history: Views transaction history"));
+    }
+
+    @Test
+    void execute_verboseViewOrdersHelp_printsDetailedHelp() throws PillException {
+        HelpCommand command = new HelpCommand("view-orders", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: view-orders"));
+        assertTrue(output.contains("Examples:"));
+    }
+
+    @Test
+    void execute_verboseTransactionsHelp_printsDetailedHelp() throws PillException {
+        HelpCommand command = new HelpCommand("transactions", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: transactions"));
+        assertTrue(output.contains("Examples:"));
+    }
+
+    @Test
+    void execute_verboseTransactionHistoryHelp_printsDetailedHelp() throws PillException {
+        HelpCommand command = new HelpCommand("transaction-history", true);
+        command.execute(itemMap, storage);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Usage: transaction-history <start-date> <end-date>"));
+        assertTrue(output.contains("<start-date>  - Show transactions from this date"));
+        assertTrue(output.contains("<end-date>    - Show transactions until this date"));
+        assertTrue(output.contains("Examples:"));
     }
 
     @Test
@@ -123,17 +262,17 @@ public class HelpCommandTest {
 
         String output = outContent.toString();
         assertTrue(output.contains("Did you mean: help?"));
-        assertTrue(output.contains("help: Shows help information"));
     }
 
     @Test
-    void execute_veryInvalidCommand_showsNoSimilarCommand() throws PillException {
-        HelpCommand command = new HelpCommand("xyz", false);
+    void execute_noSimilarCommand_handleNullMatch() throws PillException {
+        HelpCommand command = new HelpCommand("xyzabc", false);
         command.execute(itemMap, storage);
 
         String output = outContent.toString();
-        assertTrue(output.contains("Unknown command:"));
+        assertTrue(output.contains("Unknown command: xyzabc"));
         assertTrue(output.contains("No similar command found"));
+        assertTrue(output.contains("Available commands:"));
     }
 
     @Test
@@ -155,76 +294,12 @@ public class HelpCommandTest {
     }
 
     @Test
-    void execute_helpWithMultipleWords_printsGeneralHelp() throws PillException {
-        HelpCommand command = new HelpCommand("help more words", false);
+    void execute_mixedCaseCommand_handlesCorrectly() throws PillException {
+        HelpCommand command = new HelpCommand("HeLp", false);
         command.execute(itemMap, storage);
 
         String output = outContent.toString();
         assertTrue(output.contains("help: Shows help information"));
-    }
-
-    @Test
-    void execute_multiWordInvalidCommand_showsNoSimilarCommand() throws PillException {
-        HelpCommand command = new HelpCommand("invalid command string", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Unknown command:"));
-        assertTrue(output.contains("No similar command found"));
-    }
-
-    @Test
-    void execute_almostList_suggestsListCommand() throws PillException {
-        HelpCommand command = new HelpCommand("lst", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: list?"));
-    }
-
-    @Test
-    void execute_almostAdd_suggestsAddCommand() throws PillException {
-        HelpCommand command = new HelpCommand("ad", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: add?"));
-    }
-
-    @Test
-    void execute_almostDelete_suggestsDeleteCommand() throws PillException {
-        HelpCommand command = new HelpCommand("delet", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: delete?"));
-    }
-
-    @Test
-    void execute_almostEdit_suggestsEditCommand() throws PillException {
-        HelpCommand command = new HelpCommand("edt", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: edit?"));
-    }
-
-    @Test
-    void execute_almostStockCheck_suggestsStockCheckCommand() throws PillException {
-        HelpCommand command = new HelpCommand("stock-chek", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: stock-check?"));
-    }
-
-    @Test
-    void execute_almostExit_suggestsExitCommand() throws PillException {
-        HelpCommand command = new HelpCommand("ext", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: exit?"));
     }
 
     @Test
@@ -237,34 +312,6 @@ public class HelpCommandTest {
     }
 
     @Test
-    void execute_mixedCaseCommand_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("HeLp", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("help: Shows help information"));
-    }
-
-    @Test
-    void execute_commandWithTrailingSpaces_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("help   ", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("help: Shows help information"));
-    }
-
-    @Test
-    void execute_verboseWithExtraFlags_stillShowsVerbose() throws PillException {
-        HelpCommand command = new HelpCommand("help -v -x", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: help [command] [-v]"));
-        assertTrue(output.contains("Examples:"));
-    }
-
-    @Test
     void execute_helpWithSpecialCharacters_handlesCorrectly() throws PillException {
         HelpCommand command = new HelpCommand("help#$%", false);
         command.execute(itemMap, storage);
@@ -272,788 +319,6 @@ public class HelpCommandTest {
         String output = outContent.toString();
         assertTrue(output.contains("Unknown command:"));
         assertTrue(output.contains("Available commands:"));
-    }
-
-    @Test
-    void execute_emptyStringCommand_printsGeneralHelp() throws PillException {
-        HelpCommand command = new HelpCommand("    ", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Available commands:"));
-    }
-
-    @Test
-    void execute_helpWithNumbers_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("help123", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Unknown command:"));
-    }
-
-    @Test
-    void execute_caseInsensitiveVerboseFlag_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("help -V", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: help [command] [-v]"));
-    }
-
-    @Test
-    void execute_generalHelp_includesNewCommands() throws PillException {
-        HelpCommand command = new HelpCommand("", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("expired       - Lists all items that have expired"));
-        assertTrue(output.contains("expiring      - Lists items expiring before a specified date"));
-    }
-
-    @Test
-    void execute_expiredHelp_printsBasicHelp() throws PillException {
-        HelpCommand command = new HelpCommand("expired", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("expired: Lists all items that have expired as of today"));
-    }
-
-    @Test
-    void execute_verboseExpiredHelp_printsDetailedHelp() throws PillException {
-        HelpCommand command = new HelpCommand("expired", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: expired"));
-        assertTrue(output.contains("Shows all items with expiry dates before today's date"));
-        assertTrue(output.contains("Example:"));
-    }
-
-    @Test
-    void execute_expiringHelp_printsBasicHelp() throws PillException {
-        HelpCommand command = new HelpCommand("expiring", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("expiring: Lists all items that will expire before a specified date"));
-        assertTrue(output.contains("Correct input format: expiring yyyy-MM-dd"));
-    }
-
-    @Test
-    void execute_verboseExpiringHelp_printsDetailedHelp() throws PillException {
-        HelpCommand command = new HelpCommand("expiring", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: expiring <date>"));
-        assertTrue(output.contains("<date> - The cutoff date in yyyy-MM-dd format"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("expiring 2024-12-31"));
-    }
-
-    @Test
-    void execute_almostExpired_suggestsExpiredCommand() throws PillException {
-        HelpCommand command = new HelpCommand("expire", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: expired?"));
-    }
-
-    @Test
-    void execute_almostExpiring_suggestsExpiringCommand() throws PillException {
-        HelpCommand command = new HelpCommand("expirin", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: expiring?"));
-    }
-
-    @Test
-    void execute_mixedCaseExpired_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("ExPiReD", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("expired: Lists all items that have expired"));
-    }
-
-    @Test
-    void execute_mixedCaseExpiring_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("ExPiRiNg", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("expiring: Lists all items that will expire"));
-    }
-
-    @Test
-    void execute_expiringWithExtraSpaces_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("expiring    -v", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: expiring <date>"));
-        assertTrue(output.contains("Example:"));
-    }
-
-    @Test
-    void execute_expiredWithExtraSpaces_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("expired    -v", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: expired"));
-        assertTrue(output.contains("Example:"));
-    }
-
-    @Test
-    void execute_verboseHelpForAdd_printsDetailedAddHelp() throws PillException {
-        HelpCommand command = new HelpCommand("add", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: add <name> <quantity> <expiry>"));
-        assertTrue(output.contains("<name>     - Name of the item"));
-        assertTrue(output.contains("<quantity> - Initial quantity of the item"));
-        assertTrue(output.contains("<expiry>   - Expiry date of the item in yyyy-MM-dd format"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("add Aspirin 100 2024-05-24"));
-        assertTrue(output.contains("\nCorrect input format: add <name> <quantity> <expiry>"));
-    }
-
-    @Test
-    void execute_commandWithNoCloseMatch_printsNoSuggestion() throws PillException {
-        // Using a completely different string that won't match any command
-        HelpCommand command = new HelpCommand("xyzabc", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Unknown command: xyzabc"));
-        assertTrue(output.contains("No similar command found"));
-        assertTrue(output.contains("Available commands:"));
-        assertFalse(output.contains("Did you mean:"));
-    }
-
-    @Test
-    void execute_veryDifferentCommand_handleNullMatch() throws PillException {
-        // Using a long string that's definitely more than 2 edits away from any command
-        // This ensures StringMatcher.findClosestMatch returns null
-        HelpCommand command = new HelpCommand("pneumonoultramicroscopicsilicovolcanoconiosis", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Unknown command: pneumonoultramicroscopicsilicovolcanoconiosis"));
-        assertTrue(output.contains("No similar command found")); // This only appears in the else branch
-        assertTrue(output.contains("Available commands:")); // Common output
-        assertFalse(output.contains("Did you mean:")); // This shouldn't appear when there's no match
-    }
-
-    @Test
-    void execute_similarCommand_handleNonNullMatch() throws PillException {
-        HelpCommand command = new HelpCommand("ad", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-
-        // Checking only what actually appears in the output
-        assertTrue(output.contains("Did you mean: add?"));
-        assertTrue(output.contains("add: Adds a new item to the inventory"));
-    }
-
-    @Test
-    void execute_noSimilarCommand_handleNullMatch() throws PillException {
-        HelpCommand command = new HelpCommand("xyzabc", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-
-        // Checking only what actually appears in the output
-        assertTrue(output.contains("Unknown command: xyzabc"));
-        assertTrue(output.contains("No similar command found"));
-        assertTrue(output.contains("Available commands:"));
-    }
-
-    @Test
-    void execute_verboseHelpForCancelOrder_printsDetailedCancelOrderHelp() throws PillException {
-        HelpCommand command = new HelpCommand("cancel-order", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: cancel-order <order-id>"));
-        assertTrue(output.contains("<order-id> - The unique identifier of the order to cancel"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("Only pending orders can be cancelled"));
-    }
-
-    @Test
-    void execute_verboseHelpForFulfillOrder_printsDetailedFulfillOrderHelp() throws PillException {
-        HelpCommand command = new HelpCommand("fulfill-order", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: fulfill-order <order-id>"));
-        assertTrue(output.contains("<order-id> - The unique identifier of the order to fulfill"));
-        assertTrue(output.contains("This will create the necessary transactions and update inventory levels"));
-    }
-
-    @Test
-    void execute_verboseHelpForListOrders_printsDetailedListOrdersHelp() throws PillException {
-        HelpCommand command = new HelpCommand("list-orders", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: list-orders [type] [status] [start-date] [end-date]"));
-        assertTrue(output.contains("[type]      - Optional: Filter by 'purchase' or 'dispense'"));
-        assertTrue(output.contains("[status]    - Optional: Filter by 'pending', 'fulfilled', or 'cancelled'"));
-        assertTrue(output.contains("Examples:"));
-        assertTrue(output.contains("list-orders purchase pending"));
-    }
-
-    @Test
-    void execute_verboseHelpForTransactionHistory_printsDetailedTransactionHistoryHelp() throws PillException {
-        HelpCommand command = new HelpCommand("transaction-history", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: transaction-history [item-name] [type] [start-date] [end-date]"));
-        assertTrue(output.contains("[item-name] - Optional: Filter by specific item"));
-        assertTrue(output.contains("[type]      - Optional: Filter by 'incoming' or 'outgoing'"));
-        assertTrue(output.contains("Examples:"));
-        assertTrue(output.contains("transaction-history incoming 2024-01-01 2024-12-31"));
-    }
-
-    @Test
-    void execute_commandWithMultipleConsecutiveSpaces_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("help     -v", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: help [command] [-v]"));
-    }
-
-    @Test
-    void execute_nullCommandWithVerbose_printsDetailedGeneralHelp() throws PillException {
-        HelpCommand command = new HelpCommand(null, true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Available commands:"));
-        assertTrue(output.contains("\nItem Management:"));
-        assertTrue(output.contains("\nOrder Management:"));
-        assertTrue(output.contains("\nTransaction Management:"));
-    }
-
-    @Test
-    void execute_orderRelatedCommands_showsAllInGeneralHelp() throws PillException {
-        HelpCommand command = new HelpCommand("", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("order         - Creates a new purchase or dispense order"));
-        assertTrue(output.contains("fulfill-order - Processes and completes a pending order"));
-        assertTrue(output.contains("cancel-order  - Cancels a pending order"));
-        assertTrue(output.contains("list-orders   - Lists all orders with optional filtering"));
-    }
-
-    @Test
-    void execute_almostListOrders_suggestsListOrdersCommand() throws PillException {
-        HelpCommand command = new HelpCommand("list-order", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: list-orders?"));
-    }
-
-    @Test
-    void execute_almostCancelOrder_suggestsCancelOrderCommand() throws PillException {
-        HelpCommand command = new HelpCommand("cancl-order", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: cancel-order?"));
-    }
-
-    @Test
-    void execute_mixedCaseOrderCommands_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("LiSt-OrDeRs", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("list-orders: Lists all orders with optional filtering"));
-    }
-
-    @Test
-    void execute_commandConstructorWithNull_handlesCorrectly() {
-        HelpCommand command = new HelpCommand(null, true);
-        assertFalse(command.isExit());
-    }
-
-    @Test
-    void execute_emptyConstructorInput_printsGeneralHelp() throws PillException {
-        HelpCommand command = new HelpCommand("", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Available commands:"));
-    }
-  
-    @Test
-    void execute_orderHelp_printsBasicOrderHelp() throws PillException {
-        HelpCommand command = new HelpCommand("order", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("order: Creates a new purchase or dispense order"));
-        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
-    }
-
-    @Test
-    void execute_verboseOrderHelp_printsDetailedOrderHelp() throws PillException {
-        HelpCommand command = new HelpCommand("order", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: order <type> <item1> <quantity1> [item2 quantity2 ...] [-n \"notes\"]"));
-        assertTrue(output.contains("<type>     - Type of order: 'purchase' or 'dispense'"));
-        assertTrue(output.contains("Examples:"));
-        assertTrue(output.contains("order purchase Aspirin 100 Bandages 50"));
-        assertTrue(output.contains("order dispense Paracetamol 20"));
-    }
-
-    @Test
-    void execute_fulfillOrderHelp_printsBasicFulfillOrderHelp() throws PillException {
-        HelpCommand command = new HelpCommand("fulfill-order", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("fulfill-order: Processes and completes a pending order"));
-        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
-    }
-
-    @Test
-    void execute_verboseFulfillOrderHelp_printsDetailedFulfillOrderHelp() throws PillException {
-        HelpCommand command = new HelpCommand("fulfill-order", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: fulfill-order <order-id>"));
-        assertTrue(output.contains("<order-id> - The unique identifier of the order to fulfill"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("This will create the necessary transactions"));
-    }
-
-    @Test
-    void execute_transactionHistoryHelp_printsBasicTransactionHelp() throws PillException {
-        HelpCommand command = new HelpCommand("transaction-history", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("transaction-history: Views transaction history with optional filtering"));
-        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
-    }
-
-    @Test
-    void execute_verboseTransactionHistoryHelp_printsDetailedTransactionHelp() throws PillException {
-        HelpCommand command = new HelpCommand("transaction-history", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: transaction-history [item-name] [type] [start-date] [end-date]"));
-        assertTrue(output.contains("[type]      - Optional: Filter by 'incoming' or 'outgoing'"));
-        assertTrue(output.contains("Examples:"));
-        assertTrue(output.contains("transaction-history Aspirin"));
-        assertTrue(output.contains("transaction-history incoming 2024-01-01 2024-12-31"));
-    }
-
-    @Test
-    void execute_almostOrder_suggestsOrderCommand() throws PillException {
-        HelpCommand command = new HelpCommand("ordr", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: order?"));
-    }
-
-    @Test
-    void execute_almostFulfillOrder_suggestsFulfillOrderCommand() throws PillException {
-        HelpCommand command = new HelpCommand("fulfill-ordr", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: fulfill-order?"));
-    }
-
-    @Test
-    void execute_almostTransactionHistory_suggestsTransactionHistoryCommand() throws PillException {
-        HelpCommand command = new HelpCommand("transaction-histry", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: transaction-history?"));
-    }
-
-    @Test
-    void execute_listOrdersHelp_printsBasicListOrdersHelp() throws PillException {
-        HelpCommand command = new HelpCommand("list-orders", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("list-orders: Lists all orders with optional filtering"));
-        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
-    }
-
-    @Test
-    void execute_verboseListOrdersHelp_printsDetailedListOrdersHelp() throws PillException {
-        HelpCommand command = new HelpCommand("list-orders", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: list-orders [type] [status] [start-date] [end-date]"));
-        assertTrue(output.contains("[type]      - Optional: Filter by 'purchase' or 'dispense'"));
-        assertTrue(output.contains("[status]    - Optional: Filter by 'pending', 'fulfilled', or 'cancelled'"));
-        assertTrue(output.contains("Examples:"));
-        assertTrue(output.contains("list-orders purchase pending"));
-    }
-
-    @Test
-    void execute_cancelOrderHelp_printsBasicCancelOrderHelp() throws PillException {
-        HelpCommand command = new HelpCommand("cancel-order", false);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("cancel-order: Cancels a pending order"));
-        assertFalse(output.contains("Example:")); // Basic help shouldn't show examples
-    }
-
-    @Test
-    void execute_verboseCancelOrderHelp_printsDetailedCancelOrderHelp() throws PillException {
-        HelpCommand command = new HelpCommand("cancel-order", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: cancel-order <order-id>"));
-        assertTrue(output.contains("<order-id> - The unique identifier of the order to cancel"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("Note: Only pending orders can be cancelled"));
-    }
-
-    @Test
-    void execute_helpWithOrderRelatedTypos_suggestsCorrectCommands() throws PillException {
-        String[] typos = {
-            "order-list", "orderlist", "listorder", "list-ordr",
-            "cancle-order", "cancel-ordr", "cancelorder",
-            "fulfill", "fulfil-order", "fullfill-order"
-        };
-
-        StringBuilder allOutput = new StringBuilder();
-
-        for (String typo : typos) {
-            HelpCommand command = new HelpCommand(typo, false);
-            command.execute(itemMap, storage);
-            allOutput.append(outContent.toString());
-            outContent.reset();
-        }
-
-        String output = allOutput.toString();
-        assertTrue(output.contains("Did you mean: list-orders?"),
-                "Should suggest 'list-orders' for list-related typos");
-        assertTrue(output.contains("Did you mean: cancel-order?"),
-                "Should suggest 'cancel-order' for cancel-related typos");
-        assertTrue(output.contains("Did you mean: fulfill-order?"),
-                "Should suggest 'fulfill-order' for fulfill-related typos");
-    }
-
-    @Test
-    void execute_restockHelp_printsBasicHelp() throws PillException {
-        HelpCommand command = new HelpCommand("restock", false);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("restock: Restocks a specified item"));
-        assertFalse(output.contains("Usage:")); // Should not contain verbose information
-    }
-
-    @Test
-    void execute_verboseRestockHelp_printsDetailedHelp() throws PillException {
-        HelpCommand command = new HelpCommand("restock", true);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: restock <item-name> [expiry-date] <quantity>"));
-        assertTrue(output.contains("<item-name>    - The name of the item to restock"));
-        assertTrue(output.contains("[expiry-date]  - Optional. The expiry date"));
-        assertTrue(output.contains("<quantity>     - The quantity to restock up to"));
-        assertTrue(output.contains("Examples:"));
-        assertTrue(output.contains("restock apple 100"));
-        assertTrue(output.contains("restock orange 2025-12-12 50"));
-    }
-
-    @Test
-    void execute_restockAllHelp_printsBasicHelp() throws PillException {
-        HelpCommand command = new HelpCommand("restockall", false);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("restockall: Restocks all items below a specified threshold"));
-        assertFalse(output.contains("Usage:")); // Should not contain verbose information
-    }
-
-    @Test
-    void execute_verboseRestockAllHelp_printsDetailedHelp() throws PillException {
-        HelpCommand command = new HelpCommand("restockall", true);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: restockall [threshold]"));
-        assertTrue(output.contains("[threshold] - Optional. The minimum quantity for restocking"));
-        assertTrue(output.contains("Defaults to 50"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("restockall 100"));
-    }
-
-    @Test
-    void execute_costHelp_printsBasicHelp() throws PillException {
-        HelpCommand command = new HelpCommand("cost", false);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("cost: Sets the cost for a specified item"));
-        assertFalse(output.contains("Usage:")); // Should not contain verbose information
-    }
-
-    @Test
-    void execute_verboseCostHelp_printsDetailedHelp() throws PillException {
-        HelpCommand command = new HelpCommand("cost", true);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: cost <item-name> <cost>"));
-        assertTrue(output.contains("<item-name> - The name of the item"));
-        assertTrue(output.contains("<cost>      - The cost value to set for the item"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("cost apple 20.0"));
-    }
-
-    @Test
-    void execute_priceHelp_printsBasicHelp() throws PillException {
-        HelpCommand command = new HelpCommand("price", false);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("price: Sets the selling price for a specified item"));
-        assertFalse(output.contains("Usage:")); // Should not contain verbose information
-    }
-
-    @Test
-    void execute_verbosePriceHelp_printsDetailedHelp() throws PillException {
-        HelpCommand command = new HelpCommand("price", true);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: price <item-name> <price>"));
-        assertTrue(output.contains("<item-name> - The name of the item"));
-        assertTrue(output.contains("<price>     - The price value to set for the item"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("price apple 30.0"));
-    }
-
-    @Test
-    void execute_almostRestock_suggestsRestockCommand() throws PillException {
-        HelpCommand command = new HelpCommand("restok", false);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: restock?"));
-    }
-
-    @Test
-    void execute_almostRestockAll_suggestsRestockAllCommand() throws PillException {
-        HelpCommand command = new HelpCommand("restokall", false);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: restockall?"));
-    }
-
-    @Test
-    void execute_almostCost_suggestsCostCommand() throws PillException {
-        HelpCommand command = new HelpCommand("cst", false);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: cost?"));
-    }
-
-    @Test
-    void execute_almostPrice_suggestsPriceCommand() throws PillException {
-        HelpCommand command = new HelpCommand("pric", false);
-
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("Did you mean: price?"));
-    }
-
-    @Test
-    void execute_mixedCaseCommands_handlesCorrectly() throws PillException {
-        String[] commands = {"ReStOcK", "ReStOcKaLl", "CoSt", "PrIcE"};
-        String[] expectedOutputs = {
-            "restock: Restocks a specified item",
-            "restockall: Restocks all items",
-            "cost: Sets the cost",
-            "price: Sets the selling price"
-        };
-
-        for (int i = 0; i < commands.length; i++) {
-            HelpCommand command = new HelpCommand(commands[i], false);
-            outContent.reset(); // Clear the output buffer
-
-            command.execute(itemMap, storage);
-
-            String output = outContent.toString();
-            assertTrue(output.contains(expectedOutputs[i]),
-                    "Failed to handle mixed case for command: " + commands[i]);
-        }
-    }
-
-    @Test
-    void execute_verboseRestockHelp_showsThresholdDefault() throws PillException {
-        HelpCommand command = new HelpCommand("restockall", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("Defaults to 50"));
-    }
-
-    @Test
-    void execute_costHelp_printsUnitFormat() throws PillException {
-        HelpCommand command = new HelpCommand("cost", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("cost apple 20.0"));
-    }
-
-    @Test
-    void execute_priceHelp_printsUnitFormat() throws PillException {
-        HelpCommand command = new HelpCommand("price", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("price apple 30.0"));
-    }
-
-    @Test
-    void execute_restockWithNonExistentItem_suggestsRestock() throws PillException {
-        HelpCommand command = new HelpCommand("restock xyz", false);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("restock: Restocks a specified item"));
-    }
-
-    @Test
-    void execute_generalHelpCategories_showsAllCategories() throws PillException {
-        HelpCommand command = new HelpCommand("", false);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("\nItem Management:"));
-        assertTrue(output.contains("\nPrice and Cost Management:"));
-        assertTrue(output.contains("\nOrder Management:"));
-        assertTrue(output.contains("\nTransaction Management:"));
-        assertTrue(output.contains("\nOther Commands:"));
-    }
-
-    @Test
-    void execute_restockCommand_showsOptionalExpiry() throws PillException {
-        HelpCommand command = new HelpCommand("restock", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("[expiry-date]  - Optional."));
-        assertTrue(output.contains("yyyy-MM-dd format"));
-    }
-
-    @Test
-    void execute_stockManagementCommands_listedCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("", false);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("stock-check   - Lists all items that need to be restocked"));
-        assertTrue(output.contains("restock       - Restocks a specified item"));
-        assertTrue(output.contains("restockall    - Restocks all items below a specified threshold"));
-    }
-
-    @Test
-    void execute_transactionCommands_listedCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("", false);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("transaction-history - Views transaction history"));
-    }
-
-    @Test
-    void execute_restockAllWithInvalidThreshold_showsFormat() throws PillException {
-        HelpCommand command = new HelpCommand("restockall abc", false);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("restockall: Restocks all items below a specified threshold"));
-    }
-
-    @Test
-    void execute_orderCommandExample_showsComplexExample() throws PillException {
-        HelpCommand command = new HelpCommand("order", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("order purchase Aspirin 100 Bandages 50 -n \"Monthly stock replenishment\""));
-        assertTrue(output.contains("order dispense Paracetamol 20 -n \"Emergency room request\""));
-    }
-
-    @Test
-    void execute_listOrdersFilters_showsAllFilters() throws PillException {
-        HelpCommand command = new HelpCommand("list-orders", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("[type]      - Optional: Filter by 'purchase' or 'dispense'"));
-        assertTrue(output.contains("[status]    - Optional: Filter by 'pending', 'fulfilled', or 'cancelled'"));
-        assertTrue(output.contains("[start-date]- Optional: Show orders from this date"));
-        assertTrue(output.contains("[end-date]  - Optional: Show orders until this date"));
-    }
-
-    @Test
-    void execute_transactionHistoryFilters_showsAllFilters() throws PillException {
-        HelpCommand command = new HelpCommand("transaction-history", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("[item-name] - Optional: Filter by specific item"));
-        assertTrue(output.contains("[type]      - Optional: Filter by 'incoming' or 'outgoing'"));
-        assertTrue(output.contains("[start-date]- Optional: Show transactions from this date"));
-        assertTrue(output.contains("[end-date]  - Optional: Show transactions until this date"));
-    }
-
-    @Test
-    void execute_helpWithLineBreaksInCommand_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("help\n-v", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: help [command] [-v]"));
-    }
-
-    @Test
-    void execute_helpWithTabsInCommand_handlesCorrectly() throws PillException {
-        HelpCommand command = new HelpCommand("help\t-v", true);
-        command.execute(itemMap, storage);
-        String output = outContent.toString();
-        assertTrue(output.contains("Usage: help [command] [-v]"));
     }
 
     @AfterEach

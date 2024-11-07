@@ -18,9 +18,11 @@ import java.util.logging.Logger;
 public class HelpCommand extends Command {
     private static final Logger logger = PillLogger.getLogger();
     private static final List<String> VALID_COMMANDS = Arrays.asList(
-            "help", "add", "delete", "edit", "expired", "expiring",
-            "list", "order", "cancel-order", "fulfill-order", "list-orders",
-            "stock-check", "transaction-history", "exit", "cost", "price", "restock", "restockall"
+            "exit", "add", "delete", "edit", "find", "help", "list",
+            "stock-check", "expired", "expiring", "cost", "price",
+            "restock-all", "restock", "use",
+            "order", "view-orders", "fulfill-order",
+            "transactions", "transaction-history"
     );
 
     private final String commandName;
@@ -77,28 +79,32 @@ public class HelpCommand extends Command {
         System.out.println("Available commands:");
 
         System.out.println("\nItem Management:");
-        System.out.println("  add           - Adds a new item to the list");
-        System.out.println("  delete        - Deletes an item from the list");
-        System.out.println("  edit          - Edits an item in the list");
-        System.out.println("  expired       - Lists all items that have expired");
-        System.out.println("  expiring      - Lists items expiring before a specified date");
-        System.out.println("  list          - Lists all items");
-        System.out.println("  stock-check   - Lists all items that need to be restocked");
-        System.out.println("  restock       - Restocks a specified item with an optional expiry date and quantity");
-        System.out.println("  restockall    - Restocks all items below a specified threshold");
+        System.out.println("  add                   - Adds a new item to the list");
+        System.out.println("  delete                - Deletes an item from the list");
+        System.out.println("  edit                  - Edits an item in the list");
+        System.out.println("  find                  - Finds all items with the same keyword");
+        System.out.println("  expired               - Lists all items that have expired");
+        System.out.println("  expiring              - Lists items expiring before a specified date");
+        System.out.println("  list                  - Lists all items");
+        System.out.println("  stock-check           - Lists all items that need to be restocked");
+        System.out.println("  restock               - Restocks a specified item " +
+                "with an optional expiry date and quantity");
+        System.out.println("  restock-all           - Restocks all items below a specified threshold");
+        System.out.println("  use                   - Priority removal of items from the list, " +
+                "starting with earliest expiry date");
 
         System.out.println("\nPrice and Cost Management:");
-        System.out.println("  cost          - Sets the cost for a specified item");
-        System.out.println("  price         - Sets the selling price for a specified item");
+        System.out.println("  cost                  - Sets the cost for a specified item");
+        System.out.println("  price                 - Sets the selling price for a specified item");
 
         System.out.println("\nOrder Management:");
-        System.out.println("  order         - Creates a new purchase or dispense order");
-        System.out.println("  fulfill-order - Processes and completes a pending order");
-        System.out.println("  cancel-order  - Cancels a pending order");
-        System.out.println("  list-orders   - Lists all orders with optional filtering");
+        System.out.println("  order                 - Creates a new purchase or dispense order");
+        System.out.println("  fulfill-order         - Processes and completes a pending order");
+        System.out.println("  view-orders           - Lists all orders");
 
         System.out.println("\nTransaction Management:");
-        System.out.println("  transaction-history - Views transaction history with optional filtering");
+        System.out.println("  transactions          - Views all transactions");
+        System.out.println("  transaction-history   - Views transaction history in a given time period");
 
         System.out.println("\nOther Commands:");
         System.out.println("  help          - Shows this help message");
@@ -119,21 +125,7 @@ public class HelpCommand extends Command {
         logger.info("Showing specific help for command: " + command);
 
         switch (command.toLowerCase()) {
-        case "restock":
-            showRestockHelp();
-            break;
-        case "restockall":
-            showRestockAllHelp();
-            break;
-        case "cost":
-            showCostHelp();
-            break;
-        case "price":
-            showPriceHelp();
-            break;
-        case "help":
-            showHelpHelp();
-            break;
+        // Item Management
         case "add":
             showAddHelp();
             break;
@@ -142,6 +134,9 @@ public class HelpCommand extends Command {
             break;
         case "edit":
             showEditHelp();
+            break;
+        case "find":
+            showFindHelp();
             break;
         case "expired":
             showExpiredHelp();
@@ -152,27 +147,50 @@ public class HelpCommand extends Command {
         case "list":
             showListHelp();
             break;
+        case "stock-check":
+            showStockCheckHelp();
+            break;
+        case "restock":
+            showRestockHelp();
+            break;
+        case "restock-all":
+            showRestockAllHelp();
+            break;
+        case "use":
+            showUseHelp();
+            break;
+        // Price and Cost Management
+        case "cost":
+            showCostHelp();
+            break;
+        case "price":
+            showPriceHelp();
+            break;
+        // Order Management
         case "order":
             showOrderHelp();
-            break;
-        case "cancel-order":
-            showCancelOrderHelp();
             break;
         case "fulfill-order":
             showFulfillOrderHelp();
             break;
-        case "list-orders":
-            showListOrdersHelp();
+        case "view-orders":
+            showViewOrdersHelp();
+            break;
+        // Transaction Management
+        case "transactions":
+            showTransactionsHelp();
             break;
         case "transaction-history":
             showTransactionHistoryHelp();
             break;
-        case "stock-check":
-            showStockCheckHelp();
+        // Other Commands
+        case "help":
+            showHelpHelp();
             break;
         case "exit":
             showExitHelp();
             break;
+
         default:
             String closestMatch = StringMatcher.findClosestMatch(command, VALID_COMMANDS);
             if (closestMatch != null) {
@@ -207,6 +225,39 @@ public class HelpCommand extends Command {
     }
 
     /**
+     * Prints detailed information about the 'use' command.
+     */
+    private void showUseHelp() {
+        logger.fine("Showing help information for 'use' command");
+
+        System.out.println("use: Priority removal of items from the list, " +
+                "starting with the earliest expiry date.");
+        if (verbose) {
+            System.out.println("Usage: use <name>");
+            System.out.println("  <name>     - Name of the item");
+            System.out.println("\nExample:");
+            System.out.println("  use Aspirin");
+        }
+        System.out.println("\nCorrect input format: use <name>");
+    }
+
+    /**
+     * Prints detailed information about the 'find' command.
+     */
+    private void showFindHelp() {
+        logger.fine("Showing help information for 'find' command");
+
+        System.out.println("find: Finds all items with the same keyword.");
+        if (verbose) {
+            System.out.println("Usage: find <keyword>");
+            System.out.println("  <keyword>     - Keyword to search for in item names");
+            System.out.println("\nExample:");
+            System.out.println("  find Aspirin");
+        }
+        System.out.println("\nCorrect input format: find <name>");
+    }
+
+    /**
      * Prints detailed information about the 'restock' command.
      */
     private void showRestockHelp() {
@@ -215,7 +266,7 @@ public class HelpCommand extends Command {
             System.out.println("Usage: restock <item-name> [expiry-date] <quantity>");
             System.out.println("  <item-name>    - The name of the item to restock.");
             System.out.println("  [expiry-date]  - Optional. The expiry date of the item in yyyy-MM-dd format.");
-            System.out.println("  <quantity>     - The quantity to restock up to.");
+            System.out.println("  [quantity]     - Optional. The quantity to restock up to. Defaults to 50.");
             System.out.println("\nExamples:");
             System.out.println("  restock apple 100");
             System.out.println("  restock orange 2025-12-12 50");
@@ -226,7 +277,7 @@ public class HelpCommand extends Command {
      * Prints detailed information about the 'restockall' command.
      */
     private void showRestockAllHelp() {
-        System.out.println("restockall: Restocks all items below a specified threshold.");
+        System.out.println("restock-all: Restocks all items below a specified threshold.");
         if (verbose) {
             System.out.println("Usage: restockall [threshold]");
             System.out.println("  [threshold] - Optional. The minimum quantity for restocking. Defaults to 50.");
@@ -292,12 +343,12 @@ public class HelpCommand extends Command {
         if (verbose) {
             System.out.println("Usage: add <name> <quantity> <expiry>");
             System.out.println("  <name>     - Name of the item");
-            System.out.println("  <quantity> - Initial quantity of the item");
-            System.out.println("  <expiry>   - Expiry date of the item in yyyy-MM-dd format");
+            System.out.println("  [quantity] - Optional: Initial quantity of the item (default 1)");
+            System.out.println("  [expiry]   - Optional: Expiry date of the item in yyyy-MM-dd format");
             System.out.println("\nExample:");
             System.out.println("  add Aspirin 100 2024-05-24");
         }
-        System.out.println("\nCorrect input format: add <name> <quantity> <expiry>");
+        System.out.println("\nCorrect input format: add <name> [quantity] [expiry]");
     }
 
     /**
@@ -419,38 +470,30 @@ public class HelpCommand extends Command {
     }
 
     /**
-     * Prints detailed information about the 'cancel-order' command.
+     * Prints detailed information about the 'list-orders' command.
      */
-    private void showCancelOrderHelp() {
-        logger.fine("Showing help information for 'cancel-order' command");
+    private void showViewOrdersHelp() {
+        logger.fine("Showing help information for 'view-orders' command");
 
-        System.out.println("cancel-order: Cancels a pending order.");
+        System.out.println("view-orders: Lists all orders.");
         if (verbose) {
-            System.out.println("Usage: cancel-order <order-id>");
-            System.out.println("  <order-id> - The unique identifier of the order to cancel");
-            System.out.println("\nExample:");
-            System.out.println("  cancel-order 123e4567-e89b-12d3-a456-556642440000");
-            System.out.println("\nNote: Only pending orders can be cancelled");
+            System.out.println("Usage: view-orders");
+            System.out.println("\nExamples:");
+            System.out.println("  view-orders");
         }
     }
 
     /**
-     * Prints detailed information about the 'list-orders' command.
+     * Prints detailed information about the 'transactions' command.
      */
-    private void showListOrdersHelp() {
-        logger.fine("Showing help information for 'list-orders' command");
+    private void showTransactionsHelp() {
+        logger.fine("Showing help information for 'transactions' command");
 
-        System.out.println("list-orders: Lists all orders with optional filtering.");
+        System.out.println("transactions: Views all transactions.");
         if (verbose) {
-            System.out.println("Usage: list-orders [type] [status] [start-date] [end-date]");
-            System.out.println("  [type]      - Optional: Filter by 'purchase' or 'dispense'");
-            System.out.println("  [status]    - Optional: Filter by 'pending', 'fulfilled', or 'cancelled'");
-            System.out.println("  [start-date]- Optional: Show orders from this date (yyyy-MM-dd)");
-            System.out.println("  [end-date]  - Optional: Show orders until this date (yyyy-MM-dd)");
+            System.out.println("Usage: transactions");
             System.out.println("\nExamples:");
-            System.out.println("  list-orders");
-            System.out.println("  list-orders purchase pending");
-            System.out.println("  list-orders dispense fulfilled 2024-01-01 2024-12-31");
+            System.out.println("  transactions");
         }
     }
 
@@ -460,18 +503,13 @@ public class HelpCommand extends Command {
     private void showTransactionHistoryHelp() {
         logger.fine("Showing help information for 'transaction-history' command");
 
-        System.out.println("transaction-history: Views transaction history with optional filtering.");
+        System.out.println("transaction-history: Views transaction history in a given time period");
         if (verbose) {
-            System.out.println("Usage: transaction-history [item-name] [type] [start-date] [end-date]");
-            System.out.println("  [item-name] - Optional: Filter by specific item");
-            System.out.println("  [type]      - Optional: Filter by 'incoming' or 'outgoing'");
-            System.out.println("  [start-date]- Optional: Show transactions from this date (yyyy-MM-dd)");
-            System.out.println("  [end-date]  - Optional: Show transactions until this date (yyyy-MM-dd)");
+            System.out.println("Usage: transaction-history <start-date> <end-date>");
+            System.out.println("  <start-date>  - Show transactions from this date (yyyy-MM-dd)");
+            System.out.println("  <end-date>    - Show transactions until this date (yyyy-MM-dd)");
             System.out.println("\nExamples:");
-            System.out.println("  transaction-history");
-            System.out.println("  transaction-history Aspirin");
-            System.out.println("  transaction-history incoming 2024-01-01 2024-12-31");
-            System.out.println("  transaction-history Bandages outgoing 2024-01-01 2024-12-31");
+            System.out.println("  transaction-history 2024-01-01 2024-12-31");
         }
     }
 

@@ -62,8 +62,8 @@ public class Storage {
                     fw.write(item.getName() + SEPARATOR + item.getQuantity());
 
                     fw.write(SEPARATOR + item.getExpiryDate().map(LocalDate::toString).orElse(""));
-                    fw.write(SEPARATOR + (item.getCost() > 0 ? item.getCost() : ""));
-                    fw.write(SEPARATOR + (item.getPrice() > 0 ? item.getPrice() : ""));
+                    fw.write(SEPARATOR + (item.getCost() > 0 ? String.format("%.2f", item.getCost()) : ""));
+                    fw.write(SEPARATOR + (item.getPrice() > 0 ? String.format("%.2f", item.getPrice()) : ""));
 
                     fw.write(System.lineSeparator());
                 }

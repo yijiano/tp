@@ -97,14 +97,14 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                     itemUpdated = true;
                     expiryDate.ifPresentOrElse(
                             expiry -> {
-                                LOGGER.info("Updated existing item with expiry date: " + newItem);
+                                LOGGER.info("Updated existing item with expiry date: " + item);
                                 System.out.println("Item already exists with the same expiry date. Updated quantity: \n"
-                                        + newItem);
+                                        + item);
                             },
                             () -> {
-                                LOGGER.info("Updated existing item with no expiry date: " + newItem);
+                                LOGGER.info("Updated existing item with no expiry date: " + item);
                                 System.out.println("Item already exists with no expiry date. Updated quantity: \n"
-                                    + newItem);
+                                    + item);
                             }
                     );
                     break;
