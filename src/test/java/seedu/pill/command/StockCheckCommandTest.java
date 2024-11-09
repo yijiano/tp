@@ -67,7 +67,7 @@ class StockCheckCommandTest {
         StockCheckCommand command = new StockCheckCommand("10");
         command.execute(itemMap, storage);
 
-        String expectedOutput = "Listing all items that need too be restocked (less than or equal to 10):"
+        String expectedOutput = "Listing all items that need to be restocked (less than or equal to 10):"
                 + System.lineSeparator()
                 + "1. lowMed: 5 in stock" + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
@@ -85,7 +85,7 @@ class StockCheckCommandTest {
         StockCheckCommand command = new StockCheckCommand("10");
         command.execute(itemMap, storage);
 
-        String expectedOutput = "Listing all items that need too be restocked (less than or equal to 10):"
+        String expectedOutput = "Listing all items that need to be restocked (less than or equal to 10):"
                 + System.lineSeparator()
                 + "1. med1: 5 in stock" + System.lineSeparator()
                 + "2. med2: 8 in stock" + System.lineSeparator();
@@ -102,7 +102,7 @@ class StockCheckCommandTest {
         StockCheckCommand command = new StockCheckCommand("10");
         command.execute(itemMap, storage);
 
-        String expectedOutput = "Listing all items that need too be restocked (less than or equal to 10):"
+        String expectedOutput = "Listing all items that need to be restocked (less than or equal to 10):"
                 + System.lineSeparator()
                 + "1. medAtThreshold: 10 in stock" + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());

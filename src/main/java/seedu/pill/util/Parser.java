@@ -55,6 +55,7 @@ public class Parser {
      */
     public void parseCommand(String input) {
         try {
+            input = input.trim();
             String[] splitInput = input.split("\\s+");
             String commandString = splitInput[0].toLowerCase();
             String argument = splitInput.length > 1 ? splitInput[1] : null;
@@ -89,6 +90,9 @@ public class Parser {
                 break;
             case "stock-check":
                 if (splitInput.length != 2) {
+                    throw new PillException(ExceptionMessages.INVALID_STOCKCHECK_COMMAND);
+                }
+                if (!argument.matches("\\d+")) {
                     throw new PillException(ExceptionMessages.INVALID_STOCKCHECK_COMMAND);
                 }
                 new StockCheckCommand(argument).execute(this.items, this.storage);
@@ -382,7 +386,7 @@ public class Parser {
             itemName = buildItemName(splitArguments, 0, splitArguments.length - 1);
         }
 
-        if (!isANumber(quantityStr)) {
+        if (!isAPositiveInteger(quantityStr)) {
             throw new PillException(ExceptionMessages.INVALID_QUANTITY);
         }
 
@@ -513,6 +517,20 @@ public class Parser {
             quantityStr = "1";
             expiryDateStr = null;
             itemName = buildItemName(splitArguments, 0, splitArguments.length);
+        }
+
+        if (itemName.contains(",")) {
+            throw new PillException(ExceptionMessages.INVALID_ITEM_NAME);
+        }
+
+        if (expiryDateStr != null) {
+            if (!isValidDate(expiryDateStr)) {
+                throw new PillException(ExceptionMessages.INVALID_DATE_FORMAT);
+            }
+        }
+
+        if (!isAPositiveInteger(quantityStr)) {
+            throw new PillException(ExceptionMessages.INVALID_QUANTITY);
         }
 
         assert !itemName.isEmpty() : "Item name should not be empty";
@@ -681,6 +699,17 @@ public class Parser {
      */
     private boolean isValidDate(String dateStr) {
         try {
+            String[] dateparts = dateStr.split("-");
+            if (Integer.parseInt(dateparts[1]) > 12 || Integer.parseInt(dateparts[1]) < 1) {
+                return false;
+            } else if (Integer.parseInt(dateparts[2]) > 31 || Integer.parseInt(dateparts[2]) < 1) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        try {
             LocalDate.parse(dateStr);
             return true;
         } catch (DateTimeParseException e) {
@@ -736,6 +765,21 @@ public class Parser {
         try {
             Double.parseDouble(s);
             return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if a given string is a valid positive integer.
+     *
+     * @param s The string to check.
+     * @return {@code true} if the string can be parsed into a positive integer; {@code false} otherwise.
+     */
+    private boolean isAPositiveInteger(String s) {
+        try {
+            int number = Integer.parseInt(s);
+            return number > 0;
         } catch (NumberFormatException e) {
             return false;
         }
