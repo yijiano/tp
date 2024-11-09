@@ -358,13 +358,18 @@ panadol: 999990 in stock, expiring: 2024-05-16
 
 Creates a new purchase or dispense order.
 
-**Format**: `order ORDER_TYPE ITEM_COUNT ITEM_NAME QUANTITY`
+**Format**: `order ORDER_TYPE ITEM_COUNT` 
+This is followed by `ITEM_COUNT` number of lines of `ITEM_NAME QUANTITY (EXPIRY_DATE)` 
 
 - ORDER_TYPE: `purchase` or `dispense`
 
 **Sample Output**:
 
-`> order purchase 2 syringe 100 cans 10`
+```
+> order purchase 2 
+syringe 100 
+cans 10
+```
 
 ```
 Order placed! Listing order details
