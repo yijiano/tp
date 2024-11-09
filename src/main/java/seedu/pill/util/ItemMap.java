@@ -341,9 +341,9 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
                 System.out.printf("There are no items that have quantity less than or equal to %d:%n", threshold);
 
             } else {
-                LOGGER.info(String.format("Listing all items that need too be restocked (less than or equal to %d):",
+                LOGGER.info(String.format("Listing all items that need to be restocked (less than or equal to %d):",
                         threshold));
-                System.out.printf("Listing all items that need too be restocked (less than or equal to %d):%n",
+                System.out.printf("Listing all items that need to be restocked (less than or equal to %d):%n",
                         threshold);
                 IntStream.rangeClosed(1, filteredItems.size())
                         .forEach(i -> System.out.println(i + ". " + filteredItems.get(i - 1).toString()));

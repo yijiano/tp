@@ -10,8 +10,7 @@ import seedu.pill.util.Storage;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FindCommandTest {
     private ItemMap itemMap;
@@ -31,13 +30,15 @@ public class FindCommandTest {
 
     // Existing test cases
     @Test
-    public void listFindEmptyNotFoundPasses() throws PillException {
+    public void listFindEmptyNotFoundPasses() {
         FindCommand findCommand = new FindCommand("abc");
 
-        findCommand.execute(itemMap, storage);
+        PillException exception = assertThrows(PillException.class, () -> {
+            findCommand.execute(itemMap, storage);
+        });
 
-        String expectedOutput = "The inventory is empty." + System.lineSeparator();
-        assertEquals(expectedOutput, outputStream.toString());
+        String expectedMessage = "Item not found...";
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test

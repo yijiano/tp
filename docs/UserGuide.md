@@ -135,16 +135,18 @@ Listing all items:
 
 ### Deleting Existing Item: `delete`
 
-Deletes an existing item entry in the inventory.
+The `delete` command is used to remove an existing item entry from the inventory. The behavior of this command depends on whether the item has an associated expiry date.
 
-**Format**: `delete NAME`
+**Format**: `delete NAME (EXPIRY_DATE)`
 
-- Delete the items with specified`NAME` .
+- `NAME`: The name of the item you wish to delete. 
+- `EXPIRY_DATE`: An optional parameter in the `YYYY-MM-DD` format that must be provided if the item you want to delete has an expiry date.
 
-**Example**:
+**Command Behavior**:
 
-- `delete NAME`  
-  deletes the item as referenced in the `list`.
+- If an item does not have an expiry date, you can delete it using only the NAME. 
+- If an item has an expiry date, you must specify the EXPIRY_DATE to delete the correct entry. 
+- If you attempt to delete an item with an expiry date but do not provide the EXPIRY_DATE, the system will return an "Item not found" error.
 
 **Sample Output**:
 
@@ -154,6 +156,18 @@ Deletes an existing item entry in the inventory.
 Deleted the following item from the inventory: 
 cans: 10 in stock
 ```
+
+`> delete pear 2010-12-12`
+
+```
+Deleted the following item from the inventory:
+pear: 20 in stock, expiring: 2010-12-12
+```
+
+**Notes**:
+- Always provide the `EXPIRY_DATE` when deleting items that have expiry dates to ensure the correct entry is removed. 
+- Use the `list` command to view all items and their expiry dates before attempting to delete.
+
 ---
 ### Editing Existing Item: 'edit'
 
@@ -281,11 +295,18 @@ Set price of Panadol to $20.00.
 ---
 ### Restock Specific Item: `restock`
 
-Restocks a specific item to a new quantity if it is below the desired level, displaying the restock cost.
+The restock command allows you to restock a specific item to a desired quantity if it is below the specified stock level
+, displaying the restock cost. The behavior of the command differs based on whether or not an expiry date is provided.
 
 **Format**: `restock ITEM_NAME (EXPIRY_DATE) QUANTITY`
+- `ITEM_NAME`: The name of the item you wish to restock.
+- `(EXPIRY_DATE)`: An optional parameter in the `YYYY-MM-DD` format. This specifies which item entry to restock if there are multiple entries with the same item name but different expiry dates. 
+- `QUANTITY`: The desired new stock quantity.
 
-- Optional `EXPIRY_DATE` in `YYYY-MM-DD` format specifies a specific entry if multiple exist.
+**Command Behavior**:
+- The `EXPIRY_DATE` is mandatory when restocking items that have expiry dates. You must specify the expiry date explicitly, even if only one entry with that expiry date exists.
+- If an item **does not have an expiry date**, the command will restock that entry without needing an expiry date.
+- If you attempt to restock an item with an expiry date but fail to provide the `EXPIRY_DATE`, the system will display an "Item not found" error.
 
 **Sample Output**:
 
@@ -297,15 +318,15 @@ Restocked Item: Panadol, Current Stock: 1, New Stock: 100, Total Restock Cost: $
 
 ---
 
-### Restock All Items Below Threshold: `restockall`
+### Restock All Items Below Threshold: `restock-all`
 
 Restocks all items with a quantity below a specified threshold to that threshold, listing each item's restock cost.
 
-**Format**: `restockall THRESHOLD`
+**Format**: `restock-all THRESHOLD`
 
 **Sample Output**:
 
-`> restockall 50`
+`> restock-all 50`
 
 ```
 Item: Ibuprofen, Current Stock: 10, New Stock: 50, Restock Cost: $40.00 
