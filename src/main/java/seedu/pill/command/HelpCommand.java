@@ -20,9 +20,9 @@ public class HelpCommand extends Command {
     private static final List<String> VALID_COMMANDS = Arrays.asList(
             "exit", "add", "delete", "edit", "find", "help", "list",
             "stock-check", "expired", "expiring", "cost", "price",
-            "restock-all", "restock", "use",
-            "order", "view-orders", "fulfill-order",
-            "transactions", "transaction-history"
+            "restock-all", "restock", "use", "order", "view-orders",
+            "fulfill-order", "transactions", "transaction-history",
+            "visualize-price", "visualize-cost", "visualize-stock", "visualize-cost-price"
     );
 
     private final String commandName;
@@ -93,6 +93,12 @@ public class HelpCommand extends Command {
         System.out.println("  use                   - Priority removal of items from the list, " +
                 "starting with earliest expiry date");
 
+        System.out.println("\nVisualization:");
+        System.out.println("  visualize-price       - Visualizes item prices as a bar chart");
+        System.out.println("  visualize-cost        - Visualizes item costs as a bar chart");
+        System.out.println("  visualize-stock       - Visualizes item stocks as a bar chart");
+        System.out.println("  visualize-cost-price  - Visualizes item costs and prices side-by-side as a bar chart");
+
         System.out.println("\nPrice and Cost Management:");
         System.out.println("  cost                  - Sets the cost for a specified item");
         System.out.println("  price                 - Sets the selling price for a specified item");
@@ -159,6 +165,19 @@ public class HelpCommand extends Command {
         case "use":
             showUseHelp();
             break;
+        // Visualization
+        case "visualize-price":
+            showVisualizePriceHelp();
+            break;
+        case "visualize-cost":
+            showVisualizeCostHelp();
+            break;
+        case "visualize-stock":
+            showVisualizeStockHelp();
+            break;
+        case "visualize-cost-price":
+            showVisualizeCostPriceHelp();
+                break;
         // Price and Cost Management
         case "cost":
             showCostHelp();
@@ -222,6 +241,58 @@ public class HelpCommand extends Command {
 
         System.out.println("\nAvailable commands: " + String.join(", ", VALID_COMMANDS));
         System.out.println("Type 'help <command>' for more information on a specific command.");
+    }
+
+    /**
+     * Prints detailed information about the 'visualize-price' command.
+     */
+    private void showVisualizePriceHelp() {
+        System.out.println("visualize-price: Displays a bar chart of item prices.");
+        if (verbose) {
+            System.out.println("Usage: visualize-price");
+            System.out.println("\nExample:");
+            System.out.println("  visualize-price");
+            System.out.println("  This will display a chart of item prices.");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'visualize-cost' command.
+     */
+    private void showVisualizeCostHelp() {
+        System.out.println("visualize-cost: Displays a bar chart of item costs.");
+        if (verbose) {
+            System.out.println("Usage: visualize-cost");
+            System.out.println("\nExample:");
+            System.out.println("  visualize-cost");
+            System.out.println("  This will display a chart of item costs.");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'visualize-stock' command.
+     */
+    private void showVisualizeStockHelp() {
+        System.out.println("visualize-stock: Displays a bar chart of item stocks.");
+        if (verbose) {
+            System.out.println("Usage: visualize-stock");
+            System.out.println("\nExample:");
+            System.out.println("  visualize-stock");
+            System.out.println("  This will display a chart of item stocks.");
+        }
+    }
+
+    /**
+     * Prints detailed information about the 'visualize-cost-price' command.
+     */
+    private void showVisualizeCostPriceHelp() {
+        System.out.println("visualize-cost-price: Displays a bar chart comparing item costs and prices side-by-side.");
+        if (verbose) {
+            System.out.println("Usage: visualize-cost-price");
+            System.out.println("\nExample:");
+            System.out.println("  visualize-cost-price");
+            System.out.println("  This will display a chart comparing item costs and prices for each item.");
+        }
     }
 
     /**
