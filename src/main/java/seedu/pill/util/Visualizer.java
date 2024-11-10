@@ -14,12 +14,12 @@ import java.util.logging.Logger;
  */
 public class Visualizer {
 
+    private static final Logger LOGGER = PillLogger.getLogger();
     private ArrayList<Item> items;
     private List<String> itemNamesWithDates;
     private List<Double> itemPrices;
     private List<Double> itemCosts;
     private List<Integer> itemStocks;
-    private static final Logger LOGGER = PillLogger.getLogger();
 
     /**
      * Constructs a Visualizer with the specified list of items.

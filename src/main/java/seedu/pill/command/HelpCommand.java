@@ -177,7 +177,7 @@ public class HelpCommand extends Command {
             break;
         case "visualize-cost-price":
             showVisualizeCostPriceHelp();
-                break;
+            break;
         // Price and Cost Management
         case "cost":
             showCostHelp();
