@@ -25,7 +25,7 @@ public final class Pill {
      */
     public void run() {
         items = storage.loadData();
-        transactionManager  = new TransactionManager(items);
+        transactionManager  = new TransactionManager(items, storage);
         Printer.printInitMessage(items, 50);
         parser = new Parser(items, storage, transactionManager, ui);
         logger.info("New Chatbot Conversation Created");
