@@ -13,7 +13,7 @@
         - [Transaction and TransactionManager](#transaction-and-transactionmanager)
         - [StringMatcher](#stringmatcher)
         - [Order](#order)
-        - [Visualizer](#Visualizer )
+        - [Visualizer](#visualizer)
         - [Parser](#parser)
         - [DateTime](#datetime)
         - [TimeStampIO](#timestampio)
@@ -161,6 +161,8 @@ The usage of TreeSet is to facilitate storing multiple batches of items with
 different expiry dates and quantities, and to be able to extract items with the
 soonest expiry date when taking out of storage.
 
+<!-- @@author cxc0418 -->
+
 ### Order
 
 Orders are from the perspective of the Inventory, so purchases is items being
@@ -179,11 +181,61 @@ and analyze their inventory data through visual representation.
 
 ![](diagrams/Visualizer-ClassDiagram.png)
 
+<!-- @@author yakultbottle -->
+
 ### Parser
 
-Deals with parsing of user inputs to corresponding commands, and also handles
-the execution of those commands. Private helper methods throw PillException, 
-but they are all caught within Parser itself, and do not propagate out of Parser.
+The Parser class is responsible for interpreting and executing user commands 
+within the application. It translates raw user input into actionable commands,
+checks for common errors, and ensures the commands are executed in a controlled
+and predictable way. The class contains several helper methods that assist in
+interpreting specific command formats, while the main parseCommand method
+coordinates this process.
+
+#### Responsibilities
+- Input Parsing: Parser takes a single line of user input, splits it into its
+  component parts (command and arguments), and identifies which command the 
+  user intended to execute.
+- Command Dispatching: Based on the parsed command, Parser creates the 
+  appropriate command object (e.g., AddCommand, DeleteCommand, EditCommand) and
+  invokes its execute method.
+- Error Handling: All exceptions related to parsing and validation (encapsulated
+  in PillException) are handled directly within Parser. This ensures that any
+  invalid input or command errors are handled without propagating out. 
+
+#### Key Functionalities
+
+1. Command Recognition:
+    The first word of each input string determines the command type. For example,
+    “add” initiates the AddCommand, while “delete” initiates the DeleteCommand.
+    Commands can also support optional flags and arguments, parsed from the 
+    remaining components of the input.
+
+2. Argument and Flag Parsing:
+    After identifying the command, Parser extracts and verifies additional
+    arguments, flags, and parameters. Specific commands (e.g., stock-check,
+    expiring) have strict requirements on the number and format of arguments, which
+    are validated before command execution.
+
+3. Command Execution:
+    For each recognized command, the corresponding command object is created and
+    its execute method is invoked with any necessary arguments. All command objects
+    receive items and storage as parameters, enabling them to interact with the
+    application’s data layer.
+
+4. Exception Management:
+    Each helper method that parses specific commands may throw a PillException
+    for invalid arguments, unsupported commands, or unexpected input formats.
+    These exceptions are caught within the parseCommand method, allowing Parser
+    to handle error messages consistently across the application.
+
+#### Assumptions
+
+Parser expects commands to follow a specific format. For instance, commands
+like `add` require additional arguments, while commands like `list` and `exit`
+require none. Only recognized commands will proceed to execution; any unrecognized
+command results in a PillException.
+
 
 ### Exceptions
 
@@ -194,6 +246,7 @@ getMessage(), ensuring consistent error descriptions across the application.
 Most importantly, this keeps code of thrown exceptions readable.
 
 Example usage:
+
 ```
 } catch (NumberFormatException e) {
     throw new PillException(ExceptionMessages.INVALID_INDEX);
@@ -212,7 +265,9 @@ handle logging across the entire application. PillLogger implements the singleto
 logger instance, which manages log creation, configuration, and output redirection.
 
 #### Key Components
-- File Output Configuration: The log level for file output is set by the `fileHandler.setLevel()` call, using `Level.ALL` to
+
+- File Output Configuration: The log level for file output is set by the `fileHandler.setLevel()` call, using
+  `Level.ALL` to
   capture all events during execution. The log file, named according to the `FILE_NAME` attribute, is created in the
   directory specified by `PATH`.
 
@@ -221,12 +276,15 @@ logger instance, which manages log creation, configuration, and output redirecti
   debugging.
 
 #### Resilience and Error Handling
+
 In the event of a failure in log file creation, PillLogger logs the error to the console and allows the application to
 continue running. This design ensures the application’s functionality is not hindered by logging setup issues.
 
 #### API Access
+
 PillLogger exposes a single public method, `getLogger()`, which provides application-wide access to the singleton Logger
-instance. Classes within the application use `getLogger()` to record events, without needing to set up or manage their own
+instance. Classes within the application use `getLogger()` to record events, without needing to set up or manage their
+own
 loggers.
 
 <!-- @@author -->
@@ -262,24 +320,46 @@ complexity.
 
 ## Non-Functional Requirements
 
-* Technical Requirements: Any mainstream OS, i.e. Windows, macOS or Linux, with Java 11 installed. Instructions for downloading Java 11 can be found [here](https://www.oracle.com/sg/java/technologies/javase/jdk11-archive-downloads.html).
-* Project Scope Constraints: The application should only be used for tracking. It is not meant to be involved in any form of monetary transaction.
+* Technical Requirements: Any *mainstream OS* with Java 17 or above installed. 
+  Instructions for downloading Java 17 can be found 
+  [here](https://www.oracle.com/sg/java/technologies/javase/jdk17-archive-downloads.html).
+* Project Scope Constraints: The application should only be used for tracking. It is not meant to be involved in any
+  form of monetary transaction.
 * Project Scope Constraints: Data storage is only to be performed locally.
-* Quality Requirements: The application should be able to be used effectively by a novice with little experience with CLIs.
+* Quality Requirements: The application should be able to be used effectively by a novice with little experience with
+  CLIs.
 
 ## Glossary
 
-[ADD GLOSSARY HERE]
+- **Mainstream OS**: Windows, Linux, Unix, MacOS
+- **CLI (Command-Line Interface)**: A text-based user interface used to interact with software by typing commands.
+- **UI (User Interface)**: The components and layout of a software application
+    with which users interact, including visual elements like buttons, screens,
+    and command prompts that facilitate user interaction with the program.
+- **I/O (Input/Output)**: The communication between a program and the external
+    environment, such as receiving data from the user (input) or displaying results
+    to the user (output).
+- **JUnit**: A testing framework for Java that allows developers to write and run
+    repeatable automated tests.
+- **Gradle**: A build automation tool for Java (and other languages) used to compile, test, and package applications.
+- **Text UI Testing**: A form of testing where interactions with a command-line
+    interface are tested by simulating user input and validating the application’s text output.
+- **Pharmaceutical Inventory**: Refers to the stock of medicines and other medical
+    supplies maintained by a pharmacy or healthcare facility for dispensing and logistics.
+- **Expiry Date**: The date after which a pharmaceutical product is no longer considered safe or effective for use.
+- **Restocking**: The process of replenishing inventory to ensure sufficient supply.
 
 ## Instructions for Testing
 
 ### Manual Testing
 
-View the [User Guide](UserGuide.md) for the full list of UI commands and their related use case and expected outcomes.
+View the [User Guide](UserGuide.md) for the full list of UI commands and 
+their related use case and expected outcomes.
 
 ### JUnit Testing
 
-JUnit tests are written in the [test directory](../src/test/java/seedu/pill/) and serve to test key methods part of the application.
+JUnit tests are written in the [test directory](../src/test/java/seedu/pill/)
+and serve to test key methods part of the application.
 
 ### Text UI Testing
 
@@ -287,18 +367,21 @@ Files relating to Text UI Testing can be found [here](../text-ui-test/).
 
 To run the Text UI tests, navigate to the `text-ui-test` directory in the terminal.
 
-When running tests on a Windows system, run the following command from the specified directory:
+When running tests on a Windows system, run the following command from the 
+specified directory:
 
 ```
 ./runtest.bat
 ```
 
 When running tests on a UNIX-based system, run the following command from the specified directory:
+
 ```
 ./runtest.sh
 ```
 
 Outcomes of these tests are listed in the below code segment.
+
 ```
 // Successfully passed all tests
 All tests passed!
