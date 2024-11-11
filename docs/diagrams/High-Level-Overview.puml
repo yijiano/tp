@@ -19,7 +19,8 @@ package "pill" {
         class Item
         class DateTime
         class PillLogger
-        class TimestampIO
+        class TransactionManager
+        class Visualizer
     }
 
     package exceptions {
@@ -45,14 +46,16 @@ package "pill" {
     Parser --> command
     Parser -up> StringMatcher
     Parser --> DateTime
-    DateTime -up> TimestampIO
     StringMatcher -> Parser
     Parser -> PillLogger
     command --> exceptions
+    command --> TransactionManager
+    command --> Visualizer
     command -> PillLogger
     Parser --> exceptions
 
     ItemMap -> Storage
+    TransactionManager --> Storage
 
     PillException -left> ExceptionMessages
 
