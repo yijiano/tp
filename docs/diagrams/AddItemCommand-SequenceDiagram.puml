@@ -6,7 +6,8 @@ skinparam sequenceReferenceBackgroundColor #f7807c
 participant ":AddItemCommand" as AddItemCommand #E0BBE4
 participant "newItem:Item" as newItem #95E1D3
 participant ":ItemMap" as ItemMap #F9FBCB
-participant "oldSet:TreeSet" as oldTreeSet #A0D8D1
+participant "oldSet:TreeSet" as oldTreeSet #67E072
+participant "newSet:TreeSet" as newTreeSet #67E072
 participant "oldItem:Item" as oldItem #95E1D3
 participant ":Storage" as Storage #FFABAB
 
