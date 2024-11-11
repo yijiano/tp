@@ -71,7 +71,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      * @param newItem The item to be added.
      */
     public void addItem(Item newItem) {
-        String name = newItem.getName();
+        String name = newItem.getName().toLowerCase();
         int quantity = newItem.getQuantity();
         Optional<LocalDate> expiryDate = newItem.getExpiryDate();
 
@@ -135,7 +135,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      * @param newItem The item to be added.
      */
     public void addItemSilent(Item newItem) {
-        String name = newItem.getName();
+        String name = newItem.getName().toLowerCase();
         int quantity = newItem.getQuantity();
         Optional<LocalDate> expiryDate = newItem.getExpiryDate();
 
@@ -174,10 +174,11 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
     /**
      * Deletes an item from the list by its name.
      *
-     * @param name       The name of the item to be deleted.
+     * @param itemName The name of the item to be deleted.
      * @param expiryDate The date of the item to be deleted.
      */
-    public void deleteItem(String name, Optional<LocalDate> expiryDate) {
+    public void deleteItem(String itemName, Optional<LocalDate> expiryDate) {
+        String name = itemName.toLowerCase();
         assert name != null : "Item name cannot be null";
 
         if (name == null || name.trim().isEmpty()) {
@@ -188,7 +189,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
 
         TreeSet<Item> itemSet = items.get(name);
         if (itemSet != null) {
-            Item dummyItem = expiryDate.map(ex -> new Item(name, 0, ex))
+            Item dummyItem = expiryDate.map(ex -> new Item(name.toLowerCase(), 0, ex))
                             .orElse(new Item(name, 0));
             Item removedItem = itemSet.ceiling(dummyItem);
             if (removedItem != null && removedItem.getExpiryDate().equals(expiryDate)) {
@@ -215,7 +216,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      * @param updatedItem The updated item that has a new quantity.
      */
     public void editItem(Item updatedItem) {
-        String name = updatedItem.getName();
+        String name = updatedItem.getName().toLowerCase();
         int quantity = updatedItem.getQuantity();
         Optional<LocalDate> expiryDate = updatedItem.getExpiryDate();
 
@@ -416,6 +417,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      *         - the specified item name does not exist in the inventory
      */
     public void useItem(String itemName, int quantityToUse) throws PillException {
+        itemName = itemName.toLowerCase();
         if (quantityToUse > this.stockCount(itemName)) {
             LOGGER.warning("Attempt to use more items than available: name=" + itemName +
                     ", requested=" + quantityToUse +

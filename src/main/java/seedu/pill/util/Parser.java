@@ -30,7 +30,6 @@ import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -220,8 +219,8 @@ public class Parser {
      */
     private TransactionHistoryCommand parseTransactionHistoryCommand(String arguments) throws PillException {
         String[] commandArguments = arguments.split("\\s+");
-        LocalDateTime start;
-        LocalDateTime end;
+        LocalDate start;
+        LocalDate end;
         if (commandArguments.length > 2) {
             throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
         }
@@ -229,15 +228,15 @@ public class Parser {
             throw new PillException(ExceptionMessages.INVALID_TRANSACTION_HISTORY_COMMAND);
         } else if (commandArguments.length == 1) {
             try {
-                start = LocalDateTime.parse(commandArguments[0]);
-                return new TransactionHistoryCommand(start, LocalDateTime.now(), transactionManager);
+                start = LocalDate.parse(commandArguments[0]);
+                return new TransactionHistoryCommand(start, LocalDate.now(), transactionManager);
             } catch (DateTimeParseException e) {
                 throw new PillException(ExceptionMessages.INVALID_DATETIME_FORMAT);
             }
         } else {
             try {
-                start = LocalDateTime.parse(commandArguments[0]);
-                end = LocalDateTime.parse(commandArguments[1]);
+                start = LocalDate.parse(commandArguments[0]);
+                end = LocalDate.parse(commandArguments[1]);
                 return new TransactionHistoryCommand(start, end, transactionManager);
             } catch (DateTimeParseException e) {
                 throw new PillException(ExceptionMessages.INVALID_DATETIME_FORMAT);

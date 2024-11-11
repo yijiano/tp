@@ -61,15 +61,6 @@ PILL is designed for users who prefer keyboard-based interactions over GUI appli
 
 ## Important Usage Notes
 
-### Case Sensitivity
-
-Our application is **case-sensitive**. This means that item names must match exactly as they were entered. For example:
-
-- `add Panadol` and `add PANADOL` will be treated as two different items.
-- Similarly, commands such as `edit`, `delete` will only work if the case of the item name matches exactly as stored in the inventory.
-
-Ensure you use the correct capitalization when interacting with items in the inventory.
-
 ### Order of arguments
 
 Our commands **do not** allow arguments in any order. Please read the documentation for the 

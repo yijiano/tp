@@ -24,5 +24,6 @@ public class VisualizeCostPriceCommand extends Command {
             visualizer.drawCostPriceChart();
         } catch (Exception e) {
             throw new PillException(ExceptionMessages.NOTHING_TO_VISUALIZE);
-        }    }
+        }
+    }
 }

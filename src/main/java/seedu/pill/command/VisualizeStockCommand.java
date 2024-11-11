@@ -24,5 +24,6 @@ public class VisualizeStockCommand extends Command {
             visualizer.drawStockChart();
         } catch (Exception e) {
             throw new PillException(ExceptionMessages.NOTHING_TO_VISUALIZE);
-        }    }
+        }
+    }
 }
