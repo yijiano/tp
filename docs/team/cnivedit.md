@@ -57,12 +57,10 @@ Command Line Interface (CLI).
       [#239](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/239),
 
 - **Testing**:
-    - Commands
-        - ListCommand ([#49](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/49))
-        - FindCommand ([#51](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/51))
-    - Methods
-        - getExpiringItems ([#113](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/113))
-        - loadLine ([#68](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/68))
+    - ListCommand ([#49](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/49))
+    - FindCommand ([#51](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/51))
+    - getExpiringItems ([#113](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/113))
+    - loadLine ([#68](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/68))
 
 - **Documentation**:
     - Developer Guide
