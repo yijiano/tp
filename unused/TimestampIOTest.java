@@ -1,3 +1,5 @@
+//@@author philip1304-unused
+// Same reason given in TimestampIO.java
 package seedu.pill.util;
 
 import org.junit.jupiter.api.AfterEach;

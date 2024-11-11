@@ -3,7 +3,11 @@
 **Version 2.0**
 
 1. [Introduction](#introduction)
-2. [Features](#features)
+2. [Important Note](#important-note)
+    - [Case Sensitivity](#case-sensitivity)
+    - [No special characters](#no-special-characters)
+    - [Expiry Date](#expiry-date)
+3. [Features](#features)
    - **General Commands**
       - [Viewing Help: `help`](#viewing-help-help)
       - [Listing All Items: `list`](#listing-all-items-list)
@@ -35,10 +39,6 @@
       - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
       - [Viewing Transactions: `transactions`](#view-transactions-transactions)
       - [Viewing Transaction History: `transaction-history`](#view-transactions-within-a-set-time-period-transaction-history)
-3. [Important Note](#important-note)
-   - [Case Sensitivity](#case-sensitivity)
-   - [No special characters](#no-special-characters)
-   - [Expiry Date](#expiry-date)
 
 
 ## Introduction
@@ -55,6 +55,39 @@ Key features:
 PILL is designed for users who prefer keyboard-based interactions over GUI applications, offering faster data entry and retrieval through CLI commands.
 
 
+<!-- @@author yijiano -->
+
+---
+
+## Important Usage Notes
+
+### Case Sensitivity
+
+Our application is **case-sensitive**. This means that item names must match exactly as they were entered. For example:
+
+- `add Panadol` and `add PANADOL` will be treated as two different items.
+- Similarly, commands such as `edit`, `delete` will only work if the case of the item name matches exactly as stored in the inventory.
+
+Ensure you use the correct capitalization when interacting with items in the inventory.
+
+### Order of arguments
+
+Our commands **do not** allow arguments in any order. Please read the documentation for the 
+order in which arguments should follow a command. 
+
+### No special characters
+
+Our application **does not support special characters** for any input.
+
+Preferably, please keep to **lowercase, alphanumeric characters** for command inputs.
+
+### Expiry Date
+
+Under most commands, items with the same name but different expiry dates are treated as **different items**. Be very careful when reading command instructions:
+- **Include the expiry date** with the item name for commands where it is required to ensure the correct item entry is processed.
+- Always double-check the item's expiry date before executing commands like `delete` or `edit` to avoid unintentional modifications or deletions.
+
+<!-- @@author -->
 
 ## Features
 
@@ -89,8 +122,6 @@ Added the following item to the inventory:
 Aspirin: 100 in stock, expiring: 2024-05-24
 ```
 
-
-
 ---
 
 ### Listing All Items: `list`
@@ -120,12 +151,13 @@ Listing all items:
 
 ### Deleting Existing Item: `delete`
 
-The `delete` command is used to remove an existing item entry from the inventory. The behavior of this command depends on whether the item has an associated expiry date.
+The `delete` command is used to remove an existing item entry from the inventory. The behavior of this
+command depends on whether the item has an associated expiry date.
 
 **Format**: `delete NAME (EXPIRY_DATE)`
 
 - `NAME`: The name of the item you wish to delete. 
-- `EXPIRY_DATE`: An optional parameter in the `YYYY-MM-DD` format that must be provided if the item you want to delete has an expiry date.
+- `EXPIRY_DATE`: An optional parameter in the `YYYY-MM-DD` format that **must** be provided if the item you want to delete has an expiry date.
 
 **Command Behavior**:
 
@@ -212,7 +244,7 @@ Listing all items:
 
 **Notes**:
 
-- The `find` command is not **case sensitive**. This means that `find PANADOL` and `find panadol` will yield the same results.
+- The `find` command is **not** case-sensitive. This means that `find PANADOL` and `find panadol` will yield the same results.
 - Use `find` to quickly locate items, especially when you only remember part of the name.
 
 ---
@@ -503,29 +535,3 @@ The system automatically saves any changes to the inventory to the hard disk aft
 Inventory data is stored in a `.txt` file (in `csv` format). 
 
 Users can edit this file manually if necessary.
-
----
-
-## Important Note
-
-### Case Sensitivity
-
-Our application is **case sensitive**. This means that item names must match exactly as they were entered. For example:
-
-- `add Panadol` and `add PANADOL` will be treated as two different items.
-- Similarly, commands such as `edit`, `delete` will only work if the case of the item name matches exactly as stored in the inventory.
-
-Ensure you use the correct capitalization when interacting with items in the inventory.
-
-
-### No special characters
-
-Our application **does not support special characters** for any input.
-
-Preferably, please keep to **lowercase, alphanumeric characters** for command inputs.
-
-### Expiry Date
-
-Under most commands, items with the same name but different expiry dates are treated as **different items**. Be very careful when reading command instructions:
-- **Include the expiry date** with the item name for commands where it is required to ensure the correct item entry is processed.
-- Always double-check the item's expiry date before executing commands like `delete` or `edit` to avoid unintentional modifications or deletions.
