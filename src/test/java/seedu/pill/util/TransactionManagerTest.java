@@ -14,10 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 //@@author philip1304
 
@@ -535,8 +532,8 @@ class TransactionManagerTest {
 
         // Get only the transactions related to this order
         List<Transaction> orderTransactions = transactionManager.getTransactions().stream()
-                .filter(t -> t.getAssociatedOrder() == dispenseOrder)
-                .toList();
+                          .filter(t -> t.getAssociatedOrder() == dispenseOrder)
+                          .toList();
 
         assertEquals(2, orderTransactions.size());
 
