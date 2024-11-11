@@ -22,16 +22,18 @@ public class TransactionManager {
     private final List<Transaction> transactions;
     private final List<Order> orders;
     private final ItemMap itemMap;
+    private final Storage storage;
 
     /**
      * Constructs a new TransactionManager with a reference to the system's inventory.
      *
      * @param itemMap - The inventory system's ItemMap instance to track and modify stock levels
      */
-    public TransactionManager(ItemMap itemMap) {
+    public TransactionManager(ItemMap itemMap, Storage storage) {
         this.transactions = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.itemMap = itemMap;
+        this.storage = storage;
     }
 
     /**
@@ -61,6 +63,7 @@ public class TransactionManager {
         } else {
             itemMap.useItem(itemName, quantity);
         }
+        storage.saveItemMap(itemMap);
 
         transactions.add(transaction);
         return transaction;

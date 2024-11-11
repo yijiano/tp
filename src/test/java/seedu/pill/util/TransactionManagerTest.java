@@ -17,12 +17,15 @@ import java.util.List;
 class TransactionManagerTest {
     private TransactionManager transactionManager;
     private ItemMap itemMap;
+    private Storage storage;
 
     @BeforeEach
     void setUp() {
         itemMap = new ItemMap();
-        transactionManager = new TransactionManager(itemMap);
+        storage = new Storage();
+        transactionManager = new TransactionManager(itemMap, storage);
     }
+
     @Test
     void createTransaction_insufficientStock_throwsException() {
         // Arrange

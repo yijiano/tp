@@ -28,7 +28,7 @@ public class OrderCommandTest {
     public void setUp() {
         itemMap = new ItemMap();
         storage = new Storage();
-        transactionManager = new TransactionManager(itemMap);
+        transactionManager = new TransactionManager(itemMap, storage);
         outputStream = new ByteArrayOutputStream();
         printStream = new PrintStream(outputStream);
         System.setOut(printStream);
