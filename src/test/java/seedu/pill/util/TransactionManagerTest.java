@@ -23,14 +23,15 @@ class TransactionManagerTest {
     private ItemMap itemMap;
     private ByteArrayOutputStream outContent;  // Changed variable name to match usage
     private final PrintStream originalOut = System.out;
+    private Storage storage;
 
     @BeforeEach
     void setUp() {
         outContent = new ByteArrayOutputStream();  // Initialize here
         System.setOut(new PrintStream(outContent));
         itemMap = new ItemMap();
-        transactionManager = new TransactionManager(itemMap);
-
+        storage = new Storage();
+        transactionManager = new TransactionManager(itemMap, storage);
     }
 
     @Test

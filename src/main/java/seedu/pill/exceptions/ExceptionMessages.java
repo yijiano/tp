@@ -31,7 +31,6 @@ public enum ExceptionMessages {
     INVALID_ORDER_COMMAND               ("Invalid order command format..."),
     INVALID_ITEM_FORMAT                 ("Invalid item format..."),
     ORDER_NOT_PENDING                   ("Order already fulfilled..."),
-    INVALID_ITEM_NAME                   ("Invalid item name. Please do NOT include a comma in item name."),
     INVALID_DATE_FORMAT                 ("Invalid expiry date format. Please try again..."),
     NOTHING_TO_VISUALIZE                ("There is nothing to visualize...");
 
