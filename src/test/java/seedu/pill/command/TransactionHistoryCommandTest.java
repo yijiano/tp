@@ -11,7 +11,7 @@ import seedu.pill.util.Transaction;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,8 +43,8 @@ public class TransactionHistoryCommandTest {
         transactionManager.createTransaction("Paracetamol", 10,
                 Transaction.TransactionType.INCOMING, "Past transaction", null);
 
-        LocalDateTime start = LocalDateTime.now().minusDays(1);
-        LocalDateTime end = LocalDateTime.now().plusDays(1);
+        LocalDate start = LocalDate.now().minusDays(1);
+        LocalDate end = LocalDate.now().plusDays(1);
 
         TransactionHistoryCommand command = new TransactionHistoryCommand(start, end, transactionManager);
         command.execute(itemMap, storage);
@@ -56,7 +56,7 @@ public class TransactionHistoryCommandTest {
 
     @Test
     public void execute_emptyDateRange_printsNothing() throws PillException {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
         TransactionHistoryCommand command = new TransactionHistoryCommand(now, now, transactionManager);
 
         command.execute(itemMap, storage);
@@ -67,7 +67,7 @@ public class TransactionHistoryCommandTest {
 
     @Test
     public void isExit_returnsAlwaysFalse() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
         TransactionHistoryCommand command = new TransactionHistoryCommand(now, now, transactionManager);
         assertFalse(command.isExit());
     }
