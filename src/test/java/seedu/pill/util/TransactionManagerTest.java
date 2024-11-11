@@ -527,14 +527,10 @@ class TransactionManagerTest {
         // Act
         transactionManager.fulfillOrder(dispenseOrder);
 
-        // Assert
         assertEquals(Order.OrderStatus.FULFILLED, dispenseOrder.getStatus());
-
-        // Get only the transactions related to this order
         List<Transaction> orderTransactions = transactionManager.getTransactions().stream()
                           .filter(t -> t.getAssociatedOrder() == dispenseOrder)
                           .toList();
-
         assertEquals(2, orderTransactions.size());
 
         // Verify first transaction
