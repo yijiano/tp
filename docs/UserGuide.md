@@ -37,6 +37,7 @@
       - [Viewing Transaction History: `transaction-history`](#transaction-history)
 3. [Important Note](#important-note)
    - [Case Sensitivity](#case-sensitivity)
+   - [Expiry Date](#expiry-date)
 
 
 ## Introduction
@@ -191,15 +192,27 @@ pear: 20 in stock, expiring: 2010-12-12
 ---
 ### Editing Existing Item: 'edit'
 
-Edits the quantity of an existing item entry in the inventory. 
+The `edit` command is used to update the quantity of an existing item entry in the inventory. The behavior of this command depends on whether the item has an associated expiry date.
 
 **Format**: `edit NAME QUANTITY (EXPIRY_DATE)`
 
-- Edits the items with specified `NAME` to have quantity `QUANTITY`.
-- Edit can be called with an optional expiry date. If no expiry date is supplied,
-it will attempt to edit the item entry with no expiry date. 
+- `NAME`: The name of the item you wish to edit.
+- `QUANTITY`: The new quantity to update for the specified item.
+- `EXPIRY_DATE`: An optional parameter in the `YYYY-MM-DD` format that must be provided if the item has an expiry date.
 
-**Sample Output**
+**Command Behavior**:
+
+- Editing Items Without an Expiry Date:
+  - If an item does not have an expiry date, you can edit it using only the `NAME` and `QUANTITY`.
+  - Example: `edit NAME QUANTITY`
+- Editing Items With an Expiry Date:
+  - If an item has an expiry date, you must specify the `EXPIRY_DATE` to edit the correct entry.
+  - If you attempt to edit an item with an expiry date but do not provide the `EXPIRY_DATE`, the system will return an "Item not found" error.
+  - Example: `edit NAME QUANTITY EXPIRY_DATE`
+- Handling Errors:
+  - If the specified item does not exist in the inventory, or the provided details do not match an existing entry, the system will return an "Item not found" error.
+
+**Sample Output**:
 
 - `> edit Panadol 20`
 
@@ -230,6 +243,12 @@ Listing all items:
 1. Panadol: 20 in stock, expiring: 2024-12-31
 2. Big Panadol: 50 in stock
 ```
+
+**Notes**:
+
+- The `find` command is not **case sensitive**. This means that `find PANADOL` and `find panadol` will yield the same results.
+- Use `find` to quickly locate items, especially when you only remember part of the name.
+
 ---
 ### List Expiring Items: `expiring`
 
@@ -278,7 +297,7 @@ Displays all items that have stock levels below a specified threshold.
 
 `> stock-check 50`
 ```
-Listing all items that need too be restocked (less than 50):
+Listing all items that need to be restocked (less than 50):
 
 Ibuprofen: 10 in stock
 Aspirin: 5 in stock
@@ -287,7 +306,7 @@ Aspirin: 5 in stock
 ---
 ### Set Item Cost: `cost`
 
-Sets the cost for a specified item, applied to all entries with the same name.
+Sets the cost for a specified item, applied to all entries with the same name, regardless of expiry date.
 
 **Format**: `cost ITEM_NAME AMOUNT`
 
@@ -301,7 +320,7 @@ Set cost of Panadol to $15.00.
 ---
 ### Set Item Price: `price`
 
-Sets the selling price for a specified item, applied to all entries with the same name.
+Sets the selling price for a specified item, applied to all entries with the same name, regardless of expiry date.
 
 **Format**: `price ITEM_NAME AMOUNT`
 
@@ -522,3 +541,11 @@ Our application is **case sensitive**. This means that item names must match exa
 - Similarly, commands such as `edit`, `delete` will only work if the case of the item name matches exactly as stored in the inventory.
 
 Ensure you use the correct capitalization when interacting with items in the inventory.
+
+---
+
+### Expiry Date
+
+Under most commands, items with the same name but different expiry dates are treated as **different items**. Be very careful when reading command instructions:
+- **Include the expiry date** with the item name for commands where it is required to ensure the correct item entry is processed.
+- Always double-check the item's expiry date before executing commands like `delete` or `edit` to avoid unintentional modifications or deletions.
