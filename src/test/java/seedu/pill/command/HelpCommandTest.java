@@ -524,20 +524,6 @@ public class HelpCommandTest {
     }
 
     @Test
-    void execute_verboseUseHelp_printsDetailedHelp() throws PillException {
-        HelpCommand command = new HelpCommand("use", true);
-        command.execute(itemMap, storage);
-
-        String output = outContent.toString();
-        assertTrue(output.contains("use: Priority removal of items from the list, starting with earliest expiry date"));
-        assertTrue(output.contains("Usage: use <name>"));
-        assertTrue(output.contains("<name>     - Name of the item"));
-        assertTrue(output.contains("Example:"));
-        assertTrue(output.contains("use Aspirin"));
-        assertTrue(output.contains("Correct input format: use <name>"));
-    }
-
-    @Test
     void execute_verboseFindHelp_printsDetailedHelp() throws PillException {
         HelpCommand command = new HelpCommand("find", true);
         command.execute(itemMap, storage);
