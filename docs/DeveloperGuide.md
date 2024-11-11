@@ -83,8 +83,13 @@ The UI components work together to provide a seamless user experience, allowing 
 ### Commands
 
 Each user action (e.g. adding, deleting, or editing an item) is mapped to a specific command class.
-These classes handle the logic for interpreting the input and calling the appropriate methods from the ItemMap and
-Storage classes.
+Each specific class inherits from the abstract Command class. These classes handle
+the logic for interpreting the input and calling the appropriate methods from the
+ItemMap and Storage classes via the usage of polymorphism. 
+
+Below is the overview for how Commands are executed from the perspective of the Parser class.
+
+![Command overview](diagrams/Command-Overview-SequenceDiagram.png)
 
 Example:
 
@@ -93,13 +98,20 @@ AddItemCommand command = new AddItemCommand(itemName, quantity, expiryDate);
 command.execute(itemMap, storage);
 ```
 
-<!-- @@author cnivedit -->
+<!-- @@author yakultbottle -->
 
 #### AddItemCommand
 
-<img src = "diagrams/AddItemCommand-SequenceDiagram.png"/>
+The AddItemCommand intialises an Item with the corresponding name, quantity,
+and expiryDate. Then the ItemMap is checked as to whether an Item with exactly
+the same name and expiryDate already exists in the ItemMap. If it does, the 
+corresponding item's quantity is updated to include the new Item's quantity as well. 
+Else, a new Item entry is added. Finally, the Storage is updated with the corresponding
+item. 
 
-<!-- @@author yakultbottle -->
+Not depicted are the print calls to the System.out and Logger classes for brevity. 
+
+<img src = "diagrams/AddItemCommand-SequenceDiagram.png"/>
 
 ### Storage
 
