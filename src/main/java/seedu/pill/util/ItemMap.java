@@ -602,6 +602,15 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
         return null;
     }
 
+    /**
+     * Returns a flat list of all items in the inventory, for use in external classes like Visualizer.
+     *
+     * @return An ArrayList containing all items in the inventory.
+     */
+    public ArrayList<Item> getItemsAsArrayList() {
+        return new ArrayList<>(getAllItems());
+    }
+
 
     /**
      * Returns the set of items with the given name.

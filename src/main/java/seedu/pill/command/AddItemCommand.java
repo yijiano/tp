@@ -29,6 +29,7 @@ public class AddItemCommand extends Command {
         Item item = new Item(itemName, quantity, expiryDate);
         itemMap.addItem(item);
         storage.saveItem(item);
+        storage.saveItemMap(itemMap);
     }
 
     @Override
