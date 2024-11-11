@@ -2,27 +2,23 @@ package seedu.pill.util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.TreeSet;
 
 class TransactionManagerTest {
-    private TransactionManager transactionManager;
-    private ItemMap itemMap;
     private static final String VALID_ITEM_NAME = "Aspirin";
     private static final int VALID_QUANTITY = 100;
     private static final String VALID_NOTES = "Test notes";
+    private TransactionManager transactionManager;
+    private ItemMap itemMap;
 
     @BeforeEach
     void setUp() {
