@@ -49,36 +49,17 @@ public class TransactionManager {
      * @throws PillException - If there's insufficient stock for an outgoing transaction or if any other validation
      *                       fails
      */
-    public Transaction createTransaction(String itemName, int quantity,
+    public Transaction createTransaction(String itemName, int quantity, LocalDate expiryDate,
                                          Transaction.TransactionType type,
                                          String notes, Order associatedOrder) throws PillException {
 
         Transaction transaction = new Transaction(itemName, quantity, type, notes, associatedOrder);
 
         if (type == Transaction.TransactionType.INCOMING) {
-            Item item = new Item(itemName, quantity);
+            Item item = new Item(itemName, quantity, expiryDate);
             itemMap.addItem(item);
         } else {
-            TreeSet<Item> items = itemMap.get(itemName);
-            int totalQuantity = items.stream()
-                    .mapToInt(Item::getQuantity)
-                    .sum();
-
-            if (totalQuantity < quantity) {
-                throw new PillException(ExceptionMessages.INVALID_QUANTITY);
-            }
-
-            int remainingQty = quantity;
-            while (remainingQty > 0) {
-                Item item = items.first();
-                if (item.getQuantity() <= remainingQty) {
-                    remainingQty -= item.getQuantity();
-                    itemMap.deleteItem(itemName, item.getExpiryDate());
-                } else {
-                    item.setQuantity(item.getQuantity() - remainingQty);
-                    remainingQty = 0;
-                }
-            }
+            itemMap.useItem(itemName, quantity);
         }
 
         transactions.add(transaction);
@@ -127,6 +108,7 @@ public class TransactionManager {
                         createTransaction(
                                 item.getName(),
                                 item.getQuantity(),
+                                item.getExpiryDate().orElse(null),
                                 transactionType,
                                 "Order fulfillment",
                                 order

@@ -47,7 +47,7 @@ public class TransactionsCommandTest {
     @Test
     public void execute_withTransactions_listsAllTransactions() throws PillException {
         // Create a transaction by adding an incoming transaction
-        transactionManager.createTransaction("Paracetamol", 10,
+        transactionManager.createTransaction("Paracetamol", 10, null,
                 Transaction.TransactionType.INCOMING, "Test transaction", null);
 
         TransactionsCommand command = new TransactionsCommand(transactionManager);
