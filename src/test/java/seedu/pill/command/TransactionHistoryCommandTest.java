@@ -40,7 +40,7 @@ public class TransactionHistoryCommandTest {
     @Test
     public void execute_validDateRange_showsTransactions() throws PillException {
         // Create a transaction
-        transactionManager.createTransaction("Paracetamol", 10,
+        transactionManager.createTransaction("Paracetamol", 10, null,
                 Transaction.TransactionType.INCOMING, "Past transaction", null);
 
         LocalDate start = LocalDate.now().minusDays(1);

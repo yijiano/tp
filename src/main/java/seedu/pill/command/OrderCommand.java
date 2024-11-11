@@ -11,15 +11,18 @@ public class OrderCommand extends Command{
     private TransactionManager transactionManager;
     private ItemMap itemsToOrder;
     private Order.OrderType orderType;
+    private String notes;
 
-    public OrderCommand(ItemMap itemsToOrder, TransactionManager transactionManager, Order.OrderType orderType) {
+    public OrderCommand(ItemMap itemsToOrder, TransactionManager transactionManager,
+                        Order.OrderType orderType, String notes) {
         this.itemsToOrder = itemsToOrder;
         this.transactionManager = transactionManager;
         this.orderType = orderType;
+        this.notes = notes;
     }
 
     @Override
     public void execute(ItemMap itemMap, Storage storage) throws PillException {
-        transactionManager.createOrder(orderType, itemsToOrder, null);
+        transactionManager.createOrder(orderType, itemsToOrder, notes);
     }
 }
