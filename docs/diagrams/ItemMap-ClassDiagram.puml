@@ -1,6 +1,7 @@
 @startuml
 
 skinparam classAttributeIconSize 0
+hide circles
 
 class ItemMap {
     + addItem(newItem: Item)
@@ -15,11 +16,12 @@ class ItemMap {
 
 ItemMap "1" *-- "1" Map : contains >
 
-interface Map {
+interface Map << interface >> {
     itemName: String
     item: TreeSet<Item>
 }
 
 note right of Map : Maps key(itemName) to value(item)\nHas any amount of key-value pairs
+note bottom of Map : Stored as a Map, intialised as a LinkedHashMap
 
 @enduml
