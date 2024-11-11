@@ -331,7 +331,23 @@ complexity.
 
 ## Glossary
 
-**Mainstream OS**: Windows, Linux, Unix, MacOS
+- **Mainstream OS**: Windows, Linux, Unix, MacOS
+- **CLI (Command-Line Interface)**: A text-based user interface used to interact with software by typing commands.
+- **UI (User Interface)**: The components and layout of a software application
+    with which users interact, including visual elements like buttons, screens,
+    and command prompts that facilitate user interaction with the program.
+- **I/O (Input/Output)**: The communication between a program and the external
+    environment, such as receiving data from the user (input) or displaying results
+    to the user (output).
+- **JUnit**: A testing framework for Java that allows developers to write and run
+    repeatable automated tests.
+- **Gradle**: A build automation tool for Java (and other languages) used to compile, test, and package applications.
+- **Text UI Testing**: A form of testing where interactions with a command-line
+    interface are tested by simulating user input and validating the application’s text output.
+- **Pharmaceutical Inventory**: Refers to the stock of medicines and other medical
+    supplies maintained by a pharmacy or healthcare facility for dispensing and logistics.
+- **Expiry Date**: The date after which a pharmaceutical product is no longer considered safe or effective for use.
+- **Restocking**: The process of replenishing inventory to ensure sufficient supply.
 
 ## Instructions for Testing
 
