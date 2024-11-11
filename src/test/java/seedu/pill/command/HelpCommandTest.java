@@ -529,7 +529,7 @@ public class HelpCommandTest {
         command.execute(itemMap, storage);
 
         String output = outContent.toString();
-        assertTrue(output.contains("use: Priority removal of items from the list, starting with the earliest expiry date"));
+        assertTrue(output.contains("use: Priority removal of items from the list, starting with earliest expiry date"));
         assertTrue(output.contains("Usage: use <name>"));
         assertTrue(output.contains("<name>     - Name of the item"));
         assertTrue(output.contains("Example:"));
