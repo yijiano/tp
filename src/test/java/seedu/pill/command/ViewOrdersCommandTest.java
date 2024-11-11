@@ -4,21 +4,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import seedu.pill.exceptions.PillException;
-import seedu.pill.util.*;
+import seedu.pill.util.ItemMap;
+import seedu.pill.util.Storage;
+import seedu.pill.util.Order;
+import seedu.pill.util.TransactionManager;
+import seedu.pill.util.Item;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * Unit tests for TransactionsCommand
+ * Unit tests for ViewOrdersCommand
  */
-public class TransactionsCommandTest {
+public class ViewOrdersCommandTest {
     private ItemMap itemMap;
     private Storage storage;
     private TransactionManager transactionManager;
@@ -37,29 +38,33 @@ public class TransactionsCommandTest {
     }
 
     @Test
-    public void execute_emptyTransactions_printsEmptyMessage() throws PillException {
-        TransactionsCommand command = new TransactionsCommand(transactionManager);
+    public void execute_noOrders_printsEmptyList() throws PillException {
+        ViewOrdersCommand command = new ViewOrdersCommand(transactionManager);
         command.execute(itemMap, storage);
-        assertTrue(outputStream.toString().trim().contains("No transactions found"));
+        String output = outputStream.toString().trim();
+        // Orders list is empty but no specific message is printed based on source code
+        assertTrue(output.isEmpty());
     }
 
     @Test
-    public void execute_withTransactions_listsAllTransactions() throws PillException {
-        // Create a transaction by adding an incoming transaction
-        transactionManager.createTransaction("Paracetamol", 10,
-                Transaction.TransactionType.INCOMING, "Test transaction", null);
+    public void execute_withOrders_listsPendingOrders() throws PillException {
+        // Create an order with some items
+        ItemMap orderItems = new ItemMap();
+        orderItems.addItemSilent(new Item("Paracetamol", 10));
+        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, orderItems, "Test order");
 
-        TransactionsCommand command = new TransactionsCommand(transactionManager);
+        ViewOrdersCommand command = new ViewOrdersCommand(transactionManager);
         command.execute(itemMap, storage);
 
         String output = outputStream.toString().trim();
         assertTrue(output.contains("Paracetamol"));
-        assertTrue(output.contains("10"));
+        assertTrue(output.contains("10 in stock"));
+        assertTrue(output.contains("Test order"));
     }
 
     @Test
     public void isExit_returnsAlwaysFalse() {
-        TransactionsCommand command = new TransactionsCommand(transactionManager);
+        ViewOrdersCommand command = new ViewOrdersCommand(transactionManager);
         assertFalse(command.isExit());
     }
 

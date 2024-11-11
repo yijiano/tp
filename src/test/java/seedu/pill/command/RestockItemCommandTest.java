@@ -3,21 +3,16 @@ package seedu.pill.command;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import seedu.pill.exceptions.ExceptionMessages;
 import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
-import seedu.pill.util.Item;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RestockItemCommandTest {
     private ItemMap itemMap;
