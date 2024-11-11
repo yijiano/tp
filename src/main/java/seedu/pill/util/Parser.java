@@ -298,6 +298,7 @@ public class Parser {
             throw new PillException(ExceptionMessages.INVALID_ORDER_COMMAND);
         }
 
+        boolean hasBeenPrinted = false;
         for (int i = 0; i < numberOfItems; i++) {
             String userInput = ui.getRawInput();
             String[] itemArguments = userInput.split("\\s+");
@@ -306,6 +307,15 @@ public class Parser {
             }
             try {
                 Item item = parseItem(itemArguments);
+                if (!item.getExpiryDate().equals(Optional.<LocalDate>empty())
+                        && orderType.equals(OrderType.DISPENSE)) {
+                    item.setExpiryDate(null);
+
+                    if (!hasBeenPrinted) {
+                        System.out.println("Expiry dates will be ignored for dispense orders");
+                        hasBeenPrinted = true;
+                    }
+                }
                 itemsToOrder.addItemSilent(item);
             } catch (PillException e) {
                 throw new PillException(ExceptionMessages.INVALID_ITEM_FORMAT);

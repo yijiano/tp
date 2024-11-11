@@ -41,6 +41,10 @@ public class Item implements Comparable<Item> {
         return expiryDate;
     }
 
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = Optional.ofNullable(expiryDate);
+    }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -106,5 +110,8 @@ public class Item implements Comparable<Item> {
                     && Double.compare(price, item.price) == 0;
         }
         return false;
+    }
+
+    public void setExpiryDate(Object o) {
     }
 }
