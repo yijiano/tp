@@ -44,8 +44,8 @@ Command Line Interface (CLI).
       command ([#20](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/20)).
     - Justification: Abstraction of the find command, inheriting from the base command class.
     - Highlights: Receives item name to search for and executes the command.
-- **Code contributed
-  **: [RepoSense link](https://nus-cs2113-ay2425s1.github.io/tp-dashboard/?search=cnivedit&breakdown=true)
+- **Code contributed**:
+  [RepoSense link](https://nus-cs2113-ay2425s1.github.io/tp-dashboard/?search=cnivedit&breakdown=true)
 - **Project Management**:
     - Helped maintain some issues, opening
       [#69](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/69),
@@ -57,13 +57,11 @@ Command Line Interface (CLI).
       [#239](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/239),
 
 - **Testing**:
-    - Commands
-        - ListCommand ([#49](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/49))
-        - FindCommand ([#51](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/51))
-    - Methods
-        - getExpiringItems ([#113](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/113))
-        - loadLine ([#68](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/68))
-    
+    - ListCommand ([#49](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/49))
+    - FindCommand ([#51](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/51))
+    - getExpiringItems ([#113](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/113))
+    - loadLine ([#68](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/68))
+
 - **Documentation**:
     - Developer Guide
         - Added the following sections
