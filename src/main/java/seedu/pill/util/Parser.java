@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class Parser {
@@ -175,10 +176,10 @@ public class Parser {
     /**
      * Parses the arguments provided to create a {@link FulfillCommand} instance, which is used to fulfill an order.
      *
-     * @param arguments The command input containing the order index to be fulfilled.
+     * @param arguments The command input containing the order UUID to be fulfilled.
      * @return A {@link FulfillCommand} instance that contains the order and transaction manager.
      * @throws PillException if the input contains too many arguments, is empty, cannot be parsed as a number,
-     *                       or if the specified order index is invalid.
+     *                       or if the specified order UUID is invalid.
      *
      */
     private FulfillCommand parseFulfillCommand(String arguments) throws PillException {
@@ -186,14 +187,20 @@ public class Parser {
         if (commandArguments.length > 1) {
             throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
         }
-        if (commandArguments.length == 0) {
+        if (commandArguments.length == 0 || arguments.isEmpty()) {
             throw new PillException(ExceptionMessages.INVALID_FULFILL_COMMAND);
         }
         try {
-            Order order = transactionManager.getOrders().get(Integer.parseInt(commandArguments[0]) - 1);
+            List<Order> orders = transactionManager.getOrders();
+            String orderToFetch = commandArguments[0];
+            Order order = orders.stream()
+                    .filter(orderInfo -> orderInfo.getId().toString().equals(orderToFetch))
+                    .findFirst()
+                    .orElse(null);
+            if (order == null) {
+                throw new PillException(ExceptionMessages.INVALID_ORDER);
+            }
             return new FulfillCommand(order, transactionManager);
-        } catch (NumberFormatException e) {
-            throw new PillException(ExceptionMessages.INVALID_INDEX);
         } catch (IndexOutOfBoundsException e) {
             throw new PillException(ExceptionMessages.INVALID_ORDER);
         }
