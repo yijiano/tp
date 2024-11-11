@@ -1,3 +1,8 @@
+//@@author philip1304-unused
+/*
+ * We did not get around to integrating timestamps since we had too many bugs
+ * in our code and many other features that needed integrating at the same time.
+ */
 package seedu.pill.util;
 
 import java.time.LocalDateTime;
