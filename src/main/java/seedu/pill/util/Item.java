@@ -111,7 +111,4 @@ public class Item implements Comparable<Item> {
         }
         return false;
     }
-
-    public void setExpiryDate(Object o) {
-    }
 }
