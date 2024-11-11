@@ -19,6 +19,10 @@ import seedu.pill.command.OrderCommand;
 import seedu.pill.command.FulfillCommand;
 import seedu.pill.command.ViewOrdersCommand;
 import seedu.pill.command.TransactionsCommand;
+import seedu.pill.command.VisualizeCostCommand;
+import seedu.pill.command.VisualizePriceCommand;
+import seedu.pill.command.VisualizeStockCommand;
+import seedu.pill.command.VisualizeCostPriceCommand;
 
 import seedu.pill.util.Order.OrderType;
 
@@ -37,6 +41,7 @@ public class Parser {
     private final Storage storage;
     private final TransactionManager transactionManager;
     private final Ui ui;
+    private final Visualizer visualizer;
 
     /**
      * Public constructor for Parser.
@@ -46,6 +51,7 @@ public class Parser {
         this.storage = storage;
         this.transactionManager = transactionManager;
         this.ui = ui;
+        this.visualizer = new Visualizer(items.getItemsAsArrayList());
     }
 
     /**
@@ -124,6 +130,18 @@ public class Parser {
                 break;
             case "restock":
                 parseRestockItemCommand(arguments).execute(this.items, this.storage);
+                break;
+            case "visualize-price":
+                new VisualizePriceCommand(visualizer).execute(this.items, this.storage);
+                break;
+            case "visualize-cost":
+                new VisualizeCostCommand(visualizer).execute(this.items, this.storage);
+                break;
+            case "visualize-stock":
+                new VisualizeStockCommand(visualizer).execute(this.items, this.storage);
+                break;
+            case "visualize-cost-price":
+                new VisualizeCostPriceCommand(visualizer).execute(this.items, this.storage);
                 break;
             case "use":
                 parseUseItemCommand(arguments).execute(this.items, this.storage);

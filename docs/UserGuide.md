@@ -4,26 +4,41 @@
 
 1. [Introduction](#introduction)
 2. [Features](#features)
-    - [Viewing Help: `help`](#viewing-help-help)
-    - [Adding New Item: `add`](#adding-new-item-add)
-    - [Listing All Items: `list`](#listing-all-items-list)
-    - [Deleting Existing Item: `delete`](#deleting-existing-item-delete)
-    - [Editing Existing Item: `edit`](#editing-existing-item-edit)
-    - [Finding Items: `find`](#finding-items-find)
-    - [List Expiring Items: `expiring`](#list-expiring-items-expiring)
-    - [List Expired Items: `expired`](#list-expired-items-expired)
-    - [Query Existing Stock: `stock-check`](#query-existing-stock-stock-check)
-    - [Set Item Cost: `cost`](#set-item-cost-cost)
-    - [Set Item Price: `price`](#set-item-price-price)
-    - [Restock Specific Item: `restock`](#restock-specific-item-restock)
-    - [Restock All Items Below Threshold: `restock-all`](#restock-all-items-below-threshold-restockall)
-    - [Priority Removal of Items: `use`](#priority-removal-of-items-use)
-    - [Order Items: `order`](#order-items-order)
-    - [View All Orders `view-orders`](#view-all-orders-view-orders)
-    - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
-    - [Exiting the Program: `exit`](#exiting-the-program-exit)
-    - [Saving the Data](#saving-the-data)
-    - [Editing the Data File](#editing-the-data-file)
+   - **General Commands**
+      - [Viewing Help: `help`](#viewing-help-help)
+      - [Listing All Items: `list`](#listing-all-items-list)
+      - [Exiting the Program: `exit`](#exiting-the-program-exit)
+   - **Item Management**
+      - [Adding New Item: `add`](#adding-new-item-add)
+      - [Deleting Existing Item: `delete`](#deleting-existing-item-delete)
+      - [Editing Existing Item: `edit`](#editing-existing-item-edit)
+      - [Finding Items: `find`](#finding-items-find)
+      - [Priority Removal of Items: `use`](#priority-removal-of-items-use)
+   - **Expiry Management**
+      - [List Expiring Items: `expiring`](#list-expiring-items-expiring)
+      - [List Expired Items: `expired`](#list-expired-items-expired)
+   - **Stock Management**
+      - [Query Existing Stock: `stock-check`](#query-existing-stock-stock-check)
+      - [Restock Specific Item: `restock`](#restock-specific-item-restock)
+      - [Restock All Items Below Threshold: `restock-all`](#restock-all-items-below-threshold-restock-all)
+   - **Price and Cost Management**
+      - [Set Item Cost: `cost`](#set-item-cost-cost)
+      - [Set Item Price: `price`](#set-item-price-price)
+   - **Visualization**
+      - [Visualize item prices: `visualize-price`](#visualize-item-prices-visualize-price)
+      - [Visualize item costs: `visualize-cost`](#visualize-item-costs-visualize-cost)
+      - [Visualize item stock: `visualize-stock`](#visualize-item-stock-visualize-stock)
+      - [Visualize item costs and prices: `visualize-cost-price`](#visualize-item-costs-and-prices-visualize-cost-price)
+   - **Order and Transaction Management**
+      - [Order Items: `order`](#order-items-order)
+      - [View All Orders: `view-orders`](#view-all-orders-view-orders)
+      - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
+      - [Viewing Transactions: `transactions`](#transactions)
+      - [Viewing Transaction History: `transaction-history`](#transaction-history)
+3. [Important Note](#important-note)
+   - [Case Sensitivity](#case-sensitivity)
+   - [Expiry Date](#expiry-date)
+
 
 ## Introduction
 
@@ -60,6 +75,12 @@ Item Management:
   restock               - Restocks a specified item with an optional expiry date and quantity
   restock-all           - Restocks all items below a specified threshold
   use                   - Priority removal of items from the list, starting with earliest expiry date
+
+Visualization:
+  visualize-price       - Visualizes item prices as a bar chart
+  visualize-cost        - Visualizes item costs as a bar chart
+  visualize-stock       - Visualizes item stocks as a bar chart
+  visualize-cost-price  - Visualizes item costs and prices side-by-side as a bar chart
 
 Price and Cost Management:
   cost                  - Sets the cost for a specified item
@@ -171,15 +192,27 @@ pear: 20 in stock, expiring: 2010-12-12
 ---
 ### Editing Existing Item: 'edit'
 
-Edits the quantity of an existing item entry in the inventory. 
+The `edit` command is used to update the quantity of an existing item entry in the inventory. The behavior of this command depends on whether the item has an associated expiry date.
 
 **Format**: `edit NAME QUANTITY (EXPIRY_DATE)`
 
-- Edits the items with specified `NAME` to have quantity `QUANTITY`.
-- Edit can be called with an optional expiry date. If no expiry date is supplied,
-it will attempt to edit the item entry with no expiry date. 
+- `NAME`: The name of the item you wish to edit.
+- `QUANTITY`: The new quantity to update for the specified item.
+- `EXPIRY_DATE`: An optional parameter in the `YYYY-MM-DD` format that must be provided if the item has an expiry date.
 
-**Sample Output**
+**Command Behavior**:
+
+- Editing Items Without an Expiry Date:
+  - If an item does not have an expiry date, you can edit it using only the `NAME` and `QUANTITY`.
+  - Example: `edit NAME QUANTITY`
+- Editing Items With an Expiry Date:
+  - If an item has an expiry date, you must specify the `EXPIRY_DATE` to edit the correct entry.
+  - If you attempt to edit an item with an expiry date but do not provide the `EXPIRY_DATE`, the system will return an "Item not found" error.
+  - Example: `edit NAME QUANTITY EXPIRY_DATE`
+- Handling Errors:
+  - If the specified item does not exist in the inventory, or the provided details do not match an existing entry, the system will return an "Item not found" error.
+
+**Sample Output**:
 
 - `> edit Panadol 20`
 
@@ -210,6 +243,12 @@ Listing all items:
 1. Panadol: 20 in stock, expiring: 2024-12-31
 2. Big Panadol: 50 in stock
 ```
+
+**Notes**:
+
+- The `find` command is not **case sensitive**. This means that `find PANADOL` and `find panadol` will yield the same results.
+- Use `find` to quickly locate items, especially when you only remember part of the name.
+
 ---
 ### List Expiring Items: `expiring`
 
@@ -258,7 +297,7 @@ Displays all items that have stock levels below a specified threshold.
 
 `> stock-check 50`
 ```
-Listing all items that need too be restocked (less than 50):
+Listing all items that need to be restocked (less than 50):
 
 Ibuprofen: 10 in stock
 Aspirin: 5 in stock
@@ -267,7 +306,7 @@ Aspirin: 5 in stock
 ---
 ### Set Item Cost: `cost`
 
-Sets the cost for a specified item, applied to all entries with the same name.
+Sets the cost for a specified item, applied to all entries with the same name, regardless of expiry date.
 
 **Format**: `cost ITEM_NAME AMOUNT`
 
@@ -281,7 +320,7 @@ Set cost of Panadol to $15.00.
 ---
 ### Set Item Price: `price`
 
-Sets the selling price for a specified item, applied to all entries with the same name.
+Sets the selling price for a specified item, applied to all entries with the same name, regardless of expiry date.
 
 **Format**: `price ITEM_NAME AMOUNT`
 
@@ -292,6 +331,34 @@ Sets the selling price for a specified item, applied to all entries with the sam
 ```
 Set price of Panadol to $20.00.
 ```
+---
+### Visualize item prices: `visualize-price`
+
+The visualize-price command will display a chart showing the prices of all items in the inventory. Each bar represents the price of an item, and items are labeled with their names and expiry dates (if applicable).
+
+**Format**: `visualize-price`
+
+---
+### Visualize item costs: `visualize-cost`
+
+This command will display a chart showing the costs of all items in the inventory. Each bar represents the cost of an item, and items are labeled with their names and expiry dates (if applicable).
+
+**Format**: `visualize-cost`
+
+---
+### Visualize item stock: `visualize-stock`
+
+This command will display a chart showing the quantity of items in stock. Each bar represents the stock level of an item, and items are labeled with their names and expiry dates (if applicable).
+
+**Format**: `visualize-stock`
+
+---
+### Visualize item costs and prices: `visualize-cost-price`
+
+This command will display a chart comparing the costs and prices of all items. Each item will have two bars: one for cost and one for price, labeled with the item name and expiry date (if applicable).
+
+**Format**: `visualize-cost-price`
+
 ---
 ### Restock Specific Item: `restock`
 
@@ -461,3 +528,24 @@ The system automatically saves any changes to the inventory to the hard disk aft
 ### Editing the Data File
 
 Inventory data is stored in a `.csv` file. Users can edit this file manually if necessary.
+
+---
+
+## Important Note
+
+### Case Sensitivity
+
+Our application is **case sensitive**. This means that item names must match exactly as they were entered. For example:
+
+- `add Panadol` and `add PANADOL` will be treated as two different items.
+- Similarly, commands such as `edit`, `delete` will only work if the case of the item name matches exactly as stored in the inventory.
+
+Ensure you use the correct capitalization when interacting with items in the inventory.
+
+---
+
+### Expiry Date
+
+Under most commands, items with the same name but different expiry dates are treated as **different items**. Be very careful when reading command instructions:
+- **Include the expiry date** with the item name for commands where it is required to ensure the correct item entry is processed.
+- Always double-check the item's expiry date before executing commands like `delete` or `edit` to avoid unintentional modifications or deletions.

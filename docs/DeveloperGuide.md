@@ -13,6 +13,7 @@
         - [Transaction and TransactionManager](#transaction-and-transactionmanager)
         - [StringMatcher](#stringmatcher)
         - [Order](#order)
+        - [Visualizer](#Visualizer )
         - [Parser](#parser)
         - [DateTime](#datetime)
         - [TimeStampIO](#timestampio)
@@ -165,7 +166,18 @@ soonest expiry date when taking out of storage.
 Orders are from the perspective of the Inventory, so purchases is items being
 received into the inventory, and dispense is items going out of the inventory. 
 Each order is a collection of one or more items, and is either purchase or dispense.
-Once an order is fulfilled, it is removed from the order list. 
+Once an order is fulfilled, it is removed from the order list.
+
+### Visualizer
+
+The Visualizer class is the core class for handling the visualization of item data. 
+It leverages the XChart library to generate bar charts for different aspects 
+of the inventory. It is responsible for providing a graphical view
+of item data, such as item prices, costs, and stock levels. This class 
+enhances the usability of the application by allowing users to better understand 
+and analyze their inventory data through visual representation.
+
+![](diagrams/Visualizer-ClassDiagram.png)
 
 ### Parser
 
