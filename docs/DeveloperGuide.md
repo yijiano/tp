@@ -13,7 +13,7 @@
         - [Transaction and TransactionManager](#transaction-and-transactionmanager)
         - [StringMatcher](#stringmatcher)
         - [Order](#order)
-        - [Visualizer](#Visualizer )
+        - [Visualizer](#visualizer)
         - [Parser](#parser)
         - [DateTime](#datetime)
         - [TimeStampIO](#timestampio)

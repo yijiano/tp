@@ -1,8 +1,9 @@
 @startuml
 
 skinparam classAttributeIconSize 0
+hide circles
 
-interface Comparable<Item>
+interface Comparable<Item> << interface >>
 Comparable <|-[dashed]- Item
 
 class Item {
