@@ -258,20 +258,42 @@ public class Parser {
      *
      */
     private OrderCommand parseOrderCommand(String arguments) throws PillException {
-        String[] commandArguments = arguments.split("\\s+");
-        if (commandArguments.length > 2) {
+        String commandArguments;
+        String notes = null;
+
+        if (arguments.contains("\"")) {
+            // Split at the first quotation mark
+            int quoteStart = arguments.indexOf("\"");
+
+            // Extract the non-quoted section (order type and quantity)
+            commandArguments = arguments.substring(0, quoteStart).trim();
+
+            // Extract the quoted section as notes
+            int quoteEnd = arguments.lastIndexOf("\"");
+            if (quoteEnd == quoteStart) {
+                throw new PillException(ExceptionMessages.INVALID_ORDER_COMMAND); // Unbalanced quotes
+            }
+            notes = arguments.substring(quoteStart + 1, quoteEnd);
+        } else {
+            // No notes, so the entire input is order type and quantity
+            commandArguments = arguments.trim();
+        }
+
+        String[] orderTypeAndQuantity = commandArguments.split("\\s+");
+
+        if (orderTypeAndQuantity.length > 2) {
             throw new PillException(ExceptionMessages.TOO_MANY_ARGUMENTS);
-        } else if (commandArguments.length < 2) {
+        } else if (orderTypeAndQuantity.length < 2) {
             throw new PillException(ExceptionMessages.INVALID_ORDER_COMMAND);
         }
 
         ItemMap itemsToOrder = new ItemMap();
         OrderType orderType = null;
-        int numberOfItems = parseQuantity(commandArguments[1]);
+        int numberOfItems = parseQuantity(orderTypeAndQuantity[1]);
 
-        if (commandArguments[0].equalsIgnoreCase("PURCHASE")) {
+        if (orderTypeAndQuantity[0].equalsIgnoreCase("PURCHASE")) {
             orderType = OrderType.PURCHASE;
-        } else if (commandArguments[0].equalsIgnoreCase("DISPENSE")) {
+        } else if (orderTypeAndQuantity[0].equalsIgnoreCase("DISPENSE")) {
             orderType = OrderType.DISPENSE;
         } else {
             throw new PillException(ExceptionMessages.INVALID_ORDER_COMMAND);
@@ -291,7 +313,7 @@ public class Parser {
             }
         }
 
-        return new OrderCommand(itemsToOrder, transactionManager, orderType);
+        return new OrderCommand(itemsToOrder, transactionManager, orderType, notes);
     }
     /**
      * Parses an array of item arguments and returns an {@code Item} object.
