@@ -86,6 +86,8 @@ PILL is fully written in Java, and users can interact with the application using
       [#62](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/62)
       [#90](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/90)
       [#94](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/94)
+  - Helped maintain some issues, opening:
+      [#250](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/250)
 
 - **Community**:
     - Reported bugs for other teams in the class.
