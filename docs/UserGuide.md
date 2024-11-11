@@ -190,7 +190,7 @@ pear: 20 in stock, expiring: 2010-12-12
 - Use the `list` command to view all items and their expiry dates before attempting to delete.
 
 ---
-### Editing Existing Item: 'edit'
+### Editing Existing Item: `edit`
 
 The `edit` command is used to update the quantity of an existing item entry in the inventory. The behavior of this command depends on whether the item has an associated expiry date.
 
