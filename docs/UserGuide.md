@@ -156,7 +156,9 @@ pear: 20 in stock, expiring: 2010-12-12
 ---
 ### Editing Existing Item: `edit`
 
-The `edit` command is used to update the quantity of an existing item entry in the inventory. The behavior of this command depends on whether the item has an associated expiry date.
+The `edit` command is used to **update the quantity** of an existing item entry in the inventory. This does not modify the expiry date of the item.
+
+The behavior of this command depends on whether the item has an associated expiry date.
 
 **Format**: `edit NAME QUANTITY (EXPIRY_DATE)`
 
@@ -369,7 +371,7 @@ Total Restock Cost for all items below threshold 50: $40.00
 
 Priority removal of items from the list, starting with the earliest expiry date.
 
-**Format**: `use ITEM_NAME`
+**Format**: `use ITEM_NAME QUANTITY`
 
 **Sample Output**:
 
