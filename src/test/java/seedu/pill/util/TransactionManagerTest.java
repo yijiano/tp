@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeSet;
 
+//@@author philip1304
+
 class TransactionManagerTest {
     private TransactionManager transactionManager;
     private ItemMap itemMap;
@@ -30,11 +32,13 @@ class TransactionManagerTest {
         // Arrange
         String itemName = "Aspirin";
         int quantity = 100;
+        LocalDate expiryDate = null;
 
         // Act
         Transaction transaction = transactionManager.createTransaction(
                 itemName,
                 quantity,
+                expiryDate,
                 Transaction.TransactionType.INCOMING,
                 "Test incoming",
                 null
@@ -58,10 +62,12 @@ class TransactionManagerTest {
         String itemName = "Aspirin";
         int initialQuantity = 100;
         int decreaseQuantity = 30;
+        LocalDate expiryDate = null;
 
         transactionManager.createTransaction(
                 itemName,
                 initialQuantity,
+                expiryDate,
                 Transaction.TransactionType.INCOMING,
                 "Initial stock",
                 null
@@ -71,6 +77,7 @@ class TransactionManagerTest {
         Transaction transaction = transactionManager.createTransaction(
                 itemName,
                 decreaseQuantity,
+                expiryDate,
                 Transaction.TransactionType.OUTGOING,
                 "Test outgoing",
                 null
@@ -94,11 +101,13 @@ class TransactionManagerTest {
         String itemName = "Aspirin";
         int initialQuantity = 50;
         int decreaseQuantity = 100;
+        LocalDate expiryDate = null;
 
         assertThrows(PillException.class, () -> {
             transactionManager.createTransaction(
                     itemName,
                     decreaseQuantity,
+                    expiryDate,
                     Transaction.TransactionType.OUTGOING,
                     "Test insufficient",
                     null
@@ -112,11 +121,13 @@ class TransactionManagerTest {
         Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(), "Test order");
         String itemName = "Aspirin";
         int quantity = 100;
+        LocalDate expiryDate = null;
 
         // Act
         Transaction transaction = transactionManager.createTransaction(
                 itemName,
                 quantity,
+                expiryDate,
                 Transaction.TransactionType.INCOMING,
                 "Test with order",
                 order
@@ -184,11 +195,13 @@ class TransactionManagerTest {
         String itemName = "Aspirin";
         int initialQuantity = 100;
         int dispenseQuantity = 30;
+        LocalDate expiryDate = null;
 
         // Add initial stock
         transactionManager.createTransaction(
                 itemName,
                 initialQuantity,
+                expiryDate,
                 Transaction.TransactionType.INCOMING,
                 "Initial stock",
                 null
@@ -224,9 +237,9 @@ class TransactionManagerTest {
     @Test
     void getTransactions_returnsCorrectTransactions() throws PillException {
         // Arrange
-        transactionManager.createTransaction("Aspirin", 100,
+        transactionManager.createTransaction("Aspirin", 100, null,
                 Transaction.TransactionType.INCOMING, "First", null);
-        transactionManager.createTransaction("Bandage", 50,
+        transactionManager.createTransaction("Bandage", 50, null,
                 Transaction.TransactionType.INCOMING, "Second", null);
 
         // Act
@@ -257,11 +270,11 @@ class TransactionManagerTest {
     void getItemTransactions_returnsCorrectTransactions() throws PillException {
         // Arrange
         String itemName = "Aspirin";
-        transactionManager.createTransaction(itemName, 100,
+        transactionManager.createTransaction(itemName, 100, null,
                 Transaction.TransactionType.INCOMING, "First", null);
-        transactionManager.createTransaction("Bandage", 50,
+        transactionManager.createTransaction("Bandage", 50, null,
                 Transaction.TransactionType.INCOMING, "Second", null);
-        transactionManager.createTransaction(itemName, 30,
+        transactionManager.createTransaction(itemName, 30, null,
                 Transaction.TransactionType.OUTGOING, "Third", null);
 
         // Act
@@ -277,9 +290,9 @@ class TransactionManagerTest {
         // Arrange
         LocalDateTime startTime = LocalDateTime.now();
 
-        transactionManager.createTransaction("Aspirin", 100,
+        transactionManager.createTransaction("Aspirin", 100, null,
                 Transaction.TransactionType.INCOMING, "First", null);
-        transactionManager.createTransaction("Bandage", 50,
+        transactionManager.createTransaction("Bandage", 50, null,
                 Transaction.TransactionType.INCOMING, "Second", null);
 
         LocalDateTime endTime = LocalDateTime.now();
@@ -328,6 +341,7 @@ class TransactionManagerTest {
         Transaction transaction = transactionManager.createTransaction(
                 itemName,
                 50,
+                null,
                 Transaction.TransactionType.OUTGOING,
                 "Test with expiry",
                 null
@@ -344,11 +358,13 @@ class TransactionManagerTest {
         String itemName = "Aspirin";
         int initialQuantity = 100;
         int decreaseQuantity = 30;  // Less than initial quantity
+        LocalDate expiryDate = null;
 
         // Add initial stock
         transactionManager.createTransaction(
                 itemName,
                 initialQuantity,
+                expiryDate,
                 Transaction.TransactionType.INCOMING,
                 "Initial stock",
                 null
@@ -358,6 +374,7 @@ class TransactionManagerTest {
         Transaction transaction = transactionManager.createTransaction(
                 itemName,
                 decreaseQuantity,
+                expiryDate,
                 Transaction.TransactionType.OUTGOING,
                 "Partial withdrawal",
                 null
@@ -378,11 +395,13 @@ class TransactionManagerTest {
         // Arrange
         String itemName = "Aspirin";
         int initialQuantity = 100;
+        LocalDate expiryDate = null;
 
         // Add initial stock
         transactionManager.createTransaction(
                 itemName,
                 initialQuantity,
+                expiryDate,
                 Transaction.TransactionType.INCOMING,
                 "Initial stock",
                 null
@@ -392,6 +411,7 @@ class TransactionManagerTest {
         Transaction transaction = transactionManager.createTransaction(
                 itemName,
                 initialQuantity,  // Withdraw exact quantity
+                expiryDate,
                 Transaction.TransactionType.OUTGOING,
                 "Complete withdrawal",
                 null
@@ -421,6 +441,7 @@ class TransactionManagerTest {
         Transaction transaction = transactionManager.createTransaction(
                 itemName,
                 70,  // This will use up the first batch (50) and part of the second (20)
+                null,
                 Transaction.TransactionType.OUTGOING,
                 "Multi-batch withdrawal",
                 null
@@ -443,9 +464,11 @@ class TransactionManagerTest {
         // Arrange
         LocalDateTime start = LocalDateTime.now();
         Transaction first = transactionManager.createTransaction(
-                "Aspirin", 100, Transaction.TransactionType.INCOMING, "First", null);
+                "Aspirin", 100, null,
+                Transaction.TransactionType.INCOMING, "First", null);
         Transaction second = transactionManager.createTransaction(
-                "Bandage", 50, Transaction.TransactionType.INCOMING, "Second", null);
+                "Bandage", 50, null,
+                Transaction.TransactionType.INCOMING, "Second", null);
         LocalDateTime end = LocalDateTime.now();
 
         // Act
@@ -462,12 +485,14 @@ class TransactionManagerTest {
     void getTransactionHistory_beforeStartTime_excludesTransactions() throws PillException, InterruptedException {
         // Arrange
         Transaction before = transactionManager.createTransaction(
-                "Before", 100, Transaction.TransactionType.INCOMING, "Before start", null);
+                "Before", 100, null,
+                Transaction.TransactionType.INCOMING, "Before start", null);
         Thread.sleep(100); // Add delay to ensure clear time separation
         LocalDateTime start = LocalDateTime.now();
         Thread.sleep(100); // Add delay to ensure clear time separation
         Transaction during = transactionManager.createTransaction(
-                "During", 50, Transaction.TransactionType.INCOMING, "During range", null);
+                "During", 50, null,
+                Transaction.TransactionType.INCOMING, "During range", null);
         LocalDateTime end = LocalDateTime.now();
 
         // Debug prints
@@ -493,7 +518,8 @@ class TransactionManagerTest {
     void getTransactionHistory_exactBoundaryTimes_includesTransactions() throws PillException {
         // Arrange
         Transaction first = transactionManager.createTransaction(
-                "First", 100, Transaction.TransactionType.INCOMING, "Boundary start", null);
+                "First", 100, null,
+                Transaction.TransactionType.INCOMING, "Boundary start", null);
         LocalDateTime startAndEnd = first.getTimestamp(); // Use exact timestamp
 
         // Act
@@ -508,7 +534,8 @@ class TransactionManagerTest {
     void getTransactionHistory_endBeforeStart_returnsEmptyList() throws PillException {
         // Arrange
         Transaction transaction = transactionManager.createTransaction(
-                "Test", 100, Transaction.TransactionType.INCOMING, "Test", null);
+                "Test", 100, null,
+                Transaction.TransactionType.INCOMING, "Test", null);
         LocalDateTime later = LocalDateTime.now();
         LocalDateTime earlier = later.minusMinutes(1);
 
@@ -519,3 +546,5 @@ class TransactionManagerTest {
         assertTrue(transactions.isEmpty());
     }
 }
+
+//@@author
