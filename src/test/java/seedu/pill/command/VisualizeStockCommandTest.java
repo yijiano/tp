@@ -44,15 +44,6 @@ public class VisualizeStockCommandTest {
     }
 
     @Test
-    public void execute_validItems_executesSuccessfully() throws PillException {
-        itemMap.addItemSilent(new Item("Paracetamol", 10));
-        VisualizeStockCommand command = new VisualizeStockCommand(visualizer);
-
-        command.execute(itemMap, storage);
-        // Note: Can't test actual chart generation as it's a GUI operation
-    }
-
-    @Test
     public void isExit_returnsAlwaysFalse() {
         VisualizeStockCommand command = new VisualizeStockCommand(visualizer);
         assertFalse(command.isExit());

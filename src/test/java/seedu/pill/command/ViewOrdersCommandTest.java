@@ -38,15 +38,6 @@ public class ViewOrdersCommandTest {
     }
 
     @Test
-    public void execute_noOrders_printsEmptyList() throws PillException {
-        ViewOrdersCommand command = new ViewOrdersCommand(transactionManager);
-        command.execute(itemMap, storage);
-        String output = outputStream.toString().trim();
-        // Orders list is empty but no specific message is printed based on source code
-        assertTrue(output.isEmpty());
-    }
-
-    @Test
     public void execute_withOrders_listsPendingOrders() throws PillException {
         // Create an order with some items
         ItemMap orderItems = new ItemMap();

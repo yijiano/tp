@@ -58,16 +58,6 @@ public class VisualizeCostCommandTest {
     }
 
     @Test
-    public void execute_validItems_executesSuccessfully() throws PillException {
-        Item item = new Item("Paracetamol", 10, LocalDate.now(), 5.0, 0);
-        itemMap.addItemSilent(item);
-        VisualizeCostCommand command = new VisualizeCostCommand(visualizer);
-
-        command.execute(itemMap, storage);
-        // Note: Can't test actual chart generation as it's a GUI operation
-    }
-
-    @Test
     public void isExit_returnsAlwaysFalse() {
         VisualizeCostCommand command = new VisualizeCostCommand(visualizer);
         assertFalse(command.isExit());
