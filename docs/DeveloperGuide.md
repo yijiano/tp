@@ -136,8 +136,8 @@ the Java standard library, PillException is the only custom class it depends on.
 
 ### Item and ItemMap
 
-The Item class has three private variables, a name, a quantity, and an
-expiry date. An Item may or may not have an expiry date, so we store it
+The Item class has five private variables, a name, a quantity, an
+expiry date, a cost and a price. An Item may or may not have an expiry date, so we store it
 as an Optional, which handles empty values for us without using null. 
 
 ![](diagrams/Item-ClassDiagram.png)

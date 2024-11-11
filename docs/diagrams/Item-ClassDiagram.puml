@@ -17,6 +17,7 @@ class Item {
     + compareTo(other: Item) : int
 }
 
-note right of Item : Item compares to other \nItems based on expiryDate
+note right of Item : quantity defaults to 1 if not specified
+note bottom of Item : Item compares to other \nItems based on expiryDate
 
 @enduml
