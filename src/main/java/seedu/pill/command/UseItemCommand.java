@@ -19,7 +19,7 @@ public class UseItemCommand extends Command {
      * @param quantityToUse the quantity of the item to consume
      */
     public UseItemCommand(String itemName, int quantityToUse) {
-        this.itemName = itemName;
+        this.itemName = itemName.toLowerCase();
         this.quantityToUse = quantityToUse;
     }
 

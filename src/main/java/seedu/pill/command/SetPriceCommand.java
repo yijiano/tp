@@ -17,7 +17,7 @@ public class SetPriceCommand extends Command {
     private final double price;
 
     public SetPriceCommand(String itemName, double price) {
-        this.itemName = itemName;
+        this.itemName = itemName.toLowerCase();
         this.price = price;
     }
 

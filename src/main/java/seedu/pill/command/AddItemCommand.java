@@ -13,13 +13,13 @@ public class AddItemCommand extends Command {
     private final LocalDate expiryDate;
 
     public AddItemCommand(String itemName, int quantity) {
-        this.itemName = itemName;
+        this.itemName = itemName.toLowerCase();
         this.quantity = quantity;
         this.expiryDate = null;
     }
 
     public AddItemCommand(String itemName, int quantity, LocalDate expiryDate) {
-        this.itemName = itemName;
+        this.itemName = itemName.toLowerCase();
         this.quantity = quantity;
         this.expiryDate = expiryDate;
     }
