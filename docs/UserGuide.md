@@ -498,7 +498,9 @@ The system automatically saves any changes to the inventory to the hard disk aft
 
 ### Editing the Data File
 
-Inventory data is stored in a `.csv` file. Users can edit this file manually if necessary.
+Inventory data is stored in a `.txt` file (in `csv` format). 
+
+Users can edit this file manually if necessary.
 
 ---
 
