@@ -3,99 +3,77 @@
 hide footbox
 skinparam sequenceReferenceBackgroundColor #f7807c
 
-
-actor Parser
-
 participant ":AddItemCommand" as AddItemCommand #E0BBE4
-participant ":Item" as Item #95E1D3
+participant "newItem:Item" as newItem #95E1D3
 participant ":ItemMap" as ItemMap #F9FBCB
+participant ":TreeSet" as TreeSet #A0D8D1
+participant "oldItem:Item" as oldItem #95E1D3
 participant ":Storage" as Storage #FFABAB
-participant ":System.out" as System.out #FFE156
-participant ":Logger" as Logger #B9FBC0
-participant ":Treeset" as Treeset #A0D8D1
 
-activate Parser
-Parser -> AddItemCommand : AddItemCommand(itemName, quantity, expiryDate)
-activate AddItemCommand
-deactivate AddItemCommand
-
-Parser -> AddItemCommand : execute(items, storage)
+-> AddItemCommand : execute(items, storage)
 activate AddItemCommand
 
-AddItemCommand -> Item : Item(itemName, quantity, expiryDate)
-activate Item
-deactivate Item
+AddItemCommand -> newItem : newItem(itemName, quantity, expiryDate)
+activate newItem
+return item
+deactivate newItem
 
 AddItemCommand -> ItemMap : addItem(item)
 activate ItemMap
 
-ItemMap -> Item : get attributes
-activate Item
-deactivate Item
-
-opt invalid params
-    ItemMap -> System.out : print
-    activate System.out
-    deactivate System.out
-    ItemMap -> Logger : log
-    activate Logger
-    deactivate Logger
-    ItemMap --> AddItemCommand
-end
+ItemMap -> newItem : <<get attributes>>
+activate newItem
+return <<attributes>>
+deactivate newItem
 
 alt item with same name exists
-    ItemMap -> ItemMap : get(name)
-    activate ItemMap
-    deactivate ItemMap
+    ItemMap -> TreeSet : get(name)
+    activate TreeSet
+    return itemSet
 
-    loop until item with same expiry date is found or end of array is reached
+    loop until item with same expiry date \nis found or end of array is reached
         opt item has same expiry date
-            ItemMap -> Item : setQuantity(newQuantity)
-            activate Item
-            deactivate Item
-            ItemMap -> System.out : print
-            activate System.out
-            deactivate System.out
-            ItemMap -> Logger : log
-            activate Logger
-            deactivate Logger
+            ItemMap -> oldItem : setQuantity(newQuantity)
+            activate oldItem
+            return
+            deactivate oldItem
         end
     end
 
-    opt item with same expiry date not found
-        ItemMap -> Treeset : add(item)
-        activate Treeset
-        deactivate Treeset
+    opt item with same expiry \ndate not found
+        ItemMap -> TreeSet : add(item)
+        activate TreeSet
+        return
+        deactivate TreeSet
     end
 
 
 else else
-    ItemMap -> Treeset : Treeset<>()
-    activate Treeset
-    deactivate Treeset
-    ItemMap -> Treeset : add(item)
-    activate Treeset
-    deactivate Treeset
+    ItemMap -> TreeSet : TreeSet<>()
+    activate TreeSet
+    return itemSet
+    deactivate TreeSet
+    ItemMap -> TreeSet : add(item)
+    activate TreeSet
+    return
+    deactivate TreeSet
     ItemMap -> ItemMap : put(name, itemSet)
     activate ItemMap
-    deactivate ItemMap
-    ItemMap -> System.out : print
-    activate System.out
-    deactivate System.out
-    ItemMap -> Logger : log
-    activate Logger
-    deactivate Logger
+    return
+    ||10||
 end
 
-deactivate ItemMap
 ItemMap --> AddItemCommand
+deactivate ItemMap
 
 AddItemCommand -> Storage : saveItem(item)
 activate Storage
+||||||
+return
 deactivate Storage
 
-AddItemCommand --> Parser
+<-- AddItemCommand
 deactivate AddItemCommand
-deactivate Parser
+destroy AddItemCommand
 
 @enduml

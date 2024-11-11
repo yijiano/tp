@@ -1,0 +1,24 @@
+@startuml
+
+'hide footbox
+skinparam sequenceReferenceBackgroundColor #f7807c
+
+hide footbox
+
+actor Parser
+participant ":Command" as Command #E0BBE4
+
+activate Parser
+Parser -> Command ** : Command(itemName, quantity, expiryDate)
+activate Command
+return command
+
+Parser -> Command : execute(items, storage)
+activate Command
+
+...Command specific execution runs...
+
+return
+destroy Command
+
+@enduml
