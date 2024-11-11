@@ -6,7 +6,7 @@ skinparam sequenceReferenceBackgroundColor #f7807c
 participant ":AddItemCommand" as AddItemCommand #E0BBE4
 participant "newItem:Item" as newItem #95E1D3
 participant ":ItemMap" as ItemMap #F9FBCB
-participant ":TreeSet" as TreeSet #A0D8D1
+participant "oldSet:TreeSet" as oldTreeSet #A0D8D1
 participant "oldItem:Item" as oldItem #95E1D3
 participant ":Storage" as Storage #FFABAB
 
@@ -27,8 +27,8 @@ return <<attributes>>
 deactivate newItem
 
 alt item with same name exists
-    ItemMap -> TreeSet : get(name)
-    activate TreeSet
+    ItemMap -> ItemMap : get(name)
+    activate ItemMap
     return itemSet
 
     loop until item with same expiry date \nis found or end of array is reached
@@ -41,22 +41,22 @@ alt item with same name exists
     end
 
     opt item with same expiry \ndate not found
-        ItemMap -> TreeSet : add(item)
-        activate TreeSet
+        ItemMap -> oldTreeSet : add(item)
+        activate oldTreeSet
         return
-        deactivate TreeSet
+        deactivate oldTreeSet
     end
 
 
 else else
-    ItemMap -> TreeSet : TreeSet<>()
-    activate TreeSet
+    ItemMap -> newTreeSet ** : TreeSet<>()
+    activate newTreeSet
     return itemSet
-    deactivate TreeSet
-    ItemMap -> TreeSet : add(item)
-    activate TreeSet
+    deactivate newTreeSet
+    ItemMap -> newTreeSet : add(item)
+    activate newTreeSet
     return
-    deactivate TreeSet
+    deactivate newTreeSet
     ItemMap -> ItemMap : put(name, itemSet)
     activate ItemMap
     return
