@@ -70,12 +70,13 @@ public class TransactionManager {
     }
 
     /**
-     * Creates a new order in the system. Orders can be either purchase orders (for receiving stock) or dispense orders
-     * (for dispensing items).
+     * Creates a new order in the system. Orders can be either purchase orders (to receive stock) or dispense orders
+     * (to provide items to customers).
      *
-     * @param type  - The type of order (PURCHASE or DISPENSE)
-     * @param notes - Any additional notes or comments about the order
-     * @return - The created Order object
+     * @param type         - The type of order (PURCHASE or DISPENSE).
+     * @param itemsToOrder - The items to be included in this order.
+     * @param notes        - Any additional notes or comments about the order.
+     * @return             - The created Order object.
      */
     public Order createOrder(Order.OrderType type, ItemMap itemsToOrder, String notes) {
         Order order = new Order(type, itemsToOrder, notes);
