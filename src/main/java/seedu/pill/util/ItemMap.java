@@ -71,7 +71,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      * @param newItem The item to be added.
      */
     public void addItem(Item newItem) {
-        String name = newItem.getName();
+        String name = newItem.getName().toLowerCase();
         int quantity = newItem.getQuantity();
         Optional<LocalDate> expiryDate = newItem.getExpiryDate();
 
@@ -135,7 +135,7 @@ public class ItemMap implements Iterable<Map.Entry<String, TreeSet<Item>>> {
      * @param newItem The item to be added.
      */
     public void addItemSilent(Item newItem) {
-        String name = newItem.getName();
+        String name = newItem.getName().toLowerCase();
         int quantity = newItem.getQuantity();
         Optional<LocalDate> expiryDate = newItem.getExpiryDate();
 
