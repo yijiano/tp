@@ -320,9 +320,9 @@ complexity.
 
 ## Non-Functional Requirements
 
-* Technical Requirements: Any mainstream OS, i.e. Windows, macOS or Linux, with Java 11 installed. Instructions for
-  downloading Java 11 can be
-  found [here](https://www.oracle.com/sg/java/technologies/javase/jdk11-archive-downloads.html).
+* Technical Requirements: Any *mainstream OS* with Java 17 or above installed. 
+  Instructions for downloading Java 17 can be found 
+  [here](https://www.oracle.com/sg/java/technologies/javase/jdk17-archive-downloads.html).
 * Project Scope Constraints: The application should only be used for tracking. It is not meant to be involved in any
   form of monetary transaction.
 * Project Scope Constraints: Data storage is only to be performed locally.
@@ -331,18 +331,19 @@ complexity.
 
 ## Glossary
 
-[ADD GLOSSARY HERE]
+**Mainstream OS**: Windows, Linux, Unix, MacOS
 
 ## Instructions for Testing
 
 ### Manual Testing
 
-View the [User Guide](UserGuide.md) for the full list of UI commands and their related use case and expected outcomes.
+View the [User Guide](UserGuide.md) for the full list of UI commands and 
+their related use case and expected outcomes.
 
 ### JUnit Testing
 
-JUnit tests are written in the [test directory](../src/test/java/seedu/pill/) and serve to test key methods part of the
-application.
+JUnit tests are written in the [test directory](../src/test/java/seedu/pill/)
+and serve to test key methods part of the application.
 
 ### Text UI Testing
 
@@ -350,7 +351,8 @@ Files relating to Text UI Testing can be found [here](../text-ui-test/).
 
 To run the Text UI tests, navigate to the `text-ui-test` directory in the terminal.
 
-When running tests on a Windows system, run the following command from the specified directory:
+When running tests on a Windows system, run the following command from the 
+specified directory:
 
 ```
 ./runtest.bat
