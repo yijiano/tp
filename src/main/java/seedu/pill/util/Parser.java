@@ -575,9 +575,11 @@ public class Parser {
             itemName = buildItemName(splitArguments, 0, splitArguments.length);
         }
 
+        /*
         if (itemName.contains(",")) {
             throw new PillException(ExceptionMessages.INVALID_ITEM_NAME);
         }
+        */
 
         if (expiryDateStr != null) {
             if (!isValidDate(expiryDateStr)) {
