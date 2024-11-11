@@ -201,12 +201,16 @@ public class TransactionManager {
      */
     public void listOrders() {
         List<Order> orders = getOrders();
-        IntStream.rangeClosed(1, orders.size())
-                .forEach(i -> {
-                    System.out.print(i + ". ");
-                    orders.get(i - 1).listItems();
-                    System.out.println();
-                });
+        if (orders.isEmpty()) {
+            System.out.println("No orders recorded...");
+        } else {
+            IntStream.rangeClosed(1, orders.size())
+                    .forEach(i -> {
+                        System.out.print(i + ". ");
+                        orders.get(i - 1).listItems();
+                        System.out.println();
+                    });
+        }
     }
 
     /**

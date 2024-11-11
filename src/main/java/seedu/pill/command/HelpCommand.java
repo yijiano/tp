@@ -532,8 +532,8 @@ public class HelpCommand extends Command {
 
         System.out.println("fulfill-order: Processes and completes a pending order.");
         if (verbose) {
-            System.out.println("Usage: fulfill-order <order-id>");
-            System.out.println("  <order-id> - The unique identifier of the order to fulfill");
+            System.out.println("Usage: fulfill-order <order-uuid>");
+            System.out.println("  <order-uuid> - The unique identifier of the order to fulfill");
             System.out.println("\nExample:");
             System.out.println("  fulfill-order 123e4567-e89b-12d3-a456-556642440000");
             System.out.println("\nNote: This will create the necessary transactions and update inventory levels");

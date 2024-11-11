@@ -488,11 +488,11 @@ Completes an order by adding/removing items from the inventory.
 
 The action taken depends on the order type (purchase/dispense) and the items in the order.
 
-**Format**: `fulfill-order ORDER_ID`
+**Format**: `fulfill-order ORDER_UUID`
 
 **Sample Output**:
 
-`> fulfill-order 1`
+`> fulfill-order cec43f38-5c63-40b6-8964-00f8b4225c17`
 
 ```
 Added the following item to the inventory: 
