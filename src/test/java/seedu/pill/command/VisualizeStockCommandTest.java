@@ -7,7 +7,6 @@ import seedu.pill.exceptions.PillException;
 import seedu.pill.util.ItemMap;
 import seedu.pill.util.Storage;
 import seedu.pill.util.Visualizer;
-import seedu.pill.util.Item;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
