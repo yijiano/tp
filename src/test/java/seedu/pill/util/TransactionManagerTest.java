@@ -528,9 +528,9 @@ class TransactionManagerTest {
         transactionManager.fulfillOrder(dispenseOrder);
 
         assertEquals(Order.OrderStatus.FULFILLED, dispenseOrder.getStatus());
-        List<Transaction> orderTransactions = transactionManager.getTransactions().stream()
-                          .filter(t -> t.getAssociatedOrder() == dispenseOrder)
-                          .toList();
+        List<Transaction> orderTransactions = transactionManager.getTransactions()
+                .stream().filter(t -> t.getAssociatedOrder() == dispenseOrder)
+                .toList();
         assertEquals(2, orderTransactions.size());
 
         // Verify first transaction
