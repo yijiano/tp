@@ -10,9 +10,8 @@
         - [Commands](#commands)
         - [Storage](#storage)
         - [Item and ItemMap](#item-and-itemmap)
-        - [Transaction and TransactionManager](#transaction-and-transactionmanager)
+        - [Orders and Transactions](#orders-and-transactions)
         - [StringMatcher](#stringmatcher)
-        - [Order](#order)
         - [Visualizer](#visualizer)
         - [Parser](#parser)
         - [DateTime](#datetime)
@@ -179,11 +178,14 @@ Each order is a collection of one or more items, and is associated to either of 
 
 A transactions represents an inflow/outflow of items to/from the inventory.
 Each transaction is associated with a single item and the corresponding order.
+When a transaction is created, the inventory is updated to reflect this inflow/outflow by 
+invoking the `addItem` or `useItem` methods, depending on whether it is an incoming or outgoing transaction.
 
 #### Order Fulfillment
 
 An order is said to be fulfilled when the inflow/outflow of the items ordered have occurred.
-Each time an order is fulfilled, a corresponding transaction is created for each individual item in the order.
+Each time an order is fulfilled, a corresponding transaction is created for each individual item in the order and the 
+order is marked as fulfilled.
 
 #### TransactionManager
 
