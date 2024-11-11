@@ -18,12 +18,13 @@ Command Line Interface (CLI).
     - What it does: Filters and lists expiring items based on the entered cut-off date to the user.
     - Justification: Allows for easy tracking of items that are expiring post a specified cut-off date.
     - Highlights: Can be accessed using the `expiring <date>` command.
-- **New Feature**: Create commands and integrate order related features
+- **New Feature**: Create commands and integrate order related features including placing, viewing and fulfilling
+  orders, viewing transactions and querying transaction history over a specified date-range
   ([#142](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/142)).
     - What it does: Enables user to place, view and fulfill orders. Users may also view transactions and transaction
       history over a specified date range.
     - Justification: Allows for easy tracking of orders and transactions.
-    - Highlights: Replicates real life inventory functioning where the inventory is controlled by orders that are 
+    - Highlights: Replicates real life inventory functioning where the inventory is controlled by orders that are
     - placed in bulk.
 - **General Contributions**: Created PillLogger class ([#103](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/103)).
     - What it does: Responsible for console and file logging.
@@ -55,7 +56,14 @@ Command Line Interface (CLI).
       [#163](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/163),
       [#239](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/239),
 
-
+- **Testing**:
+    - Commands
+        - ListCommand ([#49](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/49))
+        - FindCommand ([#51](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/51))
+    - Methods
+        - getExpiringItems ([#113](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/113))
+        - loadLine ([#68](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/68))
+    
 - **Documentation**:
     - Developer Guide
         - Added the following sections
@@ -65,6 +73,9 @@ Command Line Interface (CLI).
             - Target User Profile ([#115](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/115))
             - Value Proposition ([#115](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/115))
             - User Stories ([#115](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/115))
+    - User Guide
+        - Fixed inaccurate order command format ([#224](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/224))
+        - Update fulfill command usage ([#235](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/235))
 
 - **Community**:
     - PRs reviewed(with non-trivial comments):
