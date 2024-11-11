@@ -34,7 +34,7 @@
       - [View All Orders: `view-orders`](#view-all-orders-view-orders)
       - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
       - [Viewing Transactions: `transactions`](#view-transactions-transactions)
-      - [Viewing Transaction History: `transaction-history](#view-transactions-within-a-set-time-period-transaction-history)
+      - [Viewing Transaction History: `transaction-history`](#view-transactions-within-a-set-time-period-transaction-history)
 3. [Important Note](#important-note)
    - [Case Sensitivity](#case-sensitivity)
    - [No special characters](#no-special-characters)
