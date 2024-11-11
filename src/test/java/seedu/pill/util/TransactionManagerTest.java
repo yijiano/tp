@@ -5,13 +5,11 @@ import org.junit.jupiter.api.Test;
 import seedu.pill.exceptions.PillException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -160,7 +158,7 @@ class TransactionManagerTest {
     @Test
     void fulfillOrder_purchaseOrder_updatesInventoryAndStatus() throws PillException {
         // Arrange
-        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(),"Test purchase");
+        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(), "Test purchase");
         String itemName = "Aspirin";
         int quantity = 100;
         order.addItem(new Item(itemName, quantity));
@@ -195,7 +193,7 @@ class TransactionManagerTest {
         );
 
         // Create and fulfill dispense order
-        Order order = transactionManager.createOrder(Order.OrderType.DISPENSE, new ItemMap(),"Test dispense");
+        Order order = transactionManager.createOrder(Order.OrderType.DISPENSE, new ItemMap(), "Test dispense");
         order.addItem(new Item(itemName, dispenseQuantity));
 
         // Act
@@ -214,7 +212,7 @@ class TransactionManagerTest {
     @Test
     void fulfillOrder_nonPendingOrder_throwsException() throws PillException {
         // Arrange
-        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(),"Test order");
+        Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(), "Test order");
         order.fulfill(); // Change status to FULFILLED
 
         // Act & Assert
@@ -275,22 +273,23 @@ class TransactionManagerTest {
     @Test
     void getTransactionHistory_returnsTransactionsInTimeRange() throws PillException {
         // Arrange
-        LocalDateTime startTime = LocalDateTime.now();
+        LocalDate startDate = LocalDate.now();
 
         transactionManager.createTransaction("Aspirin", 100,
                 Transaction.TransactionType.INCOMING, "First", null);
         transactionManager.createTransaction("Bandage", 50,
                 Transaction.TransactionType.INCOMING, "Second", null);
 
-        LocalDateTime endTime = LocalDateTime.now();
+        LocalDate endDate = LocalDate.now();
 
         // Act
-        List<Transaction> transactions = transactionManager.getTransactionHistory(startTime, endTime);
+        List<Transaction> transactions = transactionManager.getTransactionHistory(startDate, endDate);
 
         // Assert
         assertEquals(2, transactions.size());
         assertTrue(transactions.stream()
-                .allMatch(t -> !t.getTimestamp().isBefore(startTime) && !t.getTimestamp().isAfter(endTime)));
+                .allMatch(t -> !t.getTimestamp().toLocalDate().isBefore(startDate) && !t.getTimestamp().toLocalDate()
+                        .isAfter(endDate)));
     }
 
     @Test
@@ -441,16 +440,16 @@ class TransactionManagerTest {
     @Test
     void getTransactionHistory_exactTimeRange_returnsMatchingTransactions() throws PillException {
         // Arrange
-        LocalDateTime start = LocalDateTime.now();
+        LocalDate start = LocalDate.now();
         Transaction first = transactionManager.createTransaction(
                 "Aspirin", 100, Transaction.TransactionType.INCOMING, "First", null);
         Transaction second = transactionManager.createTransaction(
                 "Bandage", 50, Transaction.TransactionType.INCOMING, "Second", null);
-        LocalDateTime end = LocalDateTime.now();
+        LocalDate end = LocalDate.now();
 
         // Act
         List<Transaction> transactions = transactionManager.getTransactionHistory(
-                first.getTimestamp(), second.getTimestamp());
+                first.getTimestamp().toLocalDate(), second.getTimestamp().toLocalDate());
 
         // Assert
         assertEquals(2, transactions.size());
@@ -459,42 +458,11 @@ class TransactionManagerTest {
     }
 
     @Test
-    void getTransactionHistory_beforeStartTime_excludesTransactions() throws PillException, InterruptedException {
-        // Arrange
-        Transaction before = transactionManager.createTransaction(
-                "Before", 100, Transaction.TransactionType.INCOMING, "Before start", null);
-        Thread.sleep(100); // Add delay to ensure clear time separation
-        LocalDateTime start = LocalDateTime.now();
-        Thread.sleep(100); // Add delay to ensure clear time separation
-        Transaction during = transactionManager.createTransaction(
-                "During", 50, Transaction.TransactionType.INCOMING, "During range", null);
-        LocalDateTime end = LocalDateTime.now();
-
-        // Debug prints
-        System.out.println("Before transaction time: " + before.getTimestamp());
-        System.out.println("During transaction time: " + during.getTimestamp());
-        System.out.println("Start time: " + start);
-        System.out.println("End time: " + end);
-
-        // Act
-        List<Transaction> transactions = transactionManager.getTransactionHistory(start, end);
-
-        // Debug prints
-        System.out.println("Found transactions: " + transactions.size());
-        transactions.forEach(t -> System.out.println("Transaction: " + t.getTimestamp()));
-
-        // Assert
-        assertEquals(1, transactions.size());
-        assertFalse(transactions.contains(before));
-        assertTrue(transactions.contains(during));
-    }
-
-    @Test
     void getTransactionHistory_exactBoundaryTimes_includesTransactions() throws PillException {
         // Arrange
         Transaction first = transactionManager.createTransaction(
                 "First", 100, Transaction.TransactionType.INCOMING, "Boundary start", null);
-        LocalDateTime startAndEnd = first.getTimestamp(); // Use exact timestamp
+        LocalDate startAndEnd = first.getTimestamp().toLocalDate(); // Use exact timestamp
 
         // Act
         List<Transaction> transactions = transactionManager.getTransactionHistory(startAndEnd, startAndEnd);
@@ -509,8 +477,8 @@ class TransactionManagerTest {
         // Arrange
         Transaction transaction = transactionManager.createTransaction(
                 "Test", 100, Transaction.TransactionType.INCOMING, "Test", null);
-        LocalDateTime later = LocalDateTime.now();
-        LocalDateTime earlier = later.minusMinutes(1);
+        LocalDate later = LocalDate.now();
+        LocalDate earlier = later.minusDays(1);
 
         // Act
         List<Transaction> transactions = transactionManager.getTransactionHistory(later, earlier);
