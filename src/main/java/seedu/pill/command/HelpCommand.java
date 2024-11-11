@@ -513,14 +513,26 @@ public class HelpCommand extends Command {
 
         System.out.println("order: Creates a new purchase or dispense order.");
         if (verbose) {
-            System.out.println("Usage: order <type> <item1> <quantity1> [item2 quantity2 ...] [-n \"notes\"]");
+            System.out.println("Usage:");
+            System.out.println("order <type> <item-count>");
+            System.out.println("<item1> <quantity1>");
+            System.out.println("[item2 quantity2]");
+            System.out.println("...");
+            System.out.println("[-n \"notes\"]");
+            System.out.println();
             System.out.println("  <type>     - Type of order: 'purchase' or 'dispense'");
             System.out.println("  <itemN>    - Name of item to order");
             System.out.println("  <quantityN>- Quantity of the item");
             System.out.println("  -n         - Optional notes about the order");
             System.out.println("\nExamples:");
-            System.out.println("  order purchase Aspirin 100 Bandages 50 -n \"Monthly stock replenishment\"");
-            System.out.println("  order dispense Paracetamol 20 -n \"Emergency room request\"");
+            System.out.println("  order purchase 2");
+            System.out.println("  Aspirin 100");
+            System.out.println("  Bandages 50");
+            System.out.println("  -n \"Monthly stock replenishment\"");
+            System.out.println();
+            System.out.println("  order dispense 1");
+            System.out.println("  Paracetamol 20");
+            System.out.println("  -n \"Emergency room request\"");
         }
     }
 
@@ -532,8 +544,8 @@ public class HelpCommand extends Command {
 
         System.out.println("fulfill-order: Processes and completes a pending order.");
         if (verbose) {
-            System.out.println("Usage: fulfill-order <order-id>");
-            System.out.println("  <order-id> - The unique identifier of the order to fulfill");
+            System.out.println("Usage: fulfill-order <order-uuid>");
+            System.out.println("  <order-uuid> - The unique identifier of the order to fulfill");
             System.out.println("\nExample:");
             System.out.println("  fulfill-order 123e4567-e89b-12d3-a456-556642440000");
             System.out.println("\nNote: This will create the necessary transactions and update inventory levels");
