@@ -12,12 +12,12 @@ public class DeleteItemCommand extends Command {
     private final LocalDate expiryDate;
 
     public DeleteItemCommand(String itemName) {
-        this.itemName = itemName;
+        this.itemName = itemName.toLowerCase();
         this.expiryDate = null;
     }
 
     public DeleteItemCommand(String itemName, LocalDate expiryDate) {
-        this.itemName = itemName;
+        this.itemName = itemName.toLowerCase();
         this.expiryDate = expiryDate;
     }
 
