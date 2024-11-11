@@ -1,3 +1,8 @@
+//@@author philip1304-unused
+/*
+ * We ended up using regular Items in another ItemMap, rather than using a
+ * different type of item.
+ */
 package seedu.pill.util;
 
 import java.time.LocalDate;
