@@ -45,7 +45,7 @@ Command Line Interface (CLI).
     - Justification: Abstraction of the find command, inheriting from the base command class.
     - Highlights: Receives item name to search for and executes the command.
 - **Code contributed
-  **: [RepoSense link](https://nus-cs2113-ay2425s1.github.io/tp-dashboard/?search=cnivedit&sort=groupTitle&sortWithin=title&timeframe=commit&mergegroup=&groupSelect=groupByRepos&breakdown=true&checkedFileTypes=docs~functional-code~test-code~other&since=2024-09-20&tabOpen=true&tabType=authorship&tabAuthor=yijiano&tabRepo=AY2425S1-CS2113-W14-4%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code~other&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
+  **: [RepoSense link](https://nus-cs2113-ay2425s1.github.io/tp-dashboard/?search=cnivedit&breakdown=true)
 - **Project Management**:
     - Helped maintain some issues, opening
       [#69](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/69),
