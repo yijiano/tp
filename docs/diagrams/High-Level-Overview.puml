@@ -20,6 +20,8 @@ package "pill" {
         class DateTime
         class PillLogger
         class TransactionManager
+        class Order
+        class Transaction
         class Visualizer
     }
 
@@ -56,6 +58,8 @@ package "pill" {
 
     ItemMap -> Storage
     TransactionManager --> Storage
+    TransactionManager ---> Order
+    TransactionManager ---> Transaction
 
     PillException -left> ExceptionMessages
 
