@@ -33,10 +33,11 @@
       - [Order Items: `order`](#order-items-order)
       - [View All Orders: `view-orders`](#view-all-orders-view-orders)
       - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
-      - [Viewing Transactions: `transactions`](#transactions)
-      - [Viewing Transaction History: `transaction-history`](#transaction-history)
+      - [Viewing Transactions: `transactions`](#view-transactions-transactions)
+      - [Viewing Transaction History: `transaction-history](#view-transactions-within-a-set-time-period-transaction-history)
 3. [Important Note](#important-note)
    - [Case Sensitivity](#case-sensitivity)
+   - [No special characters](#no-special-characters)
    - [Expiry Date](#expiry-date)
 
 
@@ -65,52 +66,6 @@ Displays a list of all available commands and their descriptions.
 
 - Optional: COMMAND_NAME specifies the command to display help for.
 - Optional: `-v` flag to display verbose help for the specified command.
-
-**Sample Output**:
-`> help`
-
-```
-Available commands:
-
-Item Management:
-  add                   - Adds a new item to the list
-  delete                - Deletes an item from the list
-  edit                  - Edits an item in the list
-  find                  - Finds all items with the same keyword
-  expired               - Lists all items that have expired
-  expiring              - Lists items expiring before a specified date
-  list                  - Lists all items
-  stock-check           - Lists all items that need to be restocked
-  restock               - Restocks a specified item with an optional expiry date and quantity
-  restock-all           - Restocks all items below a specified threshold
-  use                   - Priority removal of items from the list, starting with earliest expiry date
-
-Visualization:
-  visualize-price       - Visualizes item prices as a bar chart
-  visualize-cost        - Visualizes item costs as a bar chart
-  visualize-stock       - Visualizes item stocks as a bar chart
-  visualize-cost-price  - Visualizes item costs and prices side-by-side as a bar chart
-
-Price and Cost Management:
-  cost                  - Sets the cost for a specified item
-  price                 - Sets the selling price for a specified item
-
-Order Management:
-  order                 - Creates a new purchase or dispense order
-  fulfill-order         - Processes and completes a pending order
-  view-orders           - Lists all orders
-
-Transaction Management:
-  transactions          - Views all transactions
-  transaction-history   - Views transaction history in a given time period
-
-Other Commands:
-  help          - Shows this help message
-  exit          - Exits the program
-
-Type 'help <command>' for more information on a specific command.
-Type 'help <command> -v' for verbose output with examples.
-```
 
 
 
@@ -495,6 +450,10 @@ Items:
 ---
 ### Fulfill Order: `fulfill-order`
 
+Completes an order by adding/removing items from the inventory. 
+
+The action taken depends on the order type (purchase/dispense) and the items in the order.
+
 **Format**: `fulfill-order ORDER_ID`
 
 **Sample Output**:
@@ -509,6 +468,18 @@ cans: 10 in stock
 ```
 
 ---
+### View Transactions: `transactions`
+
+Displays all fulfilled orders made in the system.
+
+**Format**: `transactions`
+
+---
+### View Transactions (within a set time period): `transaction-history`
+
+Displays all transactions made within a specified time period.
+
+**Format**: `transaction-history START_DATE END_DATE`
 
 ### Exiting the Program: `exit`
 
@@ -516,20 +487,11 @@ Exits the program.
 
 **Format**: `exit`
 
-**Sample Output**:
-
-`> exit`
-
-`Exiting the inventory interface. Have a nice day! :)`
-
-
-
 ---
 
 ### Saving the Data
 
 The system automatically saves any changes to the inventory to the hard disk after commands that modify the data (e.g., `add`, `delete`). The data is also saved upon using the `exit` command. There is no need to manually save changes.
-
 
 
 ---
@@ -551,7 +513,12 @@ Our application is **case sensitive**. This means that item names must match exa
 
 Ensure you use the correct capitalization when interacting with items in the inventory.
 
----
+
+### No special characters
+
+Our application **does not support special characters** for any input.
+
+Preferably, please keep to **lowercase, alphanumeric characters** for command inputs.
 
 ### Expiry Date
 
