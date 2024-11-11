@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Storage class handles the storage of ItemMap objects
@@ -20,6 +22,14 @@ public class Storage {
     private static final String PATH = "./data/";
     private static final String FILE_NAME = "pill.txt";
     private static final String SEPARATOR = ",";
+
+    private static String escapeCommas(String input) {
+        return input.replace(",", "\\,");
+    }
+
+    private static String unescapeCommas(String input) {
+        return input.replace("\\,", ",");
+    }
 
     /**
      * Initializes the storage file and creates the necessary
@@ -59,11 +69,13 @@ public class Storage {
             for (String itemName : itemMap.items.keySet()) {
                 TreeSet<Item> itemSet = itemMap.items.get(itemName);
                 for (Item item : itemSet) {
-                    fw.write(item.getName() + SEPARATOR + item.getQuantity());
+                    fw.write(escapeCommas(item.getName()) + SEPARATOR + item.getQuantity());
 
-                    fw.write(SEPARATOR + item.getExpiryDate().map(LocalDate::toString).orElse(""));
-                    fw.write(SEPARATOR + (item.getCost() > 0 ? String.format("%.2f", item.getCost()) : ""));
-                    fw.write(SEPARATOR + (item.getPrice() > 0 ? String.format("%.2f", item.getPrice()) : ""));
+                    fw.write(SEPARATOR + escapeCommas(item.getExpiryDate().map(LocalDate::toString).orElse("")));
+                    fw.write(SEPARATOR + escapeCommas(item.getCost() > 0 ?
+                            String.format("%.2f", item.getCost()) : ""));
+                    fw.write(SEPARATOR + escapeCommas((item.getPrice() > 0 ?
+                            String.format("%.2f", item.getPrice()) : "")));
 
                     fw.write(System.lineSeparator());
                 }
@@ -75,8 +87,6 @@ public class Storage {
         }
     }
 
-
-
     /**
      * Appends a single item to the storage file.
      *
@@ -87,11 +97,13 @@ public class Storage {
         try {
             File file = initializeFile();
             FileWriter fw = new FileWriter(file, true);
-            fw.write(item.getName() + SEPARATOR + item.getQuantity());
+            fw.write(escapeCommas(item.getName()) + SEPARATOR + item.getQuantity());
 
-            fw.write(SEPARATOR + item.getExpiryDate().map(LocalDate::toString).orElse(""));
-            fw.write(SEPARATOR + (item.getCost() > 0 ? item.getCost() : ""));
-            fw.write(SEPARATOR + (item.getPrice() > 0 ? item.getPrice() : ""));
+            fw.write(SEPARATOR + escapeCommas(item.getExpiryDate().map(LocalDate::toString).orElse("")));
+            fw.write(SEPARATOR + escapeCommas(item.getCost() > 0 ?
+                    String.format("%.2f", item.getCost()) : ""));
+            fw.write(SEPARATOR + escapeCommas((item.getPrice() > 0 ?
+                    String.format("%.2f", item.getPrice()) : "")));
 
             fw.write(System.lineSeparator());
             fw.close();
@@ -134,24 +146,53 @@ public class Storage {
      */
     public Item loadLine(String line) throws PillException {
         Item item;
-        String[] data = line.split(SEPARATOR);
+        List<String> data = new ArrayList<>();
+        StringBuilder currentField = new StringBuilder();
 
+        int unescapedCommaCount = 0;
+        boolean inEscape = false;
+
+        // Loop through each character in the line
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+
+            if (c == '\\' && !inEscape) {
+                inEscape = true;
+            } else if (c == ',' && !inEscape) {
+                unescapedCommaCount++;
+                if (unescapedCommaCount > 4) {
+                    throw new PillException(ExceptionMessages.INVALID_LINE_FORMAT);
+                }
+
+                data.add(currentField.toString());
+                currentField.setLength(0); // Clear current field
+            } else {
+                currentField.append(c);
+                inEscape = false;
+            }
+        }
+
+        // Add the last field
+        data.add(currentField.toString());
+
+        // Parse fields as before, handling potential exceptions
         try {
-            String name = data[0];
-            int quantity = Integer.parseInt(data[1]);
-            LocalDate expiryDate = data.length > 2 && !data[2].isEmpty() ? LocalDate.parse(data[2]) : null;
-            double cost = data.length > 3 && !data[3].isEmpty() ? Double.parseDouble(data[3]) : 0;
-            double price = data.length > 4 && !data[4].isEmpty() ? Double.parseDouble(data[4]) : 0;
+            String name = data.get(0); // Already unescaped
+            int quantity = Integer.parseInt(data.get(1));
+            LocalDate expiryDate = data.size() > 2 && !data.get(2).isEmpty() ? LocalDate.parse(data.get(2)) : null;
+            double cost = data.size() > 3 && !data.get(3).isEmpty() ? Double.parseDouble(data.get(3)) : 0;
+            double price = data.size() > 4 && !data.get(4).isEmpty() ? Double.parseDouble(data.get(4)) : 0;
 
             item = new Item(name, quantity, expiryDate, cost, price);
         } catch (NumberFormatException e) {
             throw new PillException(ExceptionMessages.INVALID_QUANTITY_FORMAT);
         } catch (DateTimeParseException e) {
             throw new PillException(ExceptionMessages.PARSE_DATE_ERROR);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             throw new PillException(ExceptionMessages.INVALID_LINE_FORMAT);
         }
 
         return item;
     }
+
 }

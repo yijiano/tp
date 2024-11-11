@@ -28,7 +28,7 @@ public class OrderCommandTest {
     public void setUp() {
         itemMap = new ItemMap();
         storage = new Storage();
-        transactionManager = new TransactionManager(itemMap);
+        transactionManager = new TransactionManager(itemMap, storage);
         outputStream = new ByteArrayOutputStream();
         printStream = new PrintStream(outputStream);
         System.setOut(printStream);
@@ -38,9 +38,10 @@ public class OrderCommandTest {
     public void execute_purchaseOrder_createsOrder() throws PillException {
         ItemMap itemsToOrder = new ItemMap();
         itemsToOrder.addItemSilent(new Item("Paracetamol", 10));
+        String notes = "test";
 
         OrderCommand command = new OrderCommand(itemsToOrder, transactionManager,
-                Order.OrderType.PURCHASE);
+                Order.OrderType.PURCHASE, notes);
         command.execute(itemMap, storage);
 
         assertEquals(1, transactionManager.getOrders().size());
@@ -52,9 +53,10 @@ public class OrderCommandTest {
     public void execute_dispenseOrder_createsOrder() throws PillException {
         ItemMap itemsToOrder = new ItemMap();
         itemsToOrder.addItemSilent(new Item("Paracetamol", 5));
+        String notes = "test";
 
         OrderCommand command = new OrderCommand(itemsToOrder, transactionManager,
-                Order.OrderType.DISPENSE);
+                Order.OrderType.DISPENSE, notes);
         command.execute(itemMap, storage);
 
         assertEquals(1, transactionManager.getOrders().size());
@@ -65,7 +67,7 @@ public class OrderCommandTest {
     @Test
     public void isExit_returnsAlwaysFalse() {
         OrderCommand command = new OrderCommand(new ItemMap(), transactionManager,
-                Order.OrderType.PURCHASE);
+                Order.OrderType.PURCHASE, "");
         assertFalse(command.isExit());
     }
 
