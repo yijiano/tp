@@ -31,7 +31,7 @@ public class TransactionHistoryCommandTest {
     public void setUp() {
         itemMap = new ItemMap();
         storage = new Storage();
-        transactionManager = new TransactionManager(itemMap);
+        transactionManager = new TransactionManager(itemMap, storage);
         outputStream = new ByteArrayOutputStream();
         printStream = new PrintStream(outputStream);
         System.setOut(printStream);
@@ -40,7 +40,7 @@ public class TransactionHistoryCommandTest {
     @Test
     public void execute_validDateRange_showsTransactions() throws PillException {
         // Create a transaction
-        transactionManager.createTransaction("Paracetamol", 10,
+        transactionManager.createTransaction("Paracetamol", 10, null,
                 Transaction.TransactionType.INCOMING, "Past transaction", null);
 
         LocalDate start = LocalDate.now().minusDays(1);

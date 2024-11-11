@@ -414,15 +414,30 @@ panadol: 999990 in stock, expiring: 2024-05-16
 
 Creates a new purchase or dispense order.
 
-**Format**: `order ORDER_TYPE ITEM_COUNT` 
-This is followed by `ITEM_COUNT` number of lines of `ITEM_NAME QUANTITY (EXPIRY_DATE)` 
+**Format**: `order ORDER_TYPE ITEM_COUNT ("NOTES")` 
+This is followed by `ITEM_COUNT` number of lines of `ITEM_NAME (QUANTITY) (EXPIRY_DATE)` 
 
 - ORDER_TYPE: `purchase` or `dispense`
+
+**Notes**:
+- `NOTES` are optional and in quotes, and don't detect anything after the quotation.
+  The quotation marks recognised go by the first and last quotation marks after the
+  `ORDER_TYPE` and `ITEM_COUNT`.
+  - For example: `order purchase 4 "restock on panadol" not recognised`
+    - The `not recognised` portion is **ignored** by the program.
+  - For example: `order dispense 1 "sell some "zyrtec" to "bob" on tuesday"`
+    - `NOTES` will be `sell some "zyrtec" to "bob" on tuesday`
+- Expiry dates are ignored for `dispense` orders. They are only valid for `purchase`
+  orders, since when items are dispensed from the inventory, the item with the soonest
+  expiry date will always be used first. 
+  - A warning will be printed that expiry dates are ignored for dispense orders for the 
+    first item with a specified expiry date for that order:
+    `Expiry dates will be ignored for dispense orders`
 
 **Sample Output**:
 
 ```
-> order purchase 2 
+> order purchase 2
 syringe 100 
 cans 10
 ```
@@ -438,6 +453,23 @@ Notes: null
 Items: 
 1. syringe: 100 in stock
 2. cans: 10 in stock
+```
+
+```
+> order dispense 1 "Big sale due for Thursday"
+panadol 100
+```
+
+```
+Order placed! Listing order details
+UUID: 13e3cd21-195b-4d04-9783-e8addd42c537
+Type: DISPENSE
+Creation Time: 2024-11-12T00:18:46.299344700
+Fulfillment Time: null
+Status: PENDING
+Notes: Big sale due for Thursday
+Items: 
+1. panadol: 100 in stock
 ```
 
 ---

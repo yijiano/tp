@@ -10,9 +10,8 @@
         - [Commands](#commands)
         - [Storage](#storage)
         - [Item and ItemMap](#item-and-itemmap)
-        - [Transaction and TransactionManager](#transaction-and-transactionmanager)
+        - [Orders and Transactions](#orders-and-transactions)
         - [StringMatcher](#stringmatcher)
-        - [Order](#order)
         - [Visualizer](#visualizer)
         - [Parser](#parser)
         - [DateTime](#datetime)
@@ -136,8 +135,8 @@ the Java standard library, PillException is the only custom class it depends on.
 
 ### Item and ItemMap
 
-The Item class has three private variables, a name, a quantity, and an
-expiry date. An Item may or may not have an expiry date, so we store it
+The Item class has five private variables, a name, a quantity, an
+expiry date, a cost and a price. An Item may or may not have an expiry date, so we store it
 as an Optional, which handles empty values for us without using null. 
 
 ![](diagrams/Item-ClassDiagram.png)
@@ -161,14 +160,45 @@ The usage of TreeSet is to facilitate storing multiple batches of items with
 different expiry dates and quantities, and to be able to extract items with the
 soonest expiry date when taking out of storage.
 
+
+
+### Orders and Transactions
+
 <!-- @@author cxc0418 -->
 
-### Order
+#### Orders
 
-Orders are from the perspective of the Inventory, so purchases is items being
-received into the inventory, and dispense is items going out of the inventory. 
-Each order is a collection of one or more items, and is either purchase or dispense.
-Once an order is fulfilled, it is removed from the order list.
+Orders are from the perspective of the Inventory, so purchases are items being
+received into the inventory, and dispense refers to items going out of the inventory.
+Each order is a collection of one or more items, and is associated to either of the order types: purchase or dispense.
+
+<!-- @@author cnivedit -->
+
+#### Transactions
+
+A transactions represents an inflow/outflow of items to/from the inventory.
+Each transaction is associated with a single item and the corresponding order.
+When a transaction is created, the inventory is updated to reflect this inflow/outflow by 
+invoking the `addItem` or `useItem` methods, depending on whether it is an incoming or outgoing transaction.
+
+#### Order Fulfillment
+
+An order is said to be fulfilled when the inflow/outflow of the items ordered have occurred.
+Each time an order is fulfilled, a corresponding transaction is created for each individual item in the order and the 
+order is marked as fulfilled.
+
+#### TransactionManager
+
+The `TransactionManager` class functions as the entry point for all `Order` and `Transaction` related functionalities.
+`Pill` instantiates a `TransactionManager`, which handles these functionalities throughout the application.
+`TransactionManager` keeps track of all created orders and transactions and handles the interactions within these 
+classes. 
+
+The interaction between the different members of the `TransactionManager` class is better visualized below:
+
+<img src = "diagrams/TransactionManagement-ClassDiagram.png"/>
+
+<!-- @@author cxc0418 -->
 
 ### Visualizer
 

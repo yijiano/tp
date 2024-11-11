@@ -1,0 +1,32 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+hide circles
+
+class TransactionManager {
+    - itemMap : ItemMap
+}
+
+class Transaction {
+    - id: UUID
+    - itemName: String
+    - quantity: int
+    - type: TransactionType
+    - timestamp: LocalDateTime
+    - notes: String
+}
+class Order {
+    - id: UUID
+    - type: OrderType
+    - creationTime: LocalDateTime
+    - fulfillmentTime: LocalDateTime
+    - status: OrderStatus
+    - items: ItemMap
+    - notes: String
+}
+
+TransactionManager -- "*" Transaction : manages >
+TransactionManager - "*" Order : processes >
+Transaction - "1" Order : tracks >
+
+@enduml

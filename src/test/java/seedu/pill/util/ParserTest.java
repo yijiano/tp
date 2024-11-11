@@ -32,7 +32,7 @@ public class ParserTest {
     public void setUp() {
         itemMap = new ItemMap();
         storage = new Storage();
-        transactionManager = new TransactionManager(itemMap);
+        transactionManager = new TransactionManager(itemMap, storage);
         ui = new Ui(itemMap);
         parser = new Parser(itemMap, storage, transactionManager, ui);
         outputStream = new ByteArrayOutputStream();

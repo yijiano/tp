@@ -12,26 +12,33 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.util.List;
 
+//@@author philip1304
+
 class TransactionManagerTest {
     private TransactionManager transactionManager;
     private ItemMap itemMap;
+    private Storage storage;
 
     @BeforeEach
     void setUp() {
         itemMap = new ItemMap();
-        transactionManager = new TransactionManager(itemMap);
+        storage = new Storage();
+        transactionManager = new TransactionManager(itemMap, storage);
     }
+
     @Test
     void createTransaction_insufficientStock_throwsException() {
         // Arrange
         String itemName = "Aspirin";
         int initialQuantity = 50;
         int decreaseQuantity = 100;
+        LocalDate expiryDate = null;
 
         assertThrows(PillException.class, () -> {
             transactionManager.createTransaction(
                     itemName,
                     decreaseQuantity,
+                    expiryDate,
                     Transaction.TransactionType.OUTGOING,
                     "Test insufficient",
                     null
@@ -45,11 +52,13 @@ class TransactionManagerTest {
         Order order = transactionManager.createOrder(Order.OrderType.PURCHASE, new ItemMap(), "Test order");
         String itemName = "Aspirin";
         int quantity = 100;
+        LocalDate expiryDate = null;
 
         // Act
         Transaction transaction = transactionManager.createTransaction(
                 itemName,
                 quantity,
+                expiryDate,
                 Transaction.TransactionType.INCOMING,
                 "Test with order",
                 order
@@ -103,9 +112,9 @@ class TransactionManagerTest {
     @Test
     void getTransactions_returnsCorrectTransactions() throws PillException {
         // Arrange
-        transactionManager.createTransaction("Aspirin", 100,
+        transactionManager.createTransaction("Aspirin", 100, null,
                 Transaction.TransactionType.INCOMING, "First", null);
-        transactionManager.createTransaction("Bandage", 50,
+        transactionManager.createTransaction("Bandage", 50, null,
                 Transaction.TransactionType.INCOMING, "Second", null);
 
         // Act
@@ -137,9 +146,9 @@ class TransactionManagerTest {
         // Arrange
         LocalDate startDate = LocalDate.now();
 
-        transactionManager.createTransaction("Aspirin", 100,
+        transactionManager.createTransaction("Aspirin", 100, null,
                 Transaction.TransactionType.INCOMING, "First", null);
-        transactionManager.createTransaction("Bandage", 50,
+        transactionManager.createTransaction("Bandage", 50, null,
                 Transaction.TransactionType.INCOMING, "Second", null);
 
         LocalDate endDate = LocalDate.now();
@@ -159,9 +168,11 @@ class TransactionManagerTest {
         // Arrange
         LocalDate start = LocalDate.now();
         Transaction first = transactionManager.createTransaction(
-                "Aspirin", 100, Transaction.TransactionType.INCOMING, "First", null);
+                "Aspirin", 100, null,
+                Transaction.TransactionType.INCOMING, "First", null);
         Transaction second = transactionManager.createTransaction(
-                "Bandage", 50, Transaction.TransactionType.INCOMING, "Second", null);
+                "Bandage", 50, null,
+                Transaction.TransactionType.INCOMING, "Second", null);
         LocalDate end = LocalDate.now();
 
         // Act
@@ -178,7 +189,8 @@ class TransactionManagerTest {
     void getTransactionHistory_exactBoundaryTimes_includesTransactions() throws PillException {
         // Arrange
         Transaction first = transactionManager.createTransaction(
-                "First", 100, Transaction.TransactionType.INCOMING, "Boundary start", null);
+                "First", 100, null,
+                Transaction.TransactionType.INCOMING, "Boundary start", null);
         LocalDate startAndEnd = first.getTimestamp().toLocalDate(); // Use exact timestamp
 
         // Act
@@ -193,7 +205,8 @@ class TransactionManagerTest {
     void getTransactionHistory_endBeforeStart_returnsEmptyList() throws PillException {
         // Arrange
         Transaction transaction = transactionManager.createTransaction(
-                "Test", 100, Transaction.TransactionType.INCOMING, "Test", null);
+                "Test", 100, null,
+                Transaction.TransactionType.INCOMING, "Test", null);
         LocalDate later = LocalDate.now();
         LocalDate earlier = later.minusDays(1);
 
@@ -204,3 +217,5 @@ class TransactionManagerTest {
         assertTrue(transactions.isEmpty());
     }
 }
+
+//@@author

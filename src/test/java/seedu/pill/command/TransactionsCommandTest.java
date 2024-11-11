@@ -31,7 +31,7 @@ public class TransactionsCommandTest {
     public void setUp() {
         itemMap = new ItemMap();
         storage = new Storage();
-        transactionManager = new TransactionManager(itemMap);
+        transactionManager = new TransactionManager(itemMap, storage);
         outputStream = new ByteArrayOutputStream();
         printStream = new PrintStream(outputStream);
         System.setOut(printStream);
@@ -47,7 +47,7 @@ public class TransactionsCommandTest {
     @Test
     public void execute_withTransactions_listsAllTransactions() throws PillException {
         // Create a transaction by adding an incoming transaction
-        transactionManager.createTransaction("Paracetamol", 10,
+        transactionManager.createTransaction("Paracetamol", 10, null,
                 Transaction.TransactionType.INCOMING, "Test transaction", null);
 
         TransactionsCommand command = new TransactionsCommand(transactionManager);
