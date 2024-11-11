@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.TreeSet;
 
 class TransactionManagerTest {
     private TransactionManager transactionManager;
