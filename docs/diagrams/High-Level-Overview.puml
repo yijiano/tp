@@ -36,7 +36,7 @@ package "pill" {
 
 
     Pill --> Ui
-    Pill --> Printer
+    Pill -> Printer
 
 
     Ui --> Parser
