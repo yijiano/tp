@@ -88,7 +88,7 @@ Displays a list of all available commands and their descriptions.
 
 **Format**: `help (COMMAND_NAME) (-v)`
 
-- Optional: COMMAND_NAME specifies the command to display help for.
+- Optional: `COMMAND_NAME` specifies the command to display help for.
 - Optional: `-v` flag to display verbose help for the specified command.
 
 
@@ -101,8 +101,8 @@ Adds a new item to the inventory, specifying its name and quantity.
 
 **Format**: `add NAME (QUANTITY) (EXPIRY_DATE)`
 
-- Optional: QUANTITY specifies the quantity of the item to add. Defaults to 1.
-- Optional: EXPIRY_DATE specifies the expiry date of the item in `YYYY-MM-DD` format.
+- Optional: `QUANTITY` specifies the quantity of the item to add. Defaults to 1.
+- Optional: `EXPIRY_DATE` specifies the expiry date of the item in `YYYY-MM-DD` format.
 
 **Sample Output**:
 
@@ -147,8 +147,8 @@ command depends on whether the item has an associated expiry date.
 
 **Format**: `delete NAME (EXPIRY_DATE)`
 
-- `NAME`: The name of the item you wish to delete.
-- `EXPIRY_DATE`: An optional parameter in the `YYYY-MM-DD` format that **must** be provided if the item you want to delete has an expiry date.
+- `NAME` of the item you wish to delete.
+- Optional: `EXPIRY_DATE` is a parameter in the `YYYY-MM-DD` format that **must** be provided if the item you want to delete has an expiry date.
 
 **Command Behavior**:
 
@@ -185,9 +185,9 @@ The behavior of this command depends on whether the item has an associated expir
 
 **Format**: `edit NAME QUANTITY (EXPIRY_DATE)`
 
-- `NAME`: The name of the item you wish to edit.
-- `QUANTITY`: The new quantity to update for the specified item.
-- `EXPIRY_DATE`: An optional parameter in the `YYYY-MM-DD` format that must be provided if the item has an expiry date.
+- `NAME` of the item you wish to edit.
+- `QUANTITY` to update to for the specified item.
+- Optional: `EXPIRY_DATE` is a parameter in the `YYYY-MM-DD` format that must be provided if the item has an expiry date.
 
 **Command Behavior**:
 
@@ -355,9 +355,9 @@ The restock command allows you to restock a specific item to a desired quantity 
 , displaying the restock cost. The behavior of the command differs based on whether or not an expiry date is provided.
 
 **Format**: `restock ITEM_NAME (EXPIRY_DATE) QUANTITY`
-- `ITEM_NAME`: The name of the item you wish to restock.
-- `(EXPIRY_DATE)`: An optional parameter in the `YYYY-MM-DD` format. This specifies which item entry to restock if there are multiple entries with the same item name but different expiry dates.
-- `QUANTITY`: The desired new stock quantity.
+- `ITEM_NAME` of the Item you wish to restock.
+- Optional: `(EXPIRY_DATE)` is a parameter in the `YYYY-MM-DD` format. This specifies which item entry to restock if there are multiple entries with the same item name but different expiry dates.
+- `QUANTITY` is the new stock quantity.
 
 **Command Behavior**:
 - The `EXPIRY_DATE` is mandatory when restocking items that have expiry dates. You must specify the expiry date explicitly, even if only one entry with that expiry date exists.
@@ -417,7 +417,8 @@ Creates a new purchase or dispense order.
 **Format**: `order ORDER_TYPE ITEM_COUNT ("NOTES")`
 This is followed by `ITEM_COUNT` number of lines of `ITEM_NAME (QUANTITY) (EXPIRY_DATE)`
 
-- ORDER_TYPE: `purchase` or `dispense`
+- `ORDER_TYPE` is either `purchase` or `dispense`
+- Optional: `"NOTES"` attached to the order
 
 **Notes**:
 - `NOTES` are optional and in quotes, and don't detect anything after the quotation.

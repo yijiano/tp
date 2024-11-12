@@ -5,7 +5,7 @@
 - [Developer Guide](#developer-guide)
     - [Table of Contents](#table-of-contents)
     - [Acknowledgements](#acknowledgements)
-    - [Design \& Implementation](#design--implementation)
+    - [Design & Implementation](#design--implementation)
         - [UI and I/O](#ui-and-io)
         - [Commands](#commands)
         - [Storage](#storage)
