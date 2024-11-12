@@ -35,13 +35,16 @@ Command Line Interface (CLI).
       `,` as well, by escaping the comma character when saving and unescaping it when loading. 
 - **Code contributed**: [RepoSense link](https://nus-cs2113-ay2425s1.github.io/tp-dashboard/?search=yakultbottle&breakdown=true)
 - **Project Management**:
-  - Helped maintain some issues, opening
+  - Helped do consistent bug-testing during the whole project
       [#73](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/73),
       [#74](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/74),
       [#101](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/101),
       [#150](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/150),
       [#153](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/153),
+      [#154](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/154),
       [#155](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/155),
+      [#156](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/156),
+      [#157](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/157),
       [#166](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/166)
     
 
