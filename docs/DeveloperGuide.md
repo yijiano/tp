@@ -11,11 +11,8 @@
         - [Storage](#storage)
         - [Item and ItemMap](#item-and-itemmap)
         - [Orders and Transactions](#orders-and-transactions)
-        - [StringMatcher](#stringmatcher)
         - [Visualizer](#visualizer)
         - [Parser](#parser)
-        - [DateTime](#datetime)
-        - [TimeStampIO](#timestampio)
         - [Exceptions](#exceptions)
         - [Logging](#logging)
     - [Product scope](#product-scope)
@@ -84,7 +81,7 @@ The UI components work together to provide a seamless user experience, allowing 
 Each user action (e.g. adding, deleting, or editing an item) is mapped to a specific command class.
 Each specific class inherits from the abstract Command class. These classes handle
 the logic for interpreting the input and calling the appropriate methods from the
-ItemMap and Storage classes via the usage of polymorphism. 
+ItemMap and Storage classes via the usage of polymorphism.
 
 Below is the overview for how Commands are executed from the perspective of the Parser class.
 
@@ -103,12 +100,12 @@ command.execute(itemMap, storage);
 
 The AddItemCommand intialises an Item with the corresponding name, quantity,
 and expiryDate. Then the ItemMap is checked as to whether an Item with exactly
-the same name and expiryDate already exists in the ItemMap. If it does, the 
-corresponding item's quantity is updated to include the new Item's quantity as well. 
+the same name and expiryDate already exists in the ItemMap. If it does, the
+corresponding item's quantity is updated to include the new Item's quantity as well.
 Else, a new Item entry is added. Finally, the Storage is updated with the corresponding
-item. 
+item.
 
-Not depicted are the print calls to the System.out and Logger classes for brevity. 
+Not depicted are the print calls to the System.out and Logger classes for brevity.
 
 <img src = "diagrams/AddItemCommand-SequenceDiagram.png"/>
 
@@ -137,7 +134,7 @@ the Java standard library, PillException is the only custom class it depends on.
 
 The Item class has five private variables, a name, a quantity, an
 expiry date, a cost and a price. An Item may or may not have an expiry date, so we store it
-as an Optional, which handles empty values for us without using null. 
+as an Optional, which handles empty values for us without using null.
 
 ![](diagrams/Item-ClassDiagram.png)
 
@@ -154,7 +151,7 @@ Each TreeSet\<Item> represents an item type, with each entry in the TreeSet
 having a unique expiry date. The TreeSet then orders Items based on the
 compareTo method overridden in the Item class, which sorts by the earliest
 expiry date to the latest. Items with no expiry date, aka an expiry date of
-Optional.empty(), will be the last entry in the TreeSet. 
+Optional.empty(), will be the last entry in the TreeSet.
 
 The usage of TreeSet is to facilitate storing multiple batches of items with
 different expiry dates and quantities, and to be able to extract items with the
@@ -178,21 +175,21 @@ Each order is a collection of one or more items, and is associated to either of 
 
 A transactions represents an inflow/outflow of items to/from the inventory.
 Each transaction is associated with a single item and the corresponding order.
-When a transaction is created, the inventory is updated to reflect this inflow/outflow by 
+When a transaction is created, the inventory is updated to reflect this inflow/outflow by
 invoking the `addItem` or `useItem` methods, depending on whether it is an incoming or outgoing transaction.
 
 #### Order Fulfillment
 
 An order is said to be fulfilled when the inflow/outflow of the items ordered have occurred.
-Each time an order is fulfilled, a corresponding transaction is created for each individual item in the order and the 
+Each time an order is fulfilled, a corresponding transaction is created for each individual item in the order and the
 order is marked as fulfilled.
 
 #### TransactionManager
 
 The `TransactionManager` class functions as the entry point for all `Order` and `Transaction` related functionalities.
 `Pill` instantiates a `TransactionManager`, which handles these functionalities throughout the application.
-`TransactionManager` keeps track of all created orders and transactions and handles the interactions within these 
-classes. 
+`TransactionManager` keeps track of all created orders and transactions and handles the interactions within these
+classes.
 
 The interaction between the different members of the `TransactionManager` class is better visualized below:
 
@@ -202,11 +199,11 @@ The interaction between the different members of the `TransactionManager` class 
 
 ### Visualizer
 
-The Visualizer class is the core class for handling the visualization of item data. 
-It leverages the XChart library to generate bar charts for different aspects 
+The Visualizer class is the core class for handling the visualization of item data.
+It leverages the XChart library to generate bar charts for different aspects
 of the inventory. It is responsible for providing a graphical view
-of item data, such as item prices, costs, and stock levels. This class 
-enhances the usability of the application by allowing users to better understand 
+of item data, such as item prices, costs, and stock levels. This class
+enhances the usability of the application by allowing users to better understand
 and analyze their inventory data through visual representation.
 
 ![](diagrams/Visualizer-ClassDiagram.png)
@@ -215,7 +212,7 @@ and analyze their inventory data through visual representation.
 
 ### Parser
 
-The Parser class is responsible for interpreting and executing user commands 
+The Parser class is responsible for interpreting and executing user commands
 within the application. It translates raw user input into actionable commands,
 checks for common errors, and ensures the commands are executed in a controlled
 and predictable way. The class contains several helper methods that assist in
@@ -224,40 +221,40 @@ coordinates this process.
 
 #### Responsibilities
 - Input Parsing: Parser takes a single line of user input, splits it into its
-  component parts (command and arguments), and identifies which command the 
+  component parts (command and arguments), and identifies which command the
   user intended to execute.
-- Command Dispatching: Based on the parsed command, Parser creates the 
+- Command Dispatching: Based on the parsed command, Parser creates the
   appropriate command object (e.g., AddCommand, DeleteCommand, EditCommand) and
   invokes its execute method.
 - Error Handling: All exceptions related to parsing and validation (encapsulated
   in PillException) are handled directly within Parser. This ensures that any
-  invalid input or command errors are handled without propagating out. 
+  invalid input or command errors are handled without propagating out.
 
 #### Key Functionalities
 
 1. Command Recognition:
-    The first word of each input string determines the command type. For example,
-    “add” initiates the AddCommand, while “delete” initiates the DeleteCommand.
-    Commands can also support optional flags and arguments, parsed from the 
-    remaining components of the input.
+   The first word of each input string determines the command type. For example,
+   “add” initiates the AddCommand, while “delete” initiates the DeleteCommand.
+   Commands can also support optional flags and arguments, parsed from the
+   remaining components of the input.
 
 2. Argument and Flag Parsing:
-    After identifying the command, Parser extracts and verifies additional
-    arguments, flags, and parameters. Specific commands (e.g., stock-check,
-    expiring) have strict requirements on the number and format of arguments, which
-    are validated before command execution.
+   After identifying the command, Parser extracts and verifies additional
+   arguments, flags, and parameters. Specific commands (e.g., stock-check,
+   expiring) have strict requirements on the number and format of arguments, which
+   are validated before command execution.
 
 3. Command Execution:
-    For each recognized command, the corresponding command object is created and
-    its execute method is invoked with any necessary arguments. All command objects
-    receive items and storage as parameters, enabling them to interact with the
-    application’s data layer.
+   For each recognized command, the corresponding command object is created and
+   its execute method is invoked with any necessary arguments. All command objects
+   receive items and storage as parameters, enabling them to interact with the
+   application’s data layer.
 
 4. Exception Management:
-    Each helper method that parses specific commands may throw a PillException
-    for invalid arguments, unsupported commands, or unexpected input formats.
-    These exceptions are caught within the parseCommand method, allowing Parser
-    to handle error messages consistently across the application.
+   Each helper method that parses specific commands may throw a PillException
+   for invalid arguments, unsupported commands, or unexpected input formats.
+   These exceptions are caught within the parseCommand method, allowing Parser
+   to handle error messages consistently across the application.
 
 #### Assumptions
 
@@ -350,8 +347,8 @@ complexity.
 
 ## Non-Functional Requirements
 
-* Technical Requirements: Any *mainstream OS* with Java 17 or above installed. 
-  Instructions for downloading Java 17 can be found 
+* Technical Requirements: Any *mainstream OS* with Java 17 or above installed.
+  Instructions for downloading Java 17 can be found
   [here](https://www.oracle.com/sg/java/technologies/javase/jdk17-archive-downloads.html).
 * Project Scope Constraints: The application should only be used for tracking. It is not meant to be involved in any
   form of monetary transaction.
@@ -364,18 +361,18 @@ complexity.
 - **Mainstream OS**: Windows, Linux, Unix, MacOS
 - **CLI (Command-Line Interface)**: A text-based user interface used to interact with software by typing commands.
 - **UI (User Interface)**: The components and layout of a software application
-    with which users interact, including visual elements like buttons, screens,
-    and command prompts that facilitate user interaction with the program.
+  with which users interact, including visual elements like buttons, screens,
+  and command prompts that facilitate user interaction with the program.
 - **I/O (Input/Output)**: The communication between a program and the external
-    environment, such as receiving data from the user (input) or displaying results
-    to the user (output).
+  environment, such as receiving data from the user (input) or displaying results
+  to the user (output).
 - **JUnit**: A testing framework for Java that allows developers to write and run
-    repeatable automated tests.
+  repeatable automated tests.
 - **Gradle**: A build automation tool for Java (and other languages) used to compile, test, and package applications.
 - **Text UI Testing**: A form of testing where interactions with a command-line
-    interface are tested by simulating user input and validating the application’s text output.
+  interface are tested by simulating user input and validating the application’s text output.
 - **Pharmaceutical Inventory**: Refers to the stock of medicines and other medical
-    supplies maintained by a pharmacy or healthcare facility for dispensing and logistics.
+  supplies maintained by a pharmacy or healthcare facility for dispensing and logistics.
 - **Expiry Date**: The date after which a pharmaceutical product is no longer considered safe or effective for use.
 - **Restocking**: The process of replenishing inventory to ensure sufficient supply.
 
@@ -383,7 +380,7 @@ complexity.
 
 ### Manual Testing
 
-View the [User Guide](UserGuide.md) for the full list of UI commands and 
+View the [User Guide](UserGuide.md) for the full list of UI commands and
 their related use case and expected outcomes.
 
 ### JUnit Testing
@@ -397,7 +394,7 @@ Files relating to Text UI Testing can be found [here](../text-ui-test/).
 
 To run the Text UI tests, navigate to the `text-ui-test` directory in the terminal.
 
-When running tests on a Windows system, run the following command from the 
+When running tests on a Windows system, run the following command from the
 specified directory:
 
 ```
@@ -418,3 +415,9 @@ All tests passed!
 
 // Tests failed: 1
 ```
+
+## Future Enhancements
+- Implement the ability to take in special characters in item names.
+- Implement a feature to track the price of items.
+- Implement a feature to track the cost of items.
+- Implement a feature to track the profit of items.
