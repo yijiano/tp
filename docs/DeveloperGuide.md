@@ -34,6 +34,7 @@
 PILL uses the following tools for development:
 1. [JUnit 5](https://junit.org/junit5/) - Used for testing.
 2. [Gradle](https://gradle.org/) - Used for build automation.
+3. [XChart](https://github.com/knowm/XChart) - A plotting library for visualizing data within the application.
 
 ## Design & implementation
 
