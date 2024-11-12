@@ -1,6 +1,6 @@
 package seedu.pill.util;
 
-import java.awt.*;
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import org.knowm.xchart.CategoryChart;
