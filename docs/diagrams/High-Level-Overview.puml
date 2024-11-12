@@ -36,7 +36,7 @@ package "pill" {
 
 
     Pill --> Ui
-    Pill --> Printer
+    Pill -> Printer
 
 
     Ui --> Parser
@@ -45,7 +45,7 @@ package "pill" {
     ItemMap --> Item
 
 
-    Parser --> command
+    Parser -> command
     Parser -up> StringMatcher
     Parser --> DateTime
     StringMatcher -> Parser

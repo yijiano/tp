@@ -4,41 +4,41 @@
 
 1. [Introduction](#introduction)
 2. [Important Usage Notes](#important-usage-notes)
-    - [Order of arguments](#order-of-arguments)
-    - [No special characters](#no-special-characters)
-    - [Expiry Date](#expiry-date)
+  - [Order of arguments](#order-of-arguments)
+  - [No special characters](#no-special-characters)
+  - [Expiry Date](#expiry-date)
 3. [Features](#features)
-   - **General Commands**
-      - [Viewing Help: `help`](#viewing-help-help)
-      - [Listing All Items: `list`](#listing-all-items-list)
-      - [Exiting the Program: `exit`](#exiting-the-program-exit)
-   - **Item Management**
-      - [Adding New Item: `add`](#adding-new-item-add)
-      - [Deleting Existing Item: `delete`](#deleting-existing-item-delete)
-      - [Editing Existing Item: `edit`](#editing-existing-item-edit)
-      - [Finding Items: `find`](#finding-items-find)
-      - [Priority Removal of Items: `use`](#priority-removal-of-items-use)
-   - **Expiry Management**
-      - [List Expiring Items: `expiring`](#list-expiring-items-expiring)
-      - [List Expired Items: `expired`](#list-expired-items-expired)
-   - **Stock Management**
-      - [Query Existing Stock: `stock-check`](#query-existing-stock-stock-check)
-      - [Restock Specific Item: `restock`](#restock-specific-item-restock)
-      - [Restock All Items Below Threshold: `restock-all`](#restock-all-items-below-threshold-restock-all)
-   - **Price and Cost Management**
-      - [Set Item Cost: `cost`](#set-item-cost-cost)
-      - [Set Item Price: `price`](#set-item-price-price)
-   - **Visualization**
-      - [Visualize item prices: `visualize-price`](#visualize-item-prices-visualize-price)
-      - [Visualize item costs: `visualize-cost`](#visualize-item-costs-visualize-cost)
-      - [Visualize item stock: `visualize-stock`](#visualize-item-stock-visualize-stock)
-      - [Visualize item costs and prices: `visualize-cost-price`](#visualize-item-costs-and-prices-visualize-cost-price)
-   - **Order and Transaction Management**
-      - [Order Items: `order`](#order-items-order)
-      - [View All Orders: `view-orders`](#view-all-orders-view-orders)
-      - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
-      - [Viewing Transactions: `transactions`](#view-transactions-transactions)
-      - [Viewing Transaction History: `transaction-history`](#view-transactions-within-a-set-time-period-transaction-history)
+  - **General Commands**
+    - [Viewing Help: `help`](#viewing-help-help)
+    - [Listing All Items: `list`](#listing-all-items-list)
+    - [Exiting the Program: `exit`](#exiting-the-program-exit)
+  - **Item Management**
+    - [Adding New Item: `add`](#adding-new-item-add)
+    - [Deleting Existing Item: `delete`](#deleting-existing-item-delete)
+    - [Editing Existing Item: `edit`](#editing-existing-item-edit)
+    - [Finding Items: `find`](#finding-items-find)
+    - [Priority Removal of Items: `use`](#priority-removal-of-items-use)
+  - **Expiry Management**
+    - [List Expiring Items: `expiring`](#list-expiring-items-expiring)
+    - [List Expired Items: `expired`](#list-expired-items-expired)
+  - **Stock Management**
+    - [Query Existing Stock: `stock-check`](#query-existing-stock-stock-check)
+    - [Restock Specific Item: `restock`](#restock-specific-item-restock)
+    - [Restock All Items Below Threshold: `restock-all`](#restock-all-items-below-threshold-restock-all)
+  - **Price and Cost Management**
+    - [Set Item Cost: `cost`](#set-item-cost-cost)
+    - [Set Item Price: `price`](#set-item-price-price)
+  - **Visualization**
+    - [Visualize item prices: `visualize-price`](#visualize-item-prices-visualize-price)
+    - [Visualize item costs: `visualize-cost`](#visualize-item-costs-visualize-cost)
+    - [Visualize item stock: `visualize-stock`](#visualize-item-stock-visualize-stock)
+    - [Visualize item costs and prices: `visualize-cost-price`](#visualize-item-costs-and-prices-visualize-cost-price)
+  - **Order and Transaction Management**
+    - [Order Items: `order`](#order-items-order)
+    - [View All Orders: `view-orders`](#view-all-orders-view-orders)
+    - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
+    - [Viewing Transactions: `transactions`](#view-transactions-transactions)
+    - [Viewing Transaction History: `transaction-history`](#view-transactions-within-a-set-time-period-transaction-history)
 
 
 ## Introduction
@@ -63,8 +63,8 @@ PILL is designed for users who prefer keyboard-based interactions over GUI appli
 
 ### Order of arguments
 
-Our commands **do not** allow arguments in any order. Please read the documentation for the 
-order in which arguments should follow a command. 
+Our commands **do not** allow arguments in any order. Please read the documentation for the
+order in which arguments should follow a command.
 
 ### No special characters
 
@@ -147,13 +147,13 @@ command depends on whether the item has an associated expiry date.
 
 **Format**: `delete NAME (EXPIRY_DATE)`
 
-- `NAME`: The name of the item you wish to delete. 
+- `NAME`: The name of the item you wish to delete.
 - `EXPIRY_DATE`: An optional parameter in the `YYYY-MM-DD` format that **must** be provided if the item you want to delete has an expiry date.
 
 **Command Behavior**:
 
-- If an item does not have an expiry date, you can delete it using only the NAME. 
-- If an item has an expiry date, you must specify the EXPIRY_DATE to delete the correct entry. 
+- If an item does not have an expiry date, you can delete it using only the NAME.
+- If an item has an expiry date, you must specify the EXPIRY_DATE to delete the correct entry.
 - If you attempt to delete an item with an expiry date but do not provide the EXPIRY_DATE, the system will return an "Item not found" error.
 
 **Sample Output**:
@@ -173,7 +173,7 @@ pear: 20 in stock, expiring: 2010-12-12
 ```
 
 **Notes**:
-- Always provide the `EXPIRY_DATE` when deleting items that have expiry dates to ensure the correct entry is removed. 
+- Always provide the `EXPIRY_DATE` when deleting items that have expiry dates to ensure the correct entry is removed.
 - Use the `list` command to view all items and their expiry dates before attempting to delete.
 
 ---
@@ -356,7 +356,7 @@ The restock command allows you to restock a specific item to a desired quantity 
 
 **Format**: `restock ITEM_NAME (EXPIRY_DATE) QUANTITY`
 - `ITEM_NAME`: The name of the item you wish to restock.
-- `(EXPIRY_DATE)`: An optional parameter in the `YYYY-MM-DD` format. This specifies which item entry to restock if there are multiple entries with the same item name but different expiry dates. 
+- `(EXPIRY_DATE)`: An optional parameter in the `YYYY-MM-DD` format. This specifies which item entry to restock if there are multiple entries with the same item name but different expiry dates.
 - `QUANTITY`: The desired new stock quantity.
 
 **Command Behavior**:
@@ -414,8 +414,8 @@ panadol: 999990 in stock, expiring: 2024-05-16
 
 Creates a new purchase or dispense order.
 
-**Format**: `order ORDER_TYPE ITEM_COUNT ("NOTES")` 
-This is followed by `ITEM_COUNT` number of lines of `ITEM_NAME (QUANTITY) (EXPIRY_DATE)` 
+**Format**: `order ORDER_TYPE ITEM_COUNT ("NOTES")`
+This is followed by `ITEM_COUNT` number of lines of `ITEM_NAME (QUANTITY) (EXPIRY_DATE)`
 
 - ORDER_TYPE: `purchase` or `dispense`
 
@@ -429,8 +429,8 @@ This is followed by `ITEM_COUNT` number of lines of `ITEM_NAME (QUANTITY) (EXPIR
     - `NOTES` will be `sell some "zyrtec" to "bob" on tuesday`
 - Expiry dates are ignored for `dispense` orders. They are only valid for `purchase`
   orders, since when items are dispensed from the inventory, the item with the soonest
-  expiry date will always be used first. 
-  - A warning will be printed that expiry dates are ignored for dispense orders for the 
+  expiry date will always be used first.
+  - A warning will be printed that expiry dates are ignored for dispense orders for the
     first item with a specified expiry date for that order:
     `Expiry dates will be ignored for dispense orders`
 
@@ -507,7 +507,7 @@ Items:
 ---
 ### Fulfill Order: `fulfill-order`
 
-Completes an order by adding/removing items from the inventory. 
+Completes an order by adding/removing items from the inventory.
 
 The action taken depends on the order type (purchase/dispense) and the items in the order.
 
@@ -555,6 +555,6 @@ The system automatically saves any changes to the inventory to the hard disk aft
 
 ### Editing the Data File
 
-Inventory data is stored in a `.txt` file (in `csv` format). 
+Inventory data is stored in a `.txt` file (in `csv` format).
 
 Users can edit this file manually if necessary.
