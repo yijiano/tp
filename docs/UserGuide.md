@@ -1,44 +1,44 @@
 # Pharmacy Inventory & Logistics Ledger (PILL) User Guide
 
-**Version 2.0**
+**Version 2.1**
 
 1. [Introduction](#introduction)
 2. [Important Usage Notes](#important-usage-notes)
-  - [Order of arguments](#order-of-arguments)
-  - [No special characters](#no-special-characters)
-  - [Expiry Date](#expiry-date)
+    - [Order of arguments](#order-of-arguments)
+    - [No special characters](#no-special-characters)
+    - [Expiry Date](#expiry-date)
 3. [Features](#features)
-  - **General Commands**
-    - [Viewing Help: `help`](#viewing-help-help)
-    - [Listing All Items: `list`](#listing-all-items-list)
-    - [Exiting the Program: `exit`](#exiting-the-program-exit)
-  - **Item Management**
-    - [Adding New Item: `add`](#adding-new-item-add)
-    - [Deleting Existing Item: `delete`](#deleting-existing-item-delete)
-    - [Editing Existing Item: `edit`](#editing-existing-item-edit)
-    - [Finding Items: `find`](#finding-items-find)
-    - [Priority Removal of Items: `use`](#priority-removal-of-items-use)
-  - **Expiry Management**
-    - [List Expiring Items: `expiring`](#list-expiring-items-expiring)
-    - [List Expired Items: `expired`](#list-expired-items-expired)
-  - **Stock Management**
-    - [Query Existing Stock: `stock-check`](#query-existing-stock-stock-check)
-    - [Restock Specific Item: `restock`](#restock-specific-item-restock)
-    - [Restock All Items Below Threshold: `restock-all`](#restock-all-items-below-threshold-restock-all)
-  - **Price and Cost Management**
-    - [Set Item Cost: `cost`](#set-item-cost-cost)
-    - [Set Item Price: `price`](#set-item-price-price)
-  - **Visualization**
-    - [Visualize item prices: `visualize-price`](#visualize-item-prices-visualize-price)
-    - [Visualize item costs: `visualize-cost`](#visualize-item-costs-visualize-cost)
-    - [Visualize item stock: `visualize-stock`](#visualize-item-stock-visualize-stock)
-    - [Visualize item costs and prices: `visualize-cost-price`](#visualize-item-costs-and-prices-visualize-cost-price)
-  - **Order and Transaction Management**
-    - [Order Items: `order`](#order-items-order)
-    - [View All Orders: `view-orders`](#view-all-orders-view-orders)
-    - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
-    - [Viewing Transactions: `transactions`](#view-transactions-transactions)
-    - [Viewing Transaction History: `transaction-history`](#view-transactions-within-a-set-time-period-transaction-history)
+    - **General Commands**
+        - [Viewing Help: `help`](#viewing-help-help)
+        - [Listing All Items: `list`](#listing-all-items-list)
+        - [Exiting the Program: `exit`](#exiting-the-program-exit)
+    - **Item Management**
+        - [Adding New Item: `add`](#adding-new-item-add)
+        - [Deleting Existing Item: `delete`](#deleting-existing-item-delete)
+        - [Editing Existing Item: `edit`](#editing-existing-item-edit)
+        - [Finding Items: `find`](#finding-items-find)
+        - [Priority Removal of Items: `use`](#priority-removal-of-items-use)
+    - **Expiry Management**
+        - [List Expiring Items: `expiring`](#list-expiring-items-expiring)
+        - [List Expired Items: `expired`](#list-expired-items-expired)
+    - **Stock Management**
+        - [Query Existing Stock: `stock-check`](#query-existing-stock-stock-check)
+        - [Restock Specific Item: `restock`](#restock-specific-item-restock)
+        - [Restock All Items Below Threshold: `restock-all`](#restock-all-items-below-threshold-restock-all)
+    - **Price and Cost Management**
+        - [Set Item Cost: `cost`](#set-item-cost-cost)
+        - [Set Item Price: `price`](#set-item-price-price)
+    - **Visualization**
+        - [Visualize item prices: `visualize-price`](#visualize-item-prices-visualize-price)
+        - [Visualize item costs: `visualize-cost`](#visualize-item-costs-visualize-cost)
+        - [Visualize item stock: `visualize-stock`](#visualize-item-stock-visualize-stock)
+        - [Visualize item costs and prices: `visualize-cost-price`](#visualize-item-costs-and-prices-visualize-cost-price)
+    - **Order and Transaction Management**
+        - [Order Items: `order`](#order-items-order)
+        - [View All Orders: `view-orders`](#view-all-orders-view-orders)
+        - [Fulfill Order: `fulfill-order`](#fulfill-order-fulfill-order)
+        - [Viewing Transactions: `transactions`](#view-transactions-transactions)
+        - [Viewing Transaction History: `transaction-history`](#view-transactions-within-a-set-time-period-transaction-history)
 
 
 ## Introduction
