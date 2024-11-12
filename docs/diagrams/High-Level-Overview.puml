@@ -52,6 +52,9 @@ package "pill" {
     command -> PillLogger
     Parser --> exceptions
 
+    command --> TransactionManager
+    command --> Visualizer
+
     ItemMap -> Storage
 
     PillException -left> ExceptionMessages

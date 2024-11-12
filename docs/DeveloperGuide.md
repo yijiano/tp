@@ -11,11 +11,8 @@
         - [Storage](#storage)
         - [Item and ItemMap](#item-and-itemmap)
         - [Orders and Transactions](#orders-and-transactions)
-        - [StringMatcher](#stringmatcher)
         - [Visualizer](#visualizer)
         - [Parser](#parser)
-        - [DateTime](#datetime)
-        - [TimeStampIO](#timestampio)
         - [Exceptions](#exceptions)
         - [Logging](#logging)
     - [Product scope](#product-scope)
@@ -418,3 +415,9 @@ All tests passed!
 
 // Tests failed: 1
 ```
+
+## Future Enhancements
+- Implement the ability to take in special characters in item names.
+- Implement a feature to track the price of items.
+- Implement a feature to track the cost of items.
+- Implement a feature to track the profit of items.

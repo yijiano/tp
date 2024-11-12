@@ -3,8 +3,7 @@
 **Version 2.0**
 
 1. [Introduction](#introduction)
-2. [Important Note](#important-note)
-    - [Case Sensitivity](#case-sensitivity)
+2. [Important Usage Notes](#important-usage-notes)
     - [No special characters](#no-special-characters)
     - [Expiry Date](#expiry-date)
 3. [Features](#features)
