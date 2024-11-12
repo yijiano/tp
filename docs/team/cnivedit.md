@@ -10,14 +10,14 @@ Command Line Interface (CLI).
 
 ### Summary of Contributions
 
-- **New Feature**: Added feature to fetch expired items ([#113](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/113)).
-    - What it does: Filters and lists expired items to the user.
+- **New Feature**: Added feature to fetch expired and expiring items 
+    ([#113](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/113)), ([#114](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/114)).
+    - What it does: Filters and lists expired items and items expiring after the provided cut-off date to the user.
     - Justification: Allows user to retrieve and view expired items without reading through the entire inventory.
-    - Highlights: Runs on startup. It can also be accessed using the `expired` command.
-- **New Feature**: Added feature to fetch expiring items ([#114](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/114)).
-    - What it does: Filters and lists expiring items based on the entered cut-off date to the user.
-    - Justification: Allows for easy tracking of items that are expiring post a specified cut-off date.
-    - Highlights: Can be accessed using the `expiring <date>` command.
+      Allows for easy tracking of items that are expiring soon.
+    - Highlights: Each item in the inventory item map is iterated over and each batch of the item 
+      (entry of same item with different expiry date) is checked against the current date or the cut-off date depending
+      on whether the `expired` or the `expiring` command was used.
 - **New Feature**: Create commands and integrate order related features including placing, viewing and fulfilling
   orders, viewing transactions and querying transaction history over a specified date-range
   ([#142](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/142)).
@@ -25,7 +25,7 @@ Command Line Interface (CLI).
       history over a specified date range.
     - Justification: Allows for easy tracking of orders and transactions.
     - Highlights: Replicates real life inventory functioning where the inventory is controlled by orders that are
-    - placed in bulk.
+      placed in bulk.
 - **General Contributions**: Created PillLogger class ([#103](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/103)).
     - What it does: Responsible for console and file logging.
     - Justification: Logging is essential to understand and track the behaviour of the application.
@@ -54,7 +54,7 @@ Command Line Interface (CLI).
       [#145](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/145),
       [#146](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/146),
       [#163](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/163),
-      [#239](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/239),
+      [#239](https://github.com/AY2425S1-CS2113-W14-4/tp/issues/239)
 
 - **Testing**:
     - ListCommand ([#49](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/49))
@@ -67,6 +67,8 @@ Command Line Interface (CLI).
         - Added the following sections
             - Orders and Transactions ([#241](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/241))
             - AddItem command sequence diagram ([#124](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/124))
+            - Helped update high level overview previously created by @yijiano 
+              ([#249](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/249))
             - Logging ([#121](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/121))
             - Target User Profile ([#115](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/115))
             - Value Proposition ([#115](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/115))
@@ -89,3 +91,16 @@ Command Line Interface (CLI).
       [#233](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/233),
       [#240](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/240),
       [#243](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/243)
+
+
+- **Extracts from DG**:
+
+Contributed:
+
+<img src = "../diagrams/AddItemCommand-SequenceDiagram.png"/>
+<img src = "../diagrams/TransactionManagement-ClassDiagram.png"/>
+<img src = "../diagrams/PillLogger.png" alt="Component Diagram for PillLogger"/>
+
+Helped update:
+
+<img src = "../diagrams/High-Level-Overview.png" alt="High Level Overview of PILL"/>
