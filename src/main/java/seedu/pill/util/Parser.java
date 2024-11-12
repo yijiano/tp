@@ -71,6 +71,7 @@ public class Parser {
             switch (commandString) {
             case "exit":
                 this.exitFlag = true;
+                visualizer.closeCharts();
                 break;
             case "add":
                 parseAddItemCommand(arguments).execute(this.items, this.storage);

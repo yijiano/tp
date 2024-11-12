@@ -1,5 +1,6 @@
 package seedu.pill.util;
 
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import org.knowm.xchart.CategoryChart;
@@ -225,5 +226,14 @@ public class Visualizer {
 
     public void setItems(ArrayList<Item> items) {
         this.items = items;
+    }
+
+    // Add this method to close any open chart frames.
+    public void closeCharts() {
+        for (Frame frame : JFrame.getFrames()) {
+            if (frame.getTitle().contains("Chart")) { // Close frames with "Chart" in their title
+                frame.dispose();
+            }
+        }
     }
 }
