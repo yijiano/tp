@@ -92,15 +92,18 @@ Command Line Interface (CLI).
       [#240](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/240),
       [#243](https://github.com/AY2425S1-CS2113-W14-4/tp/pull/243)
 
+<div style="page-break-after: always;"></div>
 
 - **Extracts from DG**:
 
 Contributed:
 
-<img src = "../diagrams/AddItemCommand-SequenceDiagram.png"/>
+<img width = "500" src = "../diagrams/AddItemCommand-SequenceDiagram.png"/>
+
 <img src = "../diagrams/TransactionManagement-ClassDiagram.png"/>
-<img src = "../diagrams/PillLogger.png" alt="Component Diagram for PillLogger"/>
 
-Helped update:
+<img width = "500" src = "../diagrams/PillLogger.png" alt="Component Diagram for PillLogger"/>
 
-<img src = "../diagrams/High-Level-Overview.png" alt="High Level Overview of PILL"/>
+Updated:
+
+<img width = "500" src = "../diagrams/High-Level-Overview.png" alt="High Level Overview of PILL"/>
